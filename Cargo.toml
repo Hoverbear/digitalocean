@@ -1,0 +1,17 @@
+[package]
+authors = ["hoverbear <andrew@hoverbear.org>"]
+name = "digitalocean"
+version = "0.1.0"
+
+[dependencies]
+lazy_static = "0.2.5"
+log = "0.3.7"
+reqwest = "0.5.1"
+serde = "0.9.12"
+serde_derive = "0.9.12"
+serde_json = "0.9.9"
+
+[dev-dependencies]
+dotenv = "0.10.0"
+env_logger = "0.4.2"
+uuid = { version = "0.4", features = ["v4"] }
