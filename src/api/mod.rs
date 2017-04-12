@@ -1,7 +1,6 @@
 mod domain;
 
 pub use self::domain::Domains;
-use std::marker::PhantomData;
 
 #[derive(Deserialize, Debug)]
 struct ApiLinks {
@@ -19,8 +18,4 @@ struct ApiPages {
 #[derive(Deserialize, Debug)]
 struct ApiMeta {
     total: usize,
-}
-
-struct RequestBuilder<T> {
-    response_type: PhantomData<T>,
 }

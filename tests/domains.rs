@@ -10,6 +10,8 @@ use dotenv::dotenv;
 use std::env;
 use uuid::Uuid;
 
+use digitalocean::api::Domains;
+
 #[test]
 fn endpoints() {
     // Setup for tests
@@ -21,48 +23,28 @@ fn endpoints() {
     // Initialization
     let digital_ocean = DigitalOcean::new(api_key)
         .unwrap();
-    let domain_api = digital_ocean.domains();
 
     // Test values
     let name = format!("{}.com", Uuid::new_v4()); // Needs to be unique.
     let ip_address = IpAddr::from_str("1.2.3.4").unwrap();
 
     // Create
-    let domain = domain_api.create(&name, ip_address)
-        .unwrap();
-    assert!(domain.name == name);
+    let mut request = Domains::create(name.clone(), ip_address);
 
-    // Get
-    let domain = domain_api.get(&name)
-        .unwrap()  // Result
-        .unwrap(); // Option
-    assert!(domain.name == name);
-    domain.do_subresource_thing(false);
+    let response = digital_ocean.execute(&request);
+    match response {
+        Ok(response) => assert_eq!(response.name, name),
+        Err(e) => panic!("Unexpected error: {:?}", e),
+    };
 
-    domain_api.get(&name)
-        .unwrap() // Result
-        .unwrap() // Option
-        .do_subresource_thing(false);
-    
+    // Can we run it again? This should fail.
+    let response = digital_ocean.execute(&request);
+    match response {
+        Ok(_) => panic!("Repeated creation of a domain should fail."),
+        Err(Error::UnprocessableEntity) => (),
+        Err(e) => panic!("Unexpected error: {:?}", e),
+    };
 
-    // List
-    let domains = domain_api.list()
-        .unwrap();
-    assert!(domains.len() != 0);
-
-    // Delete
-    let domain = domain_api.delete(&name)
-        .unwrap();
+    let request = request.set_zone(String::from("blah"));
+    // ... Execute.
 }
-
-// let digital_ocean = DigitalOcean::new(token);
-// let action = Droplet::create("foo", "Bar", 50)
-//     .backups(true)
-//     .ipv6(true)
-//     .private_networking(true)
-// digital_ocean.execute(action)
-//     .unwrap()
-
-// let action = Domain::get("foobar.com")
-// digital_ocean.execute(action)
-//     .unwrap()

@@ -4,27 +4,24 @@ extern crate reqwest;
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate serde_json;
 extern crate serde;
+extern crate url;
 
 pub mod api;
-pub mod types;
 mod error;
-mod client;
+mod request;
 
-use reqwest::Url;
-use api::{Images, Regions, Domains};
-use client::Client;
+use reqwest::Client;
+use reqwest::header::{Authorization, Bearer};
+use reqwest::StatusCode;
+use request::{Request, Method};
 pub use error::{Error, Result};
-
-// macro_rules! api_call { ($e:expr) => (concat!("https://api.digitalocean.com/v2/", $e)) }
-
-lazy_static! {
-    static ref ROOT_URL: Url = Url::parse("https://api.digitalocean.com/v2/")
-        .expect("This URL is static and should be well formed.");
-}
+use url::Url;
+use std::io::Read;
 
 #[derive(Clone)]
 pub struct DigitalOcean {
     client: Client,
+    token: String,
 }
 
 impl DigitalOcean {
@@ -32,23 +29,52 @@ impl DigitalOcean {
     pub fn new<T: Into<String>>(token: T) -> Result<Self> {
         info!("Created.");
         Ok(DigitalOcean {
-            client: Client::new(token.into())?,
+            client: Client::new()?,
+            token: token.into(),
         })
     }
 
-    /// Access image related API calls.
-    pub fn images(&self) -> Images {
-        Images::new(&self.client)
-    }
+    pub fn execute<T>(&self, request: &Request<T>) -> Result<T>
+    where T: Parse {
+        info!("Executing.");
 
-    /// Access region related API calls.
-    pub fn regions(&self) -> Regions {
-        Regions::new(&self.client)
-    }
+        let url = request.url.clone();
 
-    /// Access domain related API calls.
-    pub fn domains(&self) -> Domains {
-        Domains::new(&self.client)
+        let dispatch = match request.method {
+            Method::Get => self.client.get(url),
+            Method::Post => self.client.post(url),
+            Method::Delete => self.client.delete(url)
+        };
+
+
+        let dispatch = dispatch.json(&request.body);
+
+        let response = dispatch
+            .header(Authorization(Bearer {
+                token: self.token.clone(),
+            })).send()?;
+
+        info!("{:?}", response.status());
+        match *response.status() {
+            StatusCode::UnprocessableEntity => Err(Error::UnprocessableEntity)?,
+            _ => (),
+        };
+
+        let parsed = T::parse(response)?; // TODO: TryFrom?
+
+        Ok(parsed)
     }
 }
 
+static STATIC_PARSE_ERROR: &'static str = "Failed to parse a staticly defined URL.";
+
+lazy_static! {
+    static ref ROOT_URL: Url = Url::parse("https://api.digitalocean.com/v2/")
+        .expect(STATIC_PARSE_ERROR);
+    static ref DOMAINS_URL: Url = (*ROOT_URL).join("domains/")
+        .expect(STATIC_PARSE_ERROR);
+}
+    
+pub trait Parse: Sized {
+    fn parse<R>(reader: R) -> Result<Self> where R: Read;
+}
