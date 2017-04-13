@@ -8,15 +8,25 @@ extern crate url;
 
 pub mod api;
 mod error;
-mod request;
+mod method;
+pub mod request;
 
 use reqwest::Client;
 use reqwest::header::{Authorization, Bearer};
 use reqwest::StatusCode;
-use request::{Request, Method};
+use reqwest::{RequestBuilder, Response};
+use request::Request;
+use method::{Get, Post, Delete};
 pub use error::{Error, Result};
 use url::Url;
-use std::io::Read;
+use serde::Deserialize;
+
+
+const STATIC_URL_ERROR: &'static str = "Base DigitalOcean URL is malformed.";
+lazy_static! {
+    static ref ROOT_URL: Url = Url::parse("https://api.digitalocean.com/v2")
+        .expect(STATIC_URL_ERROR);
+}
 
 #[derive(Clone)]
 pub struct DigitalOcean {
@@ -34,47 +44,78 @@ impl DigitalOcean {
         })
     }
 
-    pub fn execute<T>(&self, request: &Request<T>) -> Result<T>
-    where T: Parse {
-        info!("Executing.");
+    fn get<T, O>(&self, request: Request<Get, O>) -> Result<T>
+    where T: Deserialize {
+        let req = self.client.get(request.url.clone());
 
-        let url = request.url.clone();
+        let mut response = self.fetch(req)?;
+        
+        match *response.status() {
+            // Successes
+            StatusCode::Ok => (), // Get success
+            // Errors
+            e => Err(Error::UnexpectedStatus(e))?,
+        };
+        
+        let deserialized = response.json()?;
+        Ok(deserialized)
+    }
 
-        let dispatch = match request.method {
-            Method::Get => self.client.get(url),
-            Method::Post => self.client.post(url),
-            Method::Delete => self.client.delete(url)
+    // Delete requests do not return content.
+    fn delete<O>(&self, request: Request<Delete, O>) -> Result<()> {
+        let req = self.client.delete(request.url.clone());
+
+        let req = match request.body {
+            Some(v) => req.json(&v),
+            None => req,
         };
 
+        let response = self.fetch(req)?;
 
-        let dispatch = dispatch.json(&request.body);
+        match *response.status() {
+            // Successes
+            StatusCode::NoContent => (), // Delete success
+            // Errors
+            e => Err(Error::UnexpectedStatus(e))?,
+        };
 
+        Ok(())
+    }
+
+    fn post<T, O>(&self, request: Request<Post, O>) -> Result<T>
+    where T: Deserialize {
+        let req = self.client.post(request.url.clone());
+
+        let req = match request.body {
+            Some(v) => req.json(&v),
+            None => req,
+        };
+
+        let mut response = self.fetch(req)?;
+
+        match *response.status() {
+            // Successes
+            StatusCode::Created => (), // Post Success
+            // Errors
+            StatusCode::UnprocessableEntity => Err(Error::UnprocessableEntity)?,
+            e => Err(Error::UnexpectedStatus(e))?,
+        };
+
+        let deserialized = response.json()?;
+        Ok(deserialized)
+    }
+
+    fn fetch(&self, dispatch: RequestBuilder) -> Result<Response> {
         let response = dispatch
             .header(Authorization(Bearer {
                 token: self.token.clone(),
             })).send()?;
-
-        info!("{:?}", response.status());
-        match *response.status() {
-            StatusCode::UnprocessableEntity => Err(Error::UnprocessableEntity)?,
-            _ => (),
-        };
-
-        let parsed = T::parse(response)?; // TODO: TryFrom?
-
-        Ok(parsed)
+        
+        info!("Fetch status: {:?}", response.status());
+        Ok(response)
     }
 }
 
-static STATIC_PARSE_ERROR: &'static str = "Failed to parse a staticly defined URL.";
-
-lazy_static! {
-    static ref ROOT_URL: Url = Url::parse("https://api.digitalocean.com/v2/")
-        .expect(STATIC_PARSE_ERROR);
-    static ref DOMAINS_URL: Url = (*ROOT_URL).join("domains/")
-        .expect(STATIC_PARSE_ERROR);
-}
-    
-pub trait Parse: Sized {
-    fn parse<R>(reader: R) -> Result<Self> where R: Read;
+pub trait Retrievable<T>: Sized {
+    fn retrieve(self, instance: &DigitalOcean) -> Result<T>;
 }

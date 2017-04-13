@@ -1,5 +1,6 @@
 use reqwest;
 use std;
+use url;
 use serde_json;
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -8,18 +9,19 @@ pub type Result<T> = std::result::Result<T, Error>;
 pub enum Error {
     /// The reqest's API key is invalid or not authorized to view this resource.
     Unauthorized,
-    /// The item exists (possibly on another account) or is otherwise unprocessable.
+    /// The item exists (possibly on another account), the limit on this item has been reached,
+    /// or this request is otherwise unprocessable.
     UnprocessableEntity,
     /// Unable to fetch subresource because the Client is not set.
     MissingClient,
     /// An error originating from the Reqwest library.
     ReqwestError(reqwest::Error),
-    /// An error originating from the URL handling in the Reqwest library.
-    ReqwestUrlError(reqwest::UrlError),
     /// An unexpected status code was returned from the API. Please raise a ticket.
     UnexpectedStatus(reqwest::StatusCode),
     /// An error originating from serde_json.
     SerdeJsonError(serde_json::Error),
+    /// A parse error from the url crate.
+    UrlParseError(url::ParseError),
 }
 
 impl From<reqwest::Error> for Error {
@@ -28,14 +30,14 @@ impl From<reqwest::Error> for Error {
     }
 }
 
-impl From<reqwest::UrlError> for Error {
-    fn from(error: reqwest::UrlError) -> Self {
-        Error::ReqwestUrlError(error)
-    }
-}
-
 impl From<serde_json::Error> for Error {
     fn from(error: serde_json::Error) -> Self {
         Error::SerdeJsonError(error)
+    }
+}
+
+impl From<url::ParseError> for Error {
+    fn from(error: url::ParseError) -> Self {
+        Error::UrlParseError(error)
     }
 }

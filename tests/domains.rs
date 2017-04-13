@@ -11,6 +11,7 @@ use std::env;
 use uuid::Uuid;
 
 use digitalocean::api::Domains;
+use digitalocean::Retrievable;
 
 #[test]
 fn endpoints() {
@@ -29,22 +30,34 @@ fn endpoints() {
     let ip_address = IpAddr::from_str("1.2.3.4").unwrap();
 
     // Create
-    let mut request = Domains::create(name.clone(), ip_address);
-
-    let response = digital_ocean.execute(&request);
+    let mut response = Domains::create(name.clone(), ip_address)
+        .retrieve(&digital_ocean);
     match response {
         Ok(response) => assert_eq!(response.name, name),
         Err(e) => panic!("Unexpected error: {:?}", e),
     };
 
-    // Can we run it again? This should fail.
-    let response = digital_ocean.execute(&request);
+    // Get specific.
+    let mut response = Domains::get(name.clone())
+        .retrieve(&digital_ocean);
     match response {
-        Ok(_) => panic!("Repeated creation of a domain should fail."),
-        Err(Error::UnprocessableEntity) => (),
+        Ok(response) => assert_eq!(response.name, name),
         Err(e) => panic!("Unexpected error: {:?}", e),
     };
 
-    let request = request.set_zone(String::from("blah"));
-    // ... Execute.
+    // Get list
+    let response = Domains::list()
+        .retrieve(&digital_ocean);
+    match response {
+        Ok(response) => (),
+        Err(e) => panic!("Unexpected error: {:?}", e),
+    };
+
+    // Get specific.
+    let mut response = Domains::delete(name.clone())
+        .retrieve(&digital_ocean);
+    match response {
+        Ok(response) => (),
+        Err(e) => panic!("Unexpected error: {:?}", e),
+    };
 }
