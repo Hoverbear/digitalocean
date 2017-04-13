@@ -1,24 +1,24 @@
 pub use error::{Error, Result};
 use url::Url;
-use method::{Method};
+use action::{Action};
 use serde_json::Value;
 use std::marker::PhantomData;
 
 #[derive(Debug, Clone)]
-pub struct Request<M, O> where O: ?Sized, M: Method {
+pub struct Request<A, R> where A: Action {
     pub url: Url,
     pub body: Option<Value>,
-    method: PhantomData<M>,
-    response_type: PhantomData<O>,
+    pub action: PhantomData<A>,
+    pub response_type: PhantomData<R>,
 }
 
-impl<M, O> Request<M, O>
-where M: Method {
+impl<A, R> Request<A, R>
+where A: Action {
     pub fn new(url: Url) -> Self {
         Request {
             url: url,
             body: None,
-            method: PhantomData,
+            action: PhantomData,
             response_type: PhantomData,
         }
     }

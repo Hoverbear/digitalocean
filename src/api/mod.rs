@@ -1,24 +1,25 @@
 mod domain;
 
+use url_serde::SerdeUrl;
 pub use self::domain::{Domains, Domain};
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 struct ApiLinks {
     pages: Option<ApiPages>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 struct ApiPages {
-    prev: Option<String>,
-    first: Option<String>,
-    next: Option<String>,
-    last: Option<String>,
+    prev: Option<SerdeUrl>,
+    first: Option<SerdeUrl>,
+    next: Option<SerdeUrl>,
+    last: Option<SerdeUrl>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 struct ApiMeta {
     total: usize,
 }
