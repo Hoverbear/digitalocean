@@ -44,6 +44,15 @@ fn endpoints() {
         Err(e) => panic!("Unexpected error: {:?}", e),
     };
 
+    // Check the records
+    let response = Domains::get(name.clone())
+        .records()
+        .retrieve(&digital_ocean);
+    match response {
+        Ok(_) => (),
+        Err(e) => panic!("Unexpected error: {:?}", e),
+    };
+
     // Get list
     let response = Domains::list()
         .retrieve(&digital_ocean);
@@ -52,7 +61,7 @@ fn endpoints() {
         Err(e) => panic!("Unexpected error: {:?}", e),
     };
 
-    // // Delete
+    // Delete
     let response = Domains::delete(name.clone())
         .retrieve(&digital_ocean);
     match response {

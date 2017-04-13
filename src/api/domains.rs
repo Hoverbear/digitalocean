@@ -10,41 +10,6 @@ use super::{ApiLinks, ApiMeta, MAX_PER_PAGE};
 
 const DOMAINS_SEGMENT: &'static str = "domains";
 
-#[derive(Deserialize, Debug, Clone)]
-pub struct DomainsListResponse {
-    domains: Vec<Domain>,
-    links: ApiLinks,
-    meta: ApiMeta,
-}
-
-impl HasValue for DomainsListResponse {
-    type Value = Vec<Domain>;
-    fn next_page(&self) -> Option<Url> {
-        match self.links.pages {
-            Some(ref pages) => match pages.next {
-                Some(ref v) => Some(v.clone().into_inner()),
-                None => None,
-            },
-            None => None,
-        }
-    }
-    fn value(self) -> Vec<Domain> {
-        self.domains
-    }
-}
-
-#[derive(Deserialize, Debug, Clone)]
-pub struct DomainsResponse {
-    domain: Domain,
-}
-
-impl HasValue for DomainsResponse {
-    type Value = Domain;
-    fn next_page(&self) -> Option<Url> { None }
-    fn value(self) -> Domain {
-        self.domain
-    }
-}
 pub struct Domains;
 
 #[derive(Deserialize, Debug, Clone)]
@@ -120,9 +85,38 @@ impl Domains {
     }
 }
 
-impl Request<Get, DomainsResponse> {
-    pub fn records<'a>(&'a mut self) -> &'a mut Self {
-        
-        self
+#[derive(Deserialize, Debug, Clone)]
+pub struct DomainsListResponse {
+    domains: Vec<Domain>,
+    links: ApiLinks,
+    meta: ApiMeta,
+}
+
+impl HasValue for DomainsListResponse {
+    type Value = Vec<Domain>;
+    fn next_page(&self) -> Option<Url> {
+        match self.links.pages {
+            Some(ref pages) => match pages.next {
+                Some(ref v) => Some(v.clone().into_inner()),
+                None => None,
+            },
+            None => None,
+        }
+    }
+    fn value(self) -> Vec<Domain> {
+        self.domains
+    }
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct DomainsResponse {
+    domain: Domain,
+}
+
+impl HasValue for DomainsResponse {
+    type Value = Domain;
+    fn next_page(&self) -> Option<Url> { None }
+    fn value(self) -> Domain {
+        self.domain
     }
 }

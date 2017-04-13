@@ -46,7 +46,7 @@ impl DigitalOcean {
         })
     }
 
-    fn get<R>(&self, request: Request<Get, R>) -> Result<R>
+    fn get<R>(&self, request: &mut Request<Get, R>) -> Result<R>
     where R: Deserialize + Clone {
         info!("GET {:?}", request.url);
         let req = self.client.get(request.url.clone());
@@ -64,7 +64,7 @@ impl DigitalOcean {
         Ok(deserialized)
     }
 
-    fn list<R>(&self, request: Request<List, R>) -> Result<Vec<R>>
+    fn list<R>(&self, request: &mut Request<List, R>) -> Result<Vec<R>>
     where R: Deserialize + Clone + HasValue {
         info!("Retrieving GET.");
         // This may be a paginated response. We need to buffer.
@@ -72,8 +72,8 @@ impl DigitalOcean {
         let mut current_url = request.url.clone();
 
         loop {
-            let current_request = Request::new(current_url);
-            let deserialized: R = self.get(current_request)?;
+            let mut current_request = Request::new(current_url);
+            let deserialized: R = self.get(&mut current_request)?;
             let next_page = deserialized.next_page();
             buffer.push(deserialized);
             current_url = match next_page {
@@ -86,14 +86,9 @@ impl DigitalOcean {
     }
 
     // Delete requests do not return content.
-    fn delete<R>(&self, request: Request<Delete, R>) -> Result<()> {
+    fn delete<R>(&self, request: &mut Request<Delete, R>) -> Result<()> {
         info!("DELETE {:?}", request.url);
         let req = self.client.delete(request.url.clone());
-
-        let req = match request.body {
-            Some(v) => req.json(&v),
-            None => req,
-        };
 
         let response = self.fetch(req)?;
 
@@ -107,12 +102,12 @@ impl DigitalOcean {
         Ok(())
     }
 
-    fn post<R>(&self, request: Request<Post, R>) -> Result<R>
+    fn post<R>(&self, request: &mut Request<Post, R>) -> Result<R>
     where R: Deserialize + Clone {
         info!("POST {:?}", request.url);
         let req = self.client.post(request.url.clone());
 
-        let req = match request.body {
+        let req = match request.body.clone() {
             Some(v) => req.json(&v),
             None => req,
         };
@@ -143,12 +138,12 @@ impl DigitalOcean {
 }
 
 pub trait Retrievable<T>: Sized {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<T>;
+    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<T>;
 }
 
 impl<R> Retrievable<R::Value> for Request<List, R>
 where R: Deserialize + Clone + HasValue, R::Value: IntoIterator + FromIterator<<R::Value as IntoIterator>::Item> {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<R::Value> {
+    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<R::Value> {
         info!("Retrieving GET list.");
         let responses = instance.list::<R>(self)?;
         let items = responses.into_iter()
@@ -160,7 +155,7 @@ where R: Deserialize + Clone + HasValue, R::Value: IntoIterator + FromIterator<<
 
 impl<R> Retrievable<R::Value> for Request<Post, R>
 where R: Deserialize + Clone + HasValue {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<R::Value> {
+    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<R::Value> {
         info!("Retrieving GET.");
         let response = instance.post::<R>(self)?;
         Ok(response.value())
@@ -169,7 +164,7 @@ where R: Deserialize + Clone + HasValue {
 
 impl<R> Retrievable<R::Value> for Request<Get, R>
 where R: Deserialize + Clone + HasValue {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<R::Value> {
+    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<R::Value> {
         info!("Retrieving GET.");
         let response = instance.get::<R>(self)?;
         Ok(response.value())
@@ -177,7 +172,7 @@ where R: Deserialize + Clone + HasValue {
 }
 
 impl Retrievable<()> for Request<Delete, ()> {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<()> {
+    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<()> {
         info!("Retrieving GET.");
         let response = instance.delete::<()>(self)?;
         Ok(response)
