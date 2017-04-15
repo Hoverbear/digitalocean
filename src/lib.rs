@@ -66,7 +66,7 @@ impl DigitalOcean {
     }
 
     fn list<R>(&self, request: &mut Request<List, R>) -> Result<Vec<R>>
-    where R: Deserialize + Clone + HasValue {
+    where R: Deserialize + Clone + HasValue + HasPagination {
         info!("Retrieving GET.");
         // This may be a paginated response. We need to buffer.
         let mut buffer = Vec::new();
@@ -143,7 +143,8 @@ pub trait Retrievable<T>: Sized {
 }
 
 impl<R> Retrievable<R::Value> for Request<List, R>
-where R: Deserialize + Clone + HasValue, R::Value: IntoIterator + FromIterator<<R::Value as IntoIterator>::Item> {
+where R: Deserialize + Clone + HasValue + HasPagination,
+      R::Value: IntoIterator + FromIterator<<R::Value as IntoIterator>::Item> {
     fn retrieve(&mut self, instance: &DigitalOcean) -> Result<R::Value> {
         info!("Retrieving GET list.");
         let responses = instance.list::<R>(self)?;
@@ -180,8 +181,11 @@ impl Retrievable<()> for Request<Delete, ()> {
     }
 }
 
+pub trait HasPagination {
+    fn next_page(&self) -> Option<Url>;
+}
+
 pub trait HasValue {
     type Value: Deserialize;
-    fn next_page(&self) -> Option<Url>;
     fn value(self) -> Self::Value;
 }

@@ -4,7 +4,7 @@ use std::net::IpAddr;
 use request::Request;
 use action::{Get, Post, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
-use {HasValue};
+use {HasValue, HasPagination};
 use url::Url;
 use types::DomainRecord;
 use super::{ApiLinks, ApiMeta, MAX_PER_PAGE};
@@ -18,8 +18,7 @@ pub struct DomainRecordsResponse {
     meta: ApiMeta,
 }
 
-impl HasValue for DomainRecordsResponse {
-    type Value = Vec<DomainRecord>;
+impl HasPagination for DomainRecordsResponse {
     fn next_page(&self) -> Option<Url> {
         match self.links.pages {
             Some(ref pages) => match pages.next {
@@ -29,6 +28,10 @@ impl HasValue for DomainRecordsResponse {
             None => None,
         }
     }
+}
+
+impl HasValue for DomainRecordsResponse {
+    type Value = Vec<DomainRecord>;
     fn value(self) -> Vec<DomainRecord> {
         self.domain_records
     }
