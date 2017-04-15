@@ -11,6 +11,7 @@ pub mod api;
 mod error;
 mod action;
 pub mod request;
+pub mod types;
 
 use reqwest::Client;
 use reqwest::header::{Authorization, Bearer};

@@ -6,6 +6,7 @@ use action::{Get, Post, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use {HasValue};
 use url::Url;
+use types::DomainRecord;
 use super::{ApiLinks, ApiMeta, MAX_PER_PAGE};
 use super::domains::DomainsResponse;
 
@@ -15,19 +16,6 @@ pub struct DomainRecordsResponse {
     domain_records: Vec<DomainRecord>,
     links: ApiLinks,
     meta: ApiMeta,
-}
-
-#[derive(Deserialize, Debug, Clone)]
-pub struct DomainRecord {
-    id: usize,
-    #[serde(rename = "type")]
-    kind: String, // 'type' is reserved in Rust.
-    name: String,
-    data: String,
-    priority: Option<usize>,
-    port: Option<usize>,
-    weight: Option<usize>,
-    
 }
 
 impl HasValue for DomainRecordsResponse {

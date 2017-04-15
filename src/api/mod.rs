@@ -2,8 +2,7 @@ mod domains;
 mod domain_records;
 
 use url_serde::SerdeUrl;
-pub use self::domains::{Domains, Domain};
-pub use self::domain_records::DomainRecord;
+pub use self::domains::Domains;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;

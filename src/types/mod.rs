@@ -1,3 +1,8 @@
+mod domain;
+pub use self::domain::Domain;
+mod domain_record;
+pub use self::domain_record::DomainRecord;
+
 #[derive(Deserialize, Debug, Clone)]
 pub struct Image {
     pub id: usize,

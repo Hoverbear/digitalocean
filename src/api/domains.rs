@@ -6,18 +6,12 @@ use action::{Get, Post, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use {HasValue};
 use url::Url;
+use types::Domain;
 use super::{ApiLinks, ApiMeta, MAX_PER_PAGE};
 
 const DOMAINS_SEGMENT: &'static str = "domains";
 
 pub struct Domains;
-
-#[derive(Deserialize, Debug, Clone)]
-pub struct Domain {
-    pub name: String,
-    pub ttl: Option<usize>,
-    pub zone_file: Option<String>,
-}
 
 impl Domains {
     pub fn create<N, I>(name: N, ip_address: I) -> Request<Post, DomainsResponse>
