@@ -1,6 +1,8 @@
-mod domains;
-mod domain_records;
+pub mod domains;
+pub mod domain_records;
 
+use url::Url;
+use serde::Deserialize;
 use url_serde::SerdeUrl;
 pub use self::domains::Domains;
 
@@ -23,4 +25,18 @@ struct ApiPages {
 #[derive(Deserialize, Debug, Clone)]
 struct ApiMeta {
     total: usize,
+}
+
+pub trait HasPagination {
+    fn next_page(&self) -> Option<Url>;
+}
+
+pub trait HasValue {
+    type Value: Deserialize;
+    fn value(self) -> Self::Value;
+}
+
+impl HasValue for () {
+    type Value = ();
+    fn value(self) -> Self::Value { () }
 }

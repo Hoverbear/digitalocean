@@ -1,3 +1,6 @@
+use super::HasResponse;
+use api::domain_records::DomainRecordsResponse;
+
 #[derive(Deserialize, Debug, Clone)]
 pub struct DomainRecord {
     id: usize,
@@ -9,4 +12,8 @@ pub struct DomainRecord {
     port: Option<usize>,
     weight: Option<usize>,
     
+}
+
+impl HasResponse for Vec<DomainRecord> {
+    type Response = DomainRecordsResponse;
 }

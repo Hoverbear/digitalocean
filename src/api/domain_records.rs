@@ -1,14 +1,10 @@
-use serde::Serialize;
-use std::fmt::Display;
-use std::net::IpAddr;
 use request::Request;
 use action::{Get, Post, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
-use {HasValue, HasPagination};
 use url::Url;
-use types::DomainRecord;
+use values::{DomainRecord, Domain};
 use super::{ApiLinks, ApiMeta, MAX_PER_PAGE};
-use super::domains::DomainsResponse;
+use super::{HasValue, HasPagination};
 
 
 #[derive(Deserialize, Debug, Clone)]
@@ -37,14 +33,14 @@ impl HasValue for DomainRecordsResponse {
     }
 }
 
-impl Request<Get, DomainsResponse> {
-    pub fn records<'a>(&'a mut self) -> &'a mut Request<Get, DomainRecordsResponse> {
+impl Request<Get, Domain> {
+    pub fn records<'a>(&'a mut self) -> &'a mut Request<Get, Vec<DomainRecord>> {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push("records");
         // Safe because we're only changing PhantomData.
         unsafe {
-            &mut *(self as *mut _ as *mut Request<Get, DomainRecordsResponse>)
+            &mut *(self as *mut _ as *mut Request<Get, Vec<DomainRecord>>)
         }
     }
 }

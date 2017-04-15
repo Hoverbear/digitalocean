@@ -11,7 +11,10 @@ pub mod api;
 mod error;
 mod action;
 pub mod request;
-pub mod types;
+pub mod values;
+
+pub use error::{Error, Result};
+pub use request::Retrievable;
 
 use reqwest::Client;
 use reqwest::header::{Authorization, Bearer};
@@ -19,10 +22,11 @@ use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
 use request::Request;
 use action::{List, Get, Post, Delete};
-pub use error::{Error, Result};
+use api::{HasValue, HasPagination};
+use values::HasResponse;
+use std::iter::{IntoIterator, FromIterator};
 use url::Url;
 use serde::Deserialize;
-use std::iter::FromIterator;
 
 
 const STATIC_URL_ERROR: &'static str = "Base DigitalOcean URL is malformed.";
@@ -47,8 +51,9 @@ impl DigitalOcean {
         })
     }
 
-    fn get<R>(&self, request: &mut Request<Get, R>) -> Result<R>
-    where R: Deserialize + Clone {
+    fn get<V>(&self, request: &mut Request<Get, V>) -> Result<V>
+    where V: Deserialize + Clone + HasResponse,
+          V::Response: HasValue<Value=V> {
         info!("GET {:?}", request.url);
         let req = self.client.get(request.url.clone());
 
@@ -61,22 +66,37 @@ impl DigitalOcean {
             e => Err(Error::UnexpectedStatus(e))?,
         };
         
-        let deserialized: R = response.json()?;
-        Ok(deserialized)
+        let deserialized: V::Response = response.json()?;
+        Ok(deserialized.value())
     }
 
-    fn list<R>(&self, request: &mut Request<List, R>) -> Result<Vec<R>>
-    where R: Deserialize + Clone + HasValue + HasPagination {
-        info!("Retrieving GET.");
+    fn list<V>(&self, request: &mut Request<List, Vec<V>>) -> Result<Vec<V>>
+    where V: Deserialize + Clone,
+          Vec<V>: HasResponse,
+          <Vec<V> as HasResponse>::Response: HasValue<Value=Vec<V>> + HasPagination {
+        info!("LIST {:?}", request.url);
         // This may be a paginated response. We need to buffer.
         let mut buffer = Vec::new();
         let mut current_url = request.url.clone();
 
+        current_url.query_pairs_mut()
+            .append_pair("per_page", &api::MAX_PER_PAGE.to_string());
+
         loop {
-            let mut current_request = Request::new(current_url);
-            let deserialized: R = self.get(&mut current_request)?;
+            let req = self.client.get(current_url.clone());
+            let mut response = self.fetch(req)?;
+            
+            match *response.status() {
+                // Successes
+                StatusCode::Ok => (), // Get success
+                // Errors
+                e => Err(Error::UnexpectedStatus(e))?,
+            };
+
+            let deserialized: <Vec<V> as HasResponse>::Response = response.json()?;
+
             let next_page = deserialized.next_page();
-            buffer.push(deserialized);
+            buffer.extend(deserialized.value());
             current_url = match next_page {
                 Some(v) => v,
                 None => break,
@@ -87,7 +107,7 @@ impl DigitalOcean {
     }
 
     // Delete requests do not return content.
-    fn delete<R>(&self, request: &mut Request<Delete, R>) -> Result<()> {
+    fn delete<V>(&self, request: &mut Request<Delete, V>) -> Result<()> {
         info!("DELETE {:?}", request.url);
         let req = self.client.delete(request.url.clone());
 
@@ -103,8 +123,9 @@ impl DigitalOcean {
         Ok(())
     }
 
-    fn post<R>(&self, request: &mut Request<Post, R>) -> Result<R>
-    where R: Deserialize + Clone {
+    fn post<V>(&self, request: &mut Request<Post, V>) -> Result<V>
+    where V: Deserialize + Clone + HasResponse,
+          V::Response: HasValue<Value=V> {
         info!("POST {:?}", request.url);
         let req = self.client.post(request.url.clone());
 
@@ -123,8 +144,8 @@ impl DigitalOcean {
             e => Err(Error::UnexpectedStatus(e))?,
         };
 
-        let deserialized: R = response.json()?;
-        Ok(deserialized)
+        let deserialized: V::Response = response.json()?;
+        Ok(deserialized.value())
     }
 
     fn fetch(&self, dispatch: RequestBuilder) -> Result<Response> {        
@@ -136,56 +157,4 @@ impl DigitalOcean {
         info!("Response status: {:?}", response.status());
         Ok(response)
     }
-}
-
-pub trait Retrievable<T>: Sized {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<T>;
-}
-
-impl<R> Retrievable<R::Value> for Request<List, R>
-where R: Deserialize + Clone + HasValue + HasPagination,
-      R::Value: IntoIterator + FromIterator<<R::Value as IntoIterator>::Item> {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<R::Value> {
-        info!("Retrieving GET list.");
-        let responses = instance.list::<R>(self)?;
-        let items = responses.into_iter()
-            .flat_map(|v| v.value())
-            .collect();
-        Ok(items)
-    }
-}
-
-impl<R> Retrievable<R::Value> for Request<Post, R>
-where R: Deserialize + Clone + HasValue {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<R::Value> {
-        info!("Retrieving GET.");
-        let response = instance.post::<R>(self)?;
-        Ok(response.value())
-    }
-}
-
-impl<R> Retrievable<R::Value> for Request<Get, R>
-where R: Deserialize + Clone + HasValue {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<R::Value> {
-        info!("Retrieving GET.");
-        let response = instance.get::<R>(self)?;
-        Ok(response.value())
-    }
-}
-
-impl Retrievable<()> for Request<Delete, ()> {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<()> {
-        info!("Retrieving GET.");
-        let response = instance.delete::<()>(self)?;
-        Ok(response)
-    }
-}
-
-pub trait HasPagination {
-    fn next_page(&self) -> Option<Url>;
-}
-
-pub trait HasValue {
-    type Value: Deserialize;
-    fn value(self) -> Self::Value;
 }

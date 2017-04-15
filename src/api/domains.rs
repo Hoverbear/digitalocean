@@ -2,19 +2,19 @@ use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
 use request::Request;
-use action::{Get, Post, Delete};
+use action::{List, Get, Post, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
-use {HasValue, HasPagination};
 use url::Url;
-use types::Domain;
+use values::Domain;
 use super::{ApiLinks, ApiMeta, MAX_PER_PAGE};
+use super::{HasValue, HasPagination};
 
 const DOMAINS_SEGMENT: &'static str = "domains";
 
 pub struct Domains;
 
 impl Domains {
-    pub fn create<N, I>(name: N, ip_address: I) -> Request<Post, DomainsResponse>
+    pub fn create<N, I>(name: N, ip_address: I) -> Request<Post, Domain>
     where N: AsRef<str> + Serialize + Display, I: Into<IpAddr> + Serialize + Display {
         info!("Creating {} ({}).", name, ip_address);
         
@@ -32,22 +32,20 @@ impl Domains {
         req
     }
 
-    pub fn list() -> Request<Get, DomainsListResponse> {
+    pub fn list() -> Request<List, Vec<Domain>> {
         info!("Listing.");
         
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DOMAINS_SEGMENT);
-        url.query_pairs_mut()
-            .append_pair("per_page", &MAX_PER_PAGE.to_string());
 
         let req = Request::new(url);
 
         req
     }
 
-    pub fn get<N>(name: N) -> Request<Get, DomainsResponse> 
+    pub fn get<N>(name: N) -> Request<Get, Domain> 
     where N: AsRef<str> + Display {
         info!("Getting {}.", name);
         
@@ -56,8 +54,6 @@ impl Domains {
             .expect(STATIC_URL_ERROR)
             .push(DOMAINS_SEGMENT)
             .push(name.as_ref());
-        url.query_pairs_mut()
-            .append_pair("per_page", &MAX_PER_PAGE.to_string());
 
         let req = Request::new(url);
 

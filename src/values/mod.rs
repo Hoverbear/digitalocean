@@ -3,6 +3,8 @@ pub use self::domain::Domain;
 mod domain_record;
 pub use self::domain_record::DomainRecord;
 
+use serde::Deserialize;
+
 #[derive(Deserialize, Debug, Clone)]
 pub struct Image {
     pub id: usize,
@@ -25,4 +27,12 @@ pub struct Region {
     pub sizes: Vec<String>,
     pub features: Vec<String>,
     pub available: bool,
+}
+
+pub trait HasResponse {
+    type Response: Deserialize + Clone;
+}
+
+impl HasResponse for () {
+    type Response = ();
 }
