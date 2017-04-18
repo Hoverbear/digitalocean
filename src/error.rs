@@ -3,6 +3,8 @@ use std;
 use url;
 use serde_json;
 
+use serde_json::Value;
+
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
@@ -11,7 +13,7 @@ pub enum Error {
     Unauthorized,
     /// The item exists (possibly on another account), the limit on this item has been reached,
     /// or this request is otherwise unprocessable.
-    UnprocessableEntity,
+    UnprocessableEntity(Value),
     /// Unable to fetch subresource because the Client is not set.
     MissingClient,
     /// An error originating from the Reqwest library.

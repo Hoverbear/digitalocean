@@ -13,6 +13,24 @@ use digitalocean::request::Retrievable;
 use digitalocean::api::Domains;
 use digitalocean::DigitalOcean;
 
+use digitalocean::request::Request;
+use digitalocean::values::{Domain, DomainRecord};
+use digitalocean::action::{Get, List, Create, Update};
+
+// These are more "does it compile" tests.
+#[test]
+fn usage() {
+    let mut request = Domains::get("blah.com")
+        .records()
+        .create("A", "blah", "192.168.0.1")
+        .priority(Some(10));
+    
+    let mut request = Domains::get("blah.com")
+        .records()
+        .create("A", "blah", "192.168.0.1");
+    request.priority(Some(10));
+}
+
 #[test]
 fn endpoints() {
     // Setup for tests
@@ -57,13 +75,15 @@ fn endpoints() {
         Err(e) => panic!("Unexpected error: {:?}", e),
     };
 
-    // Check specific record
-    let record = response.unwrap()
+    // Retrieve a record id.
+    let record_id = response.unwrap()
         .get(0).unwrap()
         .id;
+    
+    // Check specific record
     let response = Domains::get(name.clone())
         .records()
-        .get(record)
+        .get(record_id)
         .retrieve(&digital_ocean);
     println!("Get Record: {:#?}", response);
     match response {
@@ -79,6 +99,21 @@ fn endpoints() {
         .ttl(5)
         .retrieve(&digital_ocean);
     println!("Create record {:#?}", response);
+    match response {
+        Ok(_) => (),
+        Err(e) => panic!("Unexpected error: {:?}", e),
+    }
+
+    // Update a specific record.
+    let response = Domains::get(name.clone())
+        .records()
+        .update(record_id)
+        .kind("A".into())
+        .name("tested".into())
+        .data("192.168.0.1".into())
+        .ttl(5)
+        .retrieve(&digital_ocean);
+    println!("Update record {:#?}", response);
     match response {
         Ok(_) => (),
         Err(e) => panic!("Unexpected error: {:?}", e),

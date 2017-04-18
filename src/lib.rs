@@ -9,7 +9,7 @@ extern crate url;
 
 pub mod api;
 mod error;
-mod action;
+pub mod action;
 pub mod request;
 pub mod values;
 
@@ -20,7 +20,7 @@ use reqwest::header::{Authorization, Bearer};
 use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
 use request::Request;
-use action::{List, Get, Create, Delete};
+use action::{List, Get, Create, Delete, Update};
 use api::{HasValue, HasPagination};
 use values::HasResponse;
 use url::Url;
@@ -128,10 +128,7 @@ impl DigitalOcean {
         info!("POST {:?}", request.url);
         let req = self.client.post(request.url.clone());
 
-        let req = match request.body.clone() {
-            Some(v) => req.json(&v),
-            None => req,
-        };
+        let req = req.json(&request.body.clone());
 
         let mut response = self.fetch(req)?;
 
@@ -139,7 +136,29 @@ impl DigitalOcean {
             // Successes
             StatusCode::Created => (), // Post Success
             // Errors
-            StatusCode::UnprocessableEntity => Err(Error::UnprocessableEntity)?,
+            StatusCode::UnprocessableEntity => Err(Error::UnprocessableEntity(response.json()?))?,
+            e => Err(Error::UnexpectedStatus(e))?,
+        };
+
+        let deserialized: V::Response = response.json()?;
+        Ok(deserialized.value())
+    }
+
+    fn put<V>(&self, request: &mut Request<Update, V>) -> Result<V>
+    where V: Deserialize + Clone + HasResponse,
+          V::Response: HasValue<Value=V> {
+        info!("PUT {:?}", request.url);
+        let req = self.client.put(request.url.clone());
+
+        let req = req.json(&request.body.clone());
+
+        let mut response = self.fetch(req)?;
+
+        match *response.status() {
+            // Successes
+            StatusCode::Ok => (), // Update success
+            // Errors
+            StatusCode::UnprocessableEntity => Err(Error::UnprocessableEntity(response.json()?))?,
             e => Err(Error::UnexpectedStatus(e))?,
         };
 

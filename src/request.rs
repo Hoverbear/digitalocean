@@ -5,13 +5,13 @@ use serde_json::Value;
 use std::marker::PhantomData;
 use api::{HasValue, HasPagination};
 use values::HasResponse;
-use action::{Action, List, Get, Create, Delete};
+use action::{Action, List, Get, Create, Delete, Update};
 use DigitalOcean;
 
 #[derive(Debug, Clone)]
 pub struct Request<A, R> where A: Action {
     pub url: Url,
-    pub body: Option<Value>,
+    pub body: Value,
     pub action: PhantomData<A>,
     pub value: PhantomData<R>,
 }
@@ -21,13 +21,13 @@ where A: Action {
     pub fn new(url: Url) -> Self {
         Request {
             url: url,
-            body: None,
+            body: Value::Null,
             action: PhantomData,
             value: PhantomData,
         }
     }
     pub fn body<'a>(&'a mut self, body: Value) -> &'a mut Self {
-        self.body = Some(body);
+        self.body = body;
         self
     }
     pub fn url<'a>(&'a mut self, url: Url) -> &'a mut Self {
@@ -68,8 +68,18 @@ impl<V> Retrievable<V> for Request<Create, V>
 where V: Deserialize + Clone + HasResponse,
       V::Response: HasValue<Value=V> {
     fn retrieve(&mut self, instance: &DigitalOcean) -> Result<V> {
-        info!("Retrieving GET.");
+        info!("Retrieving POST.");
         let response = instance.post(self)?;
+        Ok(response)
+    }
+}
+
+impl<V> Retrievable<V> for Request<Update, V>
+where V: Deserialize + Clone + HasResponse,
+      V::Response: HasValue<Value=V> {
+    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<V> {
+        info!("Retrieving PUT.");
+        let response = instance.put(self)?;
         Ok(response)
     }
 }

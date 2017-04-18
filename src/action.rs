@@ -13,8 +13,8 @@ pub struct Create;
 impl Action for Create {}
 
 #[derive(Debug, Clone, Copy)]
-pub struct Put;
-impl Action for Put {}
+pub struct Update;
+impl Action for Update {}
 
 #[derive(Debug, Clone, Copy)]
 pub struct Delete;

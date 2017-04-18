@@ -1,7 +1,7 @@
 use super::HasResponse;
 use api::domain_records::{DomainRecordsResponse, DomainRecordsListResponse};
 
-/// Defined in the [DigitalOcean API docs](https://developers.digitalocean.com/documentation/v2/#domain-records).
+/// https://developers.digitalocean.com/documentation/v2/#domain-records
 #[derive(Deserialize, Debug, Clone)]
 pub struct DomainRecord {
     pub id: usize,

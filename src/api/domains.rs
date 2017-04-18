@@ -14,6 +14,7 @@ const DOMAINS_SEGMENT: &'static str = "domains";
 pub struct Domains;
 
 impl Domains {
+    /// https://developers.digitalocean.com/documentation/v2/#create-a-new-domain
     pub fn create<N, I>(name: N, ip_address: I) -> Request<Create, Domain>
     where N: AsRef<str> + Serialize + Display, I: Into<IpAddr> + Serialize + Display {
         info!("Creating {} ({}).", name, ip_address);
@@ -32,6 +33,7 @@ impl Domains {
         req
     }
 
+    /// https://developers.digitalocean.com/documentation/v2/#list-all-domains
     pub fn list() -> Request<List, Vec<Domain>> {
         info!("Listing.");
         
@@ -45,6 +47,7 @@ impl Domains {
         req
     }
 
+    /// https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain
     pub fn get<N>(name: N) -> Request<Get, Domain> 
     where N: AsRef<str> + Display {
         info!("Getting {}.", name);
@@ -60,6 +63,7 @@ impl Domains {
         req
     }
 
+    /// https://developers.digitalocean.com/documentation/v2/#delete-a-domain
     pub fn delete<N>(name: N) -> Request<Delete, ()> 
     where N: AsRef<str> + Display {
         info!("Deleting {}.", name);
