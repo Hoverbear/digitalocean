@@ -5,26 +5,25 @@ use serde_json::Value;
 use std::marker::PhantomData;
 use api::{HasValue, HasPagination};
 use values::HasResponse;
-use action::{Action, List, Get, Post, Delete};
+use action::{Action, List, Get, Create, Delete};
 use DigitalOcean;
-use std::iter::FromIterator;
 
 #[derive(Debug, Clone)]
 pub struct Request<A, R> where A: Action {
     pub url: Url,
     pub body: Option<Value>,
     pub action: PhantomData<A>,
-    pub response_type: PhantomData<R>,
+    pub value: PhantomData<R>,
 }
 
-impl<A, R> Request<A, R>
+impl<A, V> Request<A, V>
 where A: Action {
     pub fn new(url: Url) -> Self {
         Request {
             url: url,
             body: None,
             action: PhantomData,
-            response_type: PhantomData,
+            value: PhantomData,
         }
     }
     pub fn body<'a>(&'a mut self, body: Value) -> &'a mut Self {
@@ -34,6 +33,17 @@ where A: Action {
     pub fn url<'a>(&'a mut self, url: Url) -> &'a mut Self {
         self.url = url;
         self
+    }
+    pub fn action<'a, B>(&'a mut self) -> &'a mut Request<B, V>
+    where B: Action {
+        unsafe {
+            &mut *(self as *mut _ as *mut Request<B, V>)
+        }
+    }
+    pub fn value<'a, B>(&'a mut self) -> &'a mut Request<A, B> {
+        unsafe {
+            &mut *(self as *mut _ as *mut Request<A, B>)
+        }
     }
 }
 
@@ -54,7 +64,7 @@ where Vec<V>: HasResponse,
     }
 }
 
-impl<V> Retrievable<V> for Request<Post, V>
+impl<V> Retrievable<V> for Request<Create, V>
 where V: Deserialize + Clone + HasResponse,
       V::Response: HasValue<Value=V> {
     fn retrieve(&mut self, instance: &DigitalOcean) -> Result<V> {

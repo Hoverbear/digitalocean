@@ -1,19 +1,24 @@
 use super::HasResponse;
-use api::domain_records::DomainRecordsResponse;
+use api::domain_records::{DomainRecordsResponse, DomainRecordsListResponse};
 
+/// Defined in the [DigitalOcean API docs](https://developers.digitalocean.com/documentation/v2/#domain-records).
 #[derive(Deserialize, Debug, Clone)]
 pub struct DomainRecord {
-    id: usize,
+    pub id: usize,
     #[serde(rename = "type")]
-    kind: String, // 'type' is reserved in Rust.
-    name: String,
-    data: String,
-    priority: Option<usize>,
-    port: Option<usize>,
-    weight: Option<usize>,
-    
+    pub kind: String, // 'type' is reserved in Rust.
+    pub name: String,
+    pub data: String,
+    pub priority: Option<usize>,
+    pub ttl: usize,
+    pub port: Option<usize>,
+    pub weight: Option<usize>,   
+}
+
+impl HasResponse for DomainRecord {
+    type Response = DomainRecordsResponse;
 }
 
 impl HasResponse for Vec<DomainRecord> {
-    type Response = DomainRecordsResponse;
+    type Response = DomainRecordsListResponse;
 }

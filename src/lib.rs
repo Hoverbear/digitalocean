@@ -14,17 +14,15 @@ pub mod request;
 pub mod values;
 
 pub use error::{Error, Result};
-pub use request::Retrievable;
 
 use reqwest::Client;
 use reqwest::header::{Authorization, Bearer};
 use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
 use request::Request;
-use action::{List, Get, Post, Delete};
+use action::{List, Get, Create, Delete};
 use api::{HasValue, HasPagination};
 use values::HasResponse;
-use std::iter::{IntoIterator, FromIterator};
 use url::Url;
 use serde::Deserialize;
 
@@ -101,6 +99,7 @@ impl DigitalOcean {
                 Some(v) => v,
                 None => break,
             };
+            info!("Fetching next page...")
         }
 
         Ok(buffer)
@@ -123,7 +122,7 @@ impl DigitalOcean {
         Ok(())
     }
 
-    fn post<V>(&self, request: &mut Request<Post, V>) -> Result<V>
+    fn post<V>(&self, request: &mut Request<Create, V>) -> Result<V>
     where V: Deserialize + Clone + HasResponse,
           V::Response: HasValue<Value=V> {
         info!("POST {:?}", request.url);
@@ -148,7 +147,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    fn fetch(&self, dispatch: RequestBuilder) -> Result<Response> {        
+    fn fetch(&self, dispatch: RequestBuilder) -> Result<Response> {
         let response = dispatch
             .header(Authorization(Bearer {
                 token: self.token.clone(),

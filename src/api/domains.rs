@@ -2,11 +2,11 @@ use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
 use request::Request;
-use action::{List, Get, Post, Delete};
+use action::{List, Get, Create, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use values::Domain;
-use super::{ApiLinks, ApiMeta, MAX_PER_PAGE};
+use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination};
 
 const DOMAINS_SEGMENT: &'static str = "domains";
@@ -14,7 +14,7 @@ const DOMAINS_SEGMENT: &'static str = "domains";
 pub struct Domains;
 
 impl Domains {
-    pub fn create<N, I>(name: N, ip_address: I) -> Request<Post, Domain>
+    pub fn create<N, I>(name: N, ip_address: I) -> Request<Create, Domain>
     where N: AsRef<str> + Serialize + Display, I: Into<IpAddr> + Serialize + Display {
         info!("Creating {} ({}).", name, ip_address);
         
@@ -71,6 +71,7 @@ impl Domains {
             .push(name.as_ref());
         
         let req = Request::new(url);
+
         req
     }
 }
@@ -84,13 +85,7 @@ pub struct DomainsListResponse {
 
 impl HasPagination for DomainsListResponse {
     fn next_page(&self) -> Option<Url> {
-        match self.links.pages {
-            Some(ref pages) => match pages.next {
-                Some(ref v) => Some(v.clone().into_inner()),
-                None => None,
-            },
-            None => None,
-        }
+        self.links.next()
     }
 }
 

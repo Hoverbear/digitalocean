@@ -8,9 +8,10 @@ use std::str::FromStr;
 use dotenv::dotenv;
 use std::env;
 use uuid::Uuid;
+use digitalocean::request::Retrievable;
 
 use digitalocean::api::Domains;
-use digitalocean::{DigitalOcean, Retrievable};
+use digitalocean::DigitalOcean;
 
 #[test]
 fn endpoints() {
@@ -31,6 +32,7 @@ fn endpoints() {
     // Create
     let response = Domains::create(name.clone(), ip_address)
         .retrieve(&digital_ocean);
+    println!("Create Domain: {:#?}", response);
     match response {
         Ok(response) => assert_eq!(response.name, name),
         Err(e) => panic!("Unexpected error: {:?}", e),
@@ -39,6 +41,7 @@ fn endpoints() {
     // Get specific
     let response = Domains::get(name.clone())
         .retrieve(&digital_ocean);
+    println!("Get Domain: {:#?}", response);
     match response {
         Ok(response) => assert_eq!(response.name, name),
         Err(e) => panic!("Unexpected error: {:?}", e),
@@ -48,14 +51,43 @@ fn endpoints() {
     let response = Domains::get(name.clone())
         .records()
         .retrieve(&digital_ocean);
+    println!("List Records: {:#?}", response);
     match response {
         Ok(_) => (),
         Err(e) => panic!("Unexpected error: {:?}", e),
     };
 
-    // Get list
+    // Check specific record
+    let record = response.unwrap()
+        .get(0).unwrap()
+        .id;
+    let response = Domains::get(name.clone())
+        .records()
+        .get(record)
+        .retrieve(&digital_ocean);
+    println!("Get Record: {:#?}", response);
+    match response {
+        Ok(_) => (),
+        Err(e) => panic!("Unexpected error: {:?}", e),
+    };
+
+    // Create a specific record
+    let response = Domains::get(name.clone())
+        .records()
+        .create("A", "test", "192.168.0.1")
+        .priority(Some(10))
+        .ttl(5)
+        .retrieve(&digital_ocean);
+    println!("Create record {:#?}", response);
+    match response {
+        Ok(_) => (),
+        Err(e) => panic!("Unexpected error: {:?}", e),
+    }
+
+    // Get Domain list
     let response = Domains::list()
         .retrieve(&digital_ocean);
+    println!("List Domains: {:#?}", response);
     match response {
         Ok(_) => (),
         Err(e) => panic!("Unexpected error: {:?}", e),
@@ -64,6 +96,7 @@ fn endpoints() {
     // Delete
     let response = Domains::delete(name.clone())
         .retrieve(&digital_ocean);
+    println!("Delete Domain: {:#?}", response);
     match response {
         Ok(_) => (),
         Err(e) => panic!("Unexpected error: {:?}", e),

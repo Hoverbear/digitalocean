@@ -4,6 +4,7 @@ pub mod domain_records;
 use url::Url;
 use serde::Deserialize;
 use url_serde::SerdeUrl;
+
 pub use self::domains::Domains;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
@@ -12,6 +13,18 @@ pub const MAX_PER_PAGE: usize = 200;
 #[derive(Deserialize, Debug, Clone)]
 struct ApiLinks {
     pages: Option<ApiPages>,
+}
+
+impl ApiLinks {
+    fn next(&self) -> Option<Url> {
+        match self.pages {
+            Some(ref pages) => match pages.next {
+                Some(ref v) => Some(v.clone().into_inner()),
+                None => None,
+            },
+            None => None,
+        }
+    }
 }
 
 #[derive(Deserialize, Debug, Clone)]
