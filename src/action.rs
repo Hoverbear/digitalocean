@@ -1,3 +1,5 @@
+//! Marker types for requests.
+
 pub trait Action {}
 
 #[derive(Debug, Clone, Copy)]

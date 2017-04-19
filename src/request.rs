@@ -1,24 +1,29 @@
-//! Builder structure used by all requests.
+//! Abstract types representing requests and how they are executed.
 
-pub use error::{Error, Result};
+use error::{Error, Result};
 use url::Url;
-use serde::Deserialize;
 use serde_json::Value;
 use std::marker::PhantomData;
-use api::{HasValue, HasPagination, HasResponse};
+use api::{HasPagination, HasResponse};
 use action::{Action, List, Get, Create, Delete, Update};
 use DigitalOcean;
 
+/// A consuming builder which can be used to build up API calls.
+/// 
+/// In general consumers of the crate should not need to use this type directly.
+/// Instead, build up requests from what is found in [`api::*`](../api/index.html).
 #[derive(Debug, Clone)]
 pub struct Request<A, R> where A: Action {
     pub url: Url,
     pub body: Value,
-    pub action: PhantomData<A>,
-    pub value: PhantomData<R>,
+    action: PhantomData<A>,
+    value: PhantomData<R>,
 }
 
 impl<A, V> Request<A, V>
 where A: Action {
+    /// Create a request pointing at the given url. `V` is the value ultimately
+    /// returned when the call is executed.
     pub fn new(url: Url) -> Self {
         Request {
             url: url,
@@ -27,33 +32,36 @@ where A: Action {
             value: PhantomData,
         }
     }
+    /// Set the JSON body of the request.
     pub fn body(mut self, body: Value) -> Self {
         self.body = body;
         self
     }
+    /// Set the URL of the call.
     pub fn url(mut self, url: Url) -> Self {
         self.url = url;
         self
     }
+    /// Transmute the request into a different action.
     pub fn action<B>(self) -> Request<B, V>
     where B: Action {
         Request::new(self.url).body(self.body)
     }
+    /// Transmute the request to expect a different return type.
     pub fn value<B>(self) -> Request<A, B> {
         Request::new(self.url).body(self.body)
     }
 }
 
+/// Describes a API call which can be executed.
 pub trait Executable<T>: Sized
-where T: Deserialize + Clone + HasResponse,
-      T::Response: HasValue<Value=T> {
+where T: HasResponse {
+    /// Execute the corresponding call.
     fn execute(self, instance: &DigitalOcean) -> Result<T>;
 }
 
 impl<V> Executable<Vec<V>> for Request<List, Vec<V>>
-where Vec<V>: HasResponse,
-      V: Deserialize + Clone,
-      <Vec<V> as HasResponse>::Response: HasValue<Value=Vec<V>> + HasPagination {
+where Vec<V>: HasResponse, <Vec<V> as HasResponse>::Response: HasPagination {
     fn execute(self, instance: &DigitalOcean) -> Result<Vec<V>> {
         let response: Vec<V> = instance.list(self)?;
         Ok(response)
@@ -61,8 +69,7 @@ where Vec<V>: HasResponse,
 }
 
 impl<V> Executable<V> for Request<Create, V>
-where V: Deserialize + Clone + HasResponse,
-      V::Response: HasValue<Value=V> {
+where V: HasResponse {
     fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.post(self)?;
         Ok(response)
@@ -70,8 +77,7 @@ where V: Deserialize + Clone + HasResponse,
 }
 
 impl<V> Executable<V> for Request<Update, V>
-where V: Deserialize + Clone + HasResponse,
-      V::Response: HasValue<Value=V> {
+where V: HasResponse {
     fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.put(self)?;
         Ok(response)
@@ -79,8 +85,7 @@ where V: Deserialize + Clone + HasResponse,
 }
 
 impl<V> Executable<V> for Request<Get, V>
-where V: Deserialize + Clone + HasResponse,
-      V::Response: HasValue<Value=V> {
+where V: HasResponse {
     fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.get(self)?;
         Ok(response)

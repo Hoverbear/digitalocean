@@ -8,25 +8,24 @@ extern crate reqwest;
 extern crate serde;
 extern crate url_serde;
 extern crate url;
+#[macro_use] extern crate error_chain;
 
 pub mod api;
 mod error;
 pub mod action;
 pub mod request;
 
-pub use error::{Error, Result};
-pub use request::Executable;
+use error::*;
+pub use error::{Error, ErrorKind};
 
 use reqwest::Client;
 use reqwest::header::{Authorization, Bearer};
 use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
-use request::Request;
-use action::{List, Get, Create, Delete, Update};
+use request::{Request, Executable};
+use action::{Action, List, Get, Create, Delete, Update};
 use api::{HasValue, HasPagination, HasResponse};
 use url::Url;
-use serde::Deserialize;
-
 
 const STATIC_URL_ERROR: &'static str = "Base DigitalOcean URL is malformed.";
 lazy_static! {
@@ -34,6 +33,7 @@ lazy_static! {
         .expect(STATIC_URL_ERROR);
 }
 
+/// A DigitalOcean Client that holds an API key.
 #[derive(Clone)]
 pub struct DigitalOcean {
     client: Client,
@@ -50,9 +50,15 @@ impl DigitalOcean {
         })
     }
 
+    pub fn execute<A,V>(&self, request: Request<A,V>) -> Result<V>
+    where A: Action, 
+          Request<A,V>: Executable<V>,
+          V: HasResponse {
+        request.execute(self)
+    }
+
     fn get<V>(&self, request: Request<Get, V>) -> Result<V>
-    where V: Deserialize + Clone + HasResponse,
-          V::Response: HasValue<Value=V> {
+    where V: HasResponse {
         info!("GET {:?}", request.url);
         let req = self.client.get(request.url.clone());
 
@@ -62,7 +68,7 @@ impl DigitalOcean {
             // Successes
             StatusCode::Ok => (), // Get success
             // Errors
-            e => Err(Error::UnexpectedStatus(e))?,
+            e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
         
         let deserialized: V::Response = response.json()?;
@@ -70,9 +76,7 @@ impl DigitalOcean {
     }
 
     fn list<V>(&self, request: Request<List, Vec<V>>) -> Result<Vec<V>>
-    where V: Deserialize + Clone,
-          Vec<V>: HasResponse,
-          <Vec<V> as HasResponse>::Response: HasValue<Value=Vec<V>> + HasPagination {
+    where Vec<V>: HasResponse, <Vec<V> as HasResponse>::Response: HasPagination {
         info!("LIST {:?}", request.url);
         // This may be a paginated response. We need to buffer.
         let mut buffer = Vec::new();
@@ -89,7 +93,7 @@ impl DigitalOcean {
                 // Successes
                 StatusCode::Ok => (), // Get success
                 // Errors
-                e => Err(Error::UnexpectedStatus(e))?,
+                e => Err(ErrorKind::UnexpectedStatus(e))?,
             };
 
             let deserialized: <Vec<V> as HasResponse>::Response = response.json()?;
@@ -117,15 +121,14 @@ impl DigitalOcean {
             // Successes
             StatusCode::NoContent => (), // Delete success
             // Errors
-            e => Err(Error::UnexpectedStatus(e))?,
+            e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 
         Ok(())
     }
 
     fn post<V>(&self, request: Request<Create, V>) -> Result<V>
-    where V: Deserialize + Clone + HasResponse,
-          V::Response: HasValue<Value=V> {
+    where V: HasResponse {
         info!("POST {:?}", request.url);
         let req = self.client.post(request.url.clone());
 
@@ -137,8 +140,8 @@ impl DigitalOcean {
             // Successes
             StatusCode::Created => (), // Post Success
             // Errors
-            StatusCode::UnprocessableEntity => Err(Error::UnprocessableEntity(response.json()?))?,
-            e => Err(Error::UnexpectedStatus(e))?,
+            StatusCode::UnprocessableEntity => Err(ErrorKind::UnprocessableEntity(response.json()?))?,
+            e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 
         let deserialized: V::Response = response.json()?;
@@ -146,8 +149,7 @@ impl DigitalOcean {
     }
 
     fn put<V>(&self, request: Request<Update, V>) -> Result<V>
-    where V: Deserialize + Clone + HasResponse,
-          V::Response: HasValue<Value=V> {
+    where V: HasResponse {
         info!("PUT {:?}", request.url);
         let req = self.client.put(request.url.clone());
 
@@ -159,8 +161,8 @@ impl DigitalOcean {
             // Successes
             StatusCode::Ok => (), // Update success
             // Errors
-            StatusCode::UnprocessableEntity => Err(Error::UnprocessableEntity(response.json()?))?,
-            e => Err(Error::UnexpectedStatus(e))?,
+            StatusCode::UnprocessableEntity => Err(ErrorKind::UnprocessableEntity(response.json()?))?,
+            e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 
         let deserialized: V::Response = response.json()?;

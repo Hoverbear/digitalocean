@@ -59,8 +59,8 @@ impl HasValue for () {
     fn value(self) -> Self::Value { () }
 }
 
-pub trait HasResponse {
-    type Response: Deserialize + Clone;
+pub trait HasResponse: Deserialize + Deserialize + Clone {
+    type Response: Deserialize + Clone + HasValue<Value=Self>;
 }
 
 impl HasResponse for () {

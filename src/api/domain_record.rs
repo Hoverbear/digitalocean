@@ -1,5 +1,3 @@
-//! Domain record specific documentation.
-
 use std::fmt::Display;
 use serde::Serialize;
 use request::Request;
@@ -12,18 +10,34 @@ use super::{HasValue, HasPagination, HasResponse};
 
 const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
 
-
+/// Domain records (CNAME, A, SRV, ...) of a given domain.
+///
+/// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
+///
+/// Requests with this output this type are accessed via [`Domain::get(..).records()`](../request/struct.Request.html#method.records).
+/// Make sure to check the builders for [`Create`](../request/struct.Request.html#method.priority) and [`Update`](../request/struct.Request.html#method.kind).
+///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
 #[derive(Deserialize, Debug, Clone)]
 pub struct DomainRecord {
+    /// A unique identifier for each domain record.
     pub id: usize,
+    /// The type of the DNS record (ex: A, CNAME, TXT, ...).
     #[serde(rename = "type")]
     pub kind: String, // 'type' is reserved in Rust.
+    /// The name to use for the DNS record.
     pub name: String,
+    /// The value to use for the DNS record.
     pub data: String,
+    /// The priority for SRV and MX records.
     pub priority: Option<usize>,
-    pub ttl: usize,
+    /// The port for SRV records.
     pub port: Option<usize>,
+    /// This value is the time to live for the record, in seconds. This defines
+    /// the time frame that clients can cache queried information before a refresh
+    /// should be requested.
+    pub ttl: usize,
+    /// The weight for SRV records.
     pub weight: Option<usize>,   
 }
 

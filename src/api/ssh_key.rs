@@ -12,14 +12,28 @@ use super::{HasValue, HasPagination, HasResponse};
 const ACCOUNT_SEGMENT: &'static str = "account";
 const KEYS_SEGMENT: &'static str = "keys";
 
+/// An SSH Key.
+///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#ssh-keys)
 #[derive(Deserialize, Debug, Clone)]
 pub struct SshKey {
-    /// While this is technically an integer, Get/Update/Delete calls to the
-    /// API work on either `id` or `fingerprint`, so we keep them the same type.
+    /// This is a unique identification number for the key. This can be used
+    /// to reference a specific SSH key when you wish to embed a key into a 
+    /// Droplet.
+    ///
+    /// *Note:* This is a `String` to allow for `id` and `fingerprint` to be
+    /// used in `Get`, `Update`, and `Delete` calls like the API describes.
     pub id: String,
+    /// This attribute contains the fingerprint value that is generated from
+    /// the public key. This is a unique identifier that will differentiate 
+    /// it from other keys using a format that SSH recognizes.
     pub fingerprint: String,
+    /// This attribute contains the entire public key string that was uploaded.
+    /// This is what is embedded into the root user's authorized_keys file if
+    /// you choose to include this SSH key during Droplet creation.
     pub public_key: String,
+    /// This is the human-readable display name for the given SSH key. This
+    /// is used to easily identify the SSH keys when they are displayed.
     pub name: String
 }
 
@@ -100,8 +114,6 @@ impl Request<Update, SshKey> {
         self
     }
 }
-
-
 
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
