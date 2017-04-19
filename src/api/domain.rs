@@ -10,7 +10,8 @@ use super::{HasValue, HasPagination, HasResponse};
 
 const DOMAINS_SEGMENT: &'static str = "domains";
 
-/// A domain name.
+/// Domain resources are domain names that you have purchased from a domain
+/// name registrar that you are managing through the DigitalOcean DNS interface.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
 #[derive(Deserialize, Debug, Clone)]

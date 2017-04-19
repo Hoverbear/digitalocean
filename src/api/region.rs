@@ -7,7 +7,12 @@ use super::{HasValue, HasPagination, HasResponse};
 
 const REGIONS_SEGMENT: &'static str = "regions";
 
-/// A region on DigitalOcean's infrastructure.
+/// A region in DigitalOcean represents a datacenter where Droplets can be
+/// deployed and images can be transferred.
+///
+/// Each region represents a specific datacenter in a geographic location. Some
+/// geographical locations may have multiple "regions" available. This means 
+/// that there are multiple datacenters available within that area.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#regions)
 #[derive(Deserialize, Debug, Clone)]
@@ -18,11 +23,14 @@ pub struct Region {
     /// The display name of the region. This will be a full name that is used
     /// in the control panel and other interfaces.
     pub slug: String,
-    /// This attribute is set to an array which contains the identifying slugs for the sizes available in this region.
+    /// This attribute is set to an array which contains the identifying slugs
+    ///  for the sizes available in this region.
     pub sizes: Vec<String>,
-    /// This is a boolean value that represents whether new Droplets can be created in this region.
+    /// This is a boolean value that represents whether new Droplets can be 
+    /// created in this region.
     pub available: bool,
-    /// This attribute is set to an array which contains features available in this region
+    /// This attribute is set to an array which contains features available in
+    /// this region
     pub features: Vec<String>,
 }
 

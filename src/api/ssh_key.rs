@@ -12,7 +12,9 @@ use super::{HasValue, HasPagination, HasResponse};
 const ACCOUNT_SEGMENT: &'static str = "account";
 const KEYS_SEGMENT: &'static str = "keys";
 
-/// An SSH Key.
+/// DigitalOcean allows you to add SSH public keys to the interface so that you
+/// can embed your public key into a Droplet at the time of creation. Only the
+/// public key is required to take advantage of this functionality.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#ssh-keys)
 #[derive(Deserialize, Debug, Clone)]

@@ -10,9 +10,10 @@ use super::{HasValue, HasPagination, HasResponse};
 
 const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
 
-/// Domain records (CNAME, A, SRV, ...) of a given domain.
-///
-/// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
+/// Domain record resources are used to set or retrieve information about the
+/// individual DNS records configured for a domain. This allows you to build 
+/// and manage DNS zone files by adding and modifying individual records for a
+/// domain.
 ///
 /// Requests with this output this type are accessed via [`Domain::get(..).records()`](../request/struct.Request.html#method.records).
 /// Make sure to check the builders for [`Create`](../request/struct.Request.html#method.priority) and [`Update`](../request/struct.Request.html#method.kind).
@@ -23,6 +24,8 @@ pub struct DomainRecord {
     /// A unique identifier for each domain record.
     pub id: usize,
     /// The type of the DNS record (ex: A, CNAME, TXT, ...).
+    ///
+    /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
     #[serde(rename = "type")]
     pub kind: String, // 'type' is reserved in Rust.
     /// The name to use for the DNS record.
