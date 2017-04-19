@@ -6,16 +6,32 @@ use request::Request;
 use action::{List, Get, Create, Update, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use values::SshKey;
 use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination};
+use super::{HasValue, HasPagination, HasResponse};
 
 const ACCOUNT_SEGMENT: &'static str = "account";
 const KEYS_SEGMENT: &'static str = "keys";
 
-pub struct SshKeys;
+/// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#ssh-keys)
+#[derive(Deserialize, Debug, Clone)]
+pub struct SshKey {
+    /// While this is technically an integer, Get/Update/Delete calls to the
+    /// API work on either `id` or `fingerprint`, so we keep them the same type.
+    pub id: String,
+    pub fingerprint: String,
+    pub public_key: String,
+    pub name: String
+}
 
-impl SshKeys {
+impl HasResponse for SshKey {
+    type Response = SshKeysResponse;
+}
+
+impl HasResponse for Vec<SshKey> {
+    type Response = SshKeysListResponse;
+}
+
+impl SshKey {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-key)
     pub fn create<N>(name: N, public_key: N) -> Request<Create, SshKey>
     where N: AsRef<str> + Serialize + Display {

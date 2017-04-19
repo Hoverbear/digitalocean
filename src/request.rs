@@ -5,8 +5,7 @@ use url::Url;
 use serde::Deserialize;
 use serde_json::Value;
 use std::marker::PhantomData;
-use api::{HasValue, HasPagination};
-use values::HasResponse;
+use api::{HasValue, HasPagination, HasResponse};
 use action::{Action, List, Get, Create, Delete, Update};
 use DigitalOcean;
 

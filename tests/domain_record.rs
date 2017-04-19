@@ -8,9 +8,8 @@ mod utils;
 
 use serde_json::Value;
 
-use digitalocean::api::Domains;
+use digitalocean::api::{Domain, DomainRecord};
 use digitalocean::request::Request;
-use digitalocean::values::DomainRecord;
 use digitalocean::action::{Get, List, Create, Update, Delete};
 
 use utils::before;
@@ -22,7 +21,7 @@ fn list_produces_correct_request() {
     let domain = "example.com";
     let correct_url = format!("https://api.digitalocean.com/v2/domains/{}/records", domain);
 
-    let req: Request<List, Vec<DomainRecord>> = Domains::get(domain)
+    let req: Request<List, Vec<DomainRecord>> = Domain::get(domain)
         .records();
     info!("{:#?}", req);
 
@@ -38,7 +37,7 @@ fn create_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/domains/{}/records", domain);
     let (kind, name, data, ttl) = ("A", "www", "192.168.0.1", 100);
 
-    let req: Request<Create, DomainRecord> = Domains::get(domain)
+    let req: Request<Create, DomainRecord> = Domain::get(domain)
         .records()
         .create(kind, name, data)
         .ttl(ttl);
@@ -61,7 +60,7 @@ fn get_produces_correct_request() {
     let id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/domains/{}/records/{}", domain, id);
 
-    let req: Request<Get, DomainRecord> = Domains::get(domain)
+    let req: Request<Get, DomainRecord> = Domain::get(domain)
         .records()
         .get(id);
     info!("{:#?}", req);
@@ -79,7 +78,7 @@ fn update_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/domains/{}/records/{}", domain, id);
     let (kind, name, ttl) = ("SRV", "ww2", 200);
 
-    let req: Request<Update, DomainRecord> = Domains::get(domain)
+    let req: Request<Update, DomainRecord> = Domain::get(domain)
         .records()
         .update(id)
         .kind(kind)
@@ -103,7 +102,7 @@ fn delete_produces_correct_request() {
     let id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/domains/{}/records/{}", domain, id);
 
-    let req: Request<Delete, ()> = Domains::get(domain)
+    let req: Request<Delete, ()> = Domain::get(domain)
         .records()
         .delete(id);
     info!("{:#?}", req);

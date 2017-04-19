@@ -1,15 +1,16 @@
 //! API specific documentation.
 
-pub mod domains;
-pub mod domain_records;
-pub mod ssh_keys;
+mod domain;
+mod domain_record;
+mod ssh_key;
 
 use url::Url;
 use serde::Deserialize;
 use url_serde::SerdeUrl;
 
-pub use self::domains::Domains;
-pub use self::ssh_keys::SshKeys;
+pub use self::domain::Domain;
+pub use self::ssh_key::SshKey;
+pub use self::domain_record::DomainRecord;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;
@@ -56,4 +57,12 @@ pub trait HasValue {
 impl HasValue for () {
     type Value = ();
     fn value(self) -> Self::Value { () }
+}
+
+pub trait HasResponse {
+    type Response: Deserialize + Clone;
+}
+
+impl HasResponse for () {
+    type Response = ();
 }

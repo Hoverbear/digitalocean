@@ -10,9 +10,8 @@ use serde_json::Value;
 use std::net::IpAddr;
 use std::str::FromStr;
 
-use digitalocean::api::Domains;
+use digitalocean::api::Domain;
 use digitalocean::request::Request;
-use digitalocean::values::Domain;
 use digitalocean::action::{Get, List, Create, Delete};
 
 use utils::before;
@@ -23,7 +22,7 @@ fn list_produces_correct_request() {
 
     let correct_url = "https://api.digitalocean.com/v2/domains";
 
-    let req: Request<List, Vec<Domain>> = Domains::list();
+    let req: Request<List, Vec<Domain>> = Domain::list();
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -38,7 +37,7 @@ fn create_produces_correct_request() {
     let ip_address = IpAddr::from_str("192.168.0.1").unwrap();
     let correct_url = "https://api.digitalocean.com/v2/domains";
 
-    let req: Request<Create, Domain> = Domains::create(domain, ip_address);
+    let req: Request<Create, Domain> = Domain::create(domain, ip_address);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -55,7 +54,7 @@ fn get_produces_correct_request() {
     let domain = "example.com";
     let correct_url = format!("https://api.digitalocean.com/v2/domains/{}", domain);
 
-    let req: Request<Get, Domain> = Domains::get(domain);
+    let req: Request<Get, Domain> = Domain::get(domain);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -69,7 +68,7 @@ fn delete_produces_correct_request() {
     let domain = "example.com";
     let correct_url = format!("https://api.digitalocean.com/v2/domains/{}", domain);
 
-    let req: Request<Delete, ()> = Domains::delete(domain);
+    let req: Request<Delete, ()> = Domain::delete(domain);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

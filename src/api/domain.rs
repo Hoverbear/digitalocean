@@ -7,15 +7,20 @@ use request::Request;
 use action::{List, Get, Create, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use values::Domain;
 use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination};
+use super::{HasValue, HasPagination, HasResponse};
 
 const DOMAINS_SEGMENT: &'static str = "domains";
 
-pub struct Domains;
+/// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
+#[derive(Deserialize, Debug, Clone)]
+pub struct Domain {
+    pub name: String,
+    pub ttl: Option<usize>,
+    pub zone_file: Option<String>,
+}
 
-impl Domains {
+impl Domain {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain)
     pub fn create<N, I>(name: N, ip_address: I) -> Request<Create, Domain>
     where N: AsRef<str> + Serialize + Display, I: Into<IpAddr> + Serialize + Display {
@@ -72,6 +77,19 @@ pub struct DomainsListResponse {
     meta: ApiMeta,
 }
 
+#[derive(Deserialize, Debug, Clone)]
+pub struct DomainsResponse {
+    domain: Domain,
+}
+
+impl HasResponse for Domain {
+    type Response = DomainsResponse;
+}
+
+impl HasResponse for Vec<Domain> {
+    type Response = DomainsListResponse;
+}
+
 impl HasPagination for DomainsListResponse {
     fn next_page(&self) -> Option<Url> {
         self.links.next()
@@ -83,11 +101,6 @@ impl HasValue for DomainsListResponse {
     fn value(self) -> Vec<Domain> {
         self.domains
     }
-}
-
-#[derive(Deserialize, Debug, Clone)]
-pub struct DomainsResponse {
-    domain: Domain,
 }
 
 impl HasValue for DomainsResponse {

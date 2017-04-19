@@ -13,7 +13,6 @@ pub mod api;
 mod error;
 pub mod action;
 pub mod request;
-pub mod values;
 
 pub use error::{Error, Result};
 pub use request::Retrievable;
@@ -24,8 +23,7 @@ use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
 use request::Request;
 use action::{List, Get, Create, Delete, Update};
-use api::{HasValue, HasPagination};
-use values::HasResponse;
+use api::{HasValue, HasPagination, HasResponse};
 use url::Url;
 use serde::Deserialize;
 
