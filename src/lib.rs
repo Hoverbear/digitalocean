@@ -15,7 +15,7 @@ pub mod action;
 pub mod request;
 
 pub use error::{Error, Result};
-pub use request::Retrievable;
+pub use request::Executable;
 
 use reqwest::Client;
 use reqwest::header::{Authorization, Bearer};

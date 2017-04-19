@@ -27,46 +27,6 @@ pub struct DomainRecord {
     pub weight: Option<usize>,   
 }
 
-impl HasResponse for DomainRecord {
-    type Response = DomainRecordsResponse;
-}
-
-impl HasResponse for Vec<DomainRecord> {
-    type Response = DomainRecordsListResponse;
-}
-
-#[derive(Deserialize, Debug, Clone)]
-pub struct DomainRecordsResponse {
-    domain_record: DomainRecord,
-}
-
-impl HasValue for DomainRecordsResponse {
-    type Value = DomainRecord;
-    fn value(self) -> DomainRecord {
-        self.domain_record
-    }
-}
-
-#[derive(Deserialize, Debug, Clone)]
-pub struct DomainRecordsListResponse {
-    domain_records: Vec<DomainRecord>,
-    links: ApiLinks,
-    meta: ApiMeta,
-}
-
-impl HasPagination for DomainRecordsListResponse {
-    fn next_page(&self) -> Option<Url> {
-        self.links.next()
-    }
-}
-
-impl HasValue for DomainRecordsListResponse {
-    type Value = Vec<DomainRecord>;
-    fn value(self) -> Vec<DomainRecord> {
-        self.domain_records
-    }
-}
-
 impl Request<Get, Domain> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domain-records)
     pub fn records(mut self) -> Request<List, Vec<DomainRecord>> {
@@ -215,5 +175,48 @@ impl Request<Update, DomainRecord> {
     pub fn weight(mut self, val: Option<usize>) -> Self {
         self.body["weight"] = json!(val);
         self
+    }
+}
+
+/// Response type returned from Digital Ocean.
+#[derive(Deserialize, Debug, Clone)]
+pub struct DomainRecordsResponse {
+    domain_record: DomainRecord,
+}
+
+
+impl HasValue for DomainRecordsResponse {
+    type Value = DomainRecord;
+    fn value(self) -> DomainRecord {
+        self.domain_record
+    }
+}
+
+impl HasResponse for DomainRecord {
+    type Response = DomainRecordsResponse;
+}
+
+/// Response type returned from Digital Ocean.
+#[derive(Deserialize, Debug, Clone)]
+pub struct DomainRecordsListResponse {
+    domain_records: Vec<DomainRecord>,
+    links: ApiLinks,
+    meta: ApiMeta,
+}
+
+impl HasResponse for Vec<DomainRecord> {
+    type Response = DomainRecordsListResponse;
+}
+
+impl HasPagination for DomainRecordsListResponse {
+    fn next_page(&self) -> Option<Url> {
+        self.links.next()
+    }
+}
+
+impl HasValue for DomainRecordsListResponse {
+    type Value = Vec<DomainRecord>;
+    fn value(self) -> Vec<DomainRecord> {
+        self.domain_records
     }
 }

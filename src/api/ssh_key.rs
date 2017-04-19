@@ -23,14 +23,6 @@ pub struct SshKey {
     pub name: String
 }
 
-impl HasResponse for SshKey {
-    type Response = SshKeysResponse;
-}
-
-impl HasResponse for Vec<SshKey> {
-    type Response = SshKeysListResponse;
-}
-
 impl SshKey {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-key)
     pub fn create<N>(name: N, public_key: N) -> Request<Create, SshKey>
@@ -109,12 +101,20 @@ impl Request<Update, SshKey> {
     }
 }
 
+
+
+/// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
 pub struct SshKeysListResponse {
     ssh_keys: Vec<SshKey>,
     links: ApiLinks,
     meta: ApiMeta,
 }
+
+impl HasResponse for Vec<SshKey> {
+    type Response = SshKeysListResponse;
+}
+
 
 impl HasPagination for SshKeysListResponse {
     fn next_page(&self) -> Option<Url> {
@@ -129,9 +129,14 @@ impl HasValue for SshKeysListResponse {
     }
 }
 
+/// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
 pub struct SshKeysResponse {
     ssh_key: SshKey,
+}
+
+impl HasResponse for SshKey {
+    type Response = SshKeysResponse;
 }
 
 impl HasValue for SshKeysResponse {

@@ -44,51 +44,51 @@ where A: Action {
     }
 }
 
-pub trait Retrievable<T>: Sized
+pub trait Executable<T>: Sized
 where T: Deserialize + Clone + HasResponse,
       T::Response: HasValue<Value=T> {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<T>;
+    fn execute(self, instance: &DigitalOcean) -> Result<T>;
 }
 
-impl<V> Retrievable<Vec<V>> for Request<List, Vec<V>>
+impl<V> Executable<Vec<V>> for Request<List, Vec<V>>
 where Vec<V>: HasResponse,
       V: Deserialize + Clone,
       <Vec<V> as HasResponse>::Response: HasValue<Value=Vec<V>> + HasPagination {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<Vec<V>> {
+    fn execute(self, instance: &DigitalOcean) -> Result<Vec<V>> {
         let response: Vec<V> = instance.list(self)?;
         Ok(response)
     }
 }
 
-impl<V> Retrievable<V> for Request<Create, V>
+impl<V> Executable<V> for Request<Create, V>
 where V: Deserialize + Clone + HasResponse,
       V::Response: HasValue<Value=V> {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<V> {
+    fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.post(self)?;
         Ok(response)
     }
 }
 
-impl<V> Retrievable<V> for Request<Update, V>
+impl<V> Executable<V> for Request<Update, V>
 where V: Deserialize + Clone + HasResponse,
       V::Response: HasValue<Value=V> {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<V> {
+    fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.put(self)?;
         Ok(response)
     }
 }
 
-impl<V> Retrievable<V> for Request<Get, V>
+impl<V> Executable<V> for Request<Get, V>
 where V: Deserialize + Clone + HasResponse,
       V::Response: HasValue<Value=V> {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<V> {
+    fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.get(self)?;
         Ok(response)
     }
 }
 
-impl Retrievable<()> for Request<Delete, ()> {
-    fn retrieve(self, instance: &DigitalOcean) -> Result<()> {
+impl Executable<()> for Request<Delete, ()> {
+    fn execute(self, instance: &DigitalOcean) -> Result<()> {
         let response = instance.delete(self)?;
         Ok(response)
     }

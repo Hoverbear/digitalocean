@@ -70,13 +70,7 @@ impl Domain {
     }
 }
 
-#[derive(Deserialize, Debug, Clone)]
-pub struct DomainsListResponse {
-    domains: Vec<Domain>,
-    links: ApiLinks,
-    meta: ApiMeta,
-}
-
+/// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
 pub struct DomainsResponse {
     domain: Domain,
@@ -84,6 +78,21 @@ pub struct DomainsResponse {
 
 impl HasResponse for Domain {
     type Response = DomainsResponse;
+}
+
+impl HasValue for DomainsResponse {
+    type Value = Domain;
+    fn value(self) -> Domain {
+        self.domain
+    }
+}
+
+/// Response type returned from Digital Ocean.
+#[derive(Deserialize, Debug, Clone)]
+pub struct DomainsListResponse {
+    domains: Vec<Domain>,
+    links: ApiLinks,
+    meta: ApiMeta,
 }
 
 impl HasResponse for Vec<Domain> {
@@ -100,12 +109,5 @@ impl HasValue for DomainsListResponse {
     type Value = Vec<Domain>;
     fn value(self) -> Vec<Domain> {
         self.domains
-    }
-}
-
-impl HasValue for DomainsResponse {
-    type Value = Domain;
-    fn value(self) -> Domain {
-        self.domain
     }
 }
