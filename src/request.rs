@@ -1,3 +1,5 @@
+//! Builder structure used by all requests.
+
 pub use error::{Error, Result};
 use url::Url;
 use serde::Deserialize;
@@ -26,39 +28,34 @@ where A: Action {
             value: PhantomData,
         }
     }
-    pub fn body<'a>(&'a mut self, body: Value) -> &'a mut Self {
+    pub fn body(mut self, body: Value) -> Self {
         self.body = body;
         self
     }
-    pub fn url<'a>(&'a mut self, url: Url) -> &'a mut Self {
+    pub fn url(mut self, url: Url) -> Self {
         self.url = url;
         self
     }
-    pub fn action<'a, B>(&'a mut self) -> &'a mut Request<B, V>
+    pub fn action<B>(self) -> Request<B, V>
     where B: Action {
-        unsafe {
-            &mut *(self as *mut _ as *mut Request<B, V>)
-        }
+        Request::new(self.url).body(self.body)
     }
-    pub fn value<'a, B>(&'a mut self) -> &'a mut Request<A, B> {
-        unsafe {
-            &mut *(self as *mut _ as *mut Request<A, B>)
-        }
+    pub fn value<B>(self) -> Request<A, B> {
+        Request::new(self.url).body(self.body)
     }
 }
 
 pub trait Retrievable<T>: Sized
 where T: Deserialize + Clone + HasResponse,
       T::Response: HasValue<Value=T> {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<T>;
+    fn retrieve(self, instance: &DigitalOcean) -> Result<T>;
 }
 
 impl<V> Retrievable<Vec<V>> for Request<List, Vec<V>>
 where Vec<V>: HasResponse,
       V: Deserialize + Clone,
       <Vec<V> as HasResponse>::Response: HasValue<Value=Vec<V>> + HasPagination {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<Vec<V>> {
-        info!("Retrieving GET list.");
+    fn retrieve(self, instance: &DigitalOcean) -> Result<Vec<V>> {
         let response: Vec<V> = instance.list(self)?;
         Ok(response)
     }
@@ -67,8 +64,7 @@ where Vec<V>: HasResponse,
 impl<V> Retrievable<V> for Request<Create, V>
 where V: Deserialize + Clone + HasResponse,
       V::Response: HasValue<Value=V> {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<V> {
-        info!("Retrieving POST.");
+    fn retrieve(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.post(self)?;
         Ok(response)
     }
@@ -77,8 +73,7 @@ where V: Deserialize + Clone + HasResponse,
 impl<V> Retrievable<V> for Request<Update, V>
 where V: Deserialize + Clone + HasResponse,
       V::Response: HasValue<Value=V> {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<V> {
-        info!("Retrieving PUT.");
+    fn retrieve(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.put(self)?;
         Ok(response)
     }
@@ -87,16 +82,14 @@ where V: Deserialize + Clone + HasResponse,
 impl<V> Retrievable<V> for Request<Get, V>
 where V: Deserialize + Clone + HasResponse,
       V::Response: HasValue<Value=V> {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<V> {
-        info!("Retrieving GET.");
+    fn retrieve(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.get(self)?;
         Ok(response)
     }
 }
 
 impl Retrievable<()> for Request<Delete, ()> {
-    fn retrieve(&mut self, instance: &DigitalOcean) -> Result<()> {
-        info!("Retrieving GET.");
+    fn retrieve(self, instance: &DigitalOcean) -> Result<()> {
         let response = instance.delete(self)?;
         Ok(response)
     }

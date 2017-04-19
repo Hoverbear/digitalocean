@@ -1,3 +1,5 @@
+//! API specific documentation.
+
 pub mod domains;
 pub mod domain_records;
 

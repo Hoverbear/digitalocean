@@ -1,3 +1,5 @@
+//! Crate level docs.
+
 #[macro_use] extern crate lazy_static;
 #[macro_use] extern crate log;
 extern crate reqwest;
@@ -14,6 +16,7 @@ pub mod request;
 pub mod values;
 
 pub use error::{Error, Result};
+pub use request::Retrievable;
 
 use reqwest::Client;
 use reqwest::header::{Authorization, Bearer};
@@ -49,7 +52,7 @@ impl DigitalOcean {
         })
     }
 
-    fn get<V>(&self, request: &mut Request<Get, V>) -> Result<V>
+    fn get<V>(&self, request: Request<Get, V>) -> Result<V>
     where V: Deserialize + Clone + HasResponse,
           V::Response: HasValue<Value=V> {
         info!("GET {:?}", request.url);
@@ -68,7 +71,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    fn list<V>(&self, request: &mut Request<List, Vec<V>>) -> Result<Vec<V>>
+    fn list<V>(&self, request: Request<List, Vec<V>>) -> Result<Vec<V>>
     where V: Deserialize + Clone,
           Vec<V>: HasResponse,
           <Vec<V> as HasResponse>::Response: HasValue<Value=Vec<V>> + HasPagination {
@@ -106,7 +109,7 @@ impl DigitalOcean {
     }
 
     // Delete requests do not return content.
-    fn delete<V>(&self, request: &mut Request<Delete, V>) -> Result<()> {
+    fn delete<V>(&self, request: Request<Delete, V>) -> Result<()> {
         info!("DELETE {:?}", request.url);
         let req = self.client.delete(request.url.clone());
 
@@ -122,7 +125,7 @@ impl DigitalOcean {
         Ok(())
     }
 
-    fn post<V>(&self, request: &mut Request<Create, V>) -> Result<V>
+    fn post<V>(&self, request: Request<Create, V>) -> Result<V>
     where V: Deserialize + Clone + HasResponse,
           V::Response: HasValue<Value=V> {
         info!("POST {:?}", request.url);
@@ -144,7 +147,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    fn put<V>(&self, request: &mut Request<Update, V>) -> Result<V>
+    fn put<V>(&self, request: Request<Update, V>) -> Result<V>
     where V: Deserialize + Clone + HasResponse,
           V::Response: HasValue<Value=V> {
         info!("PUT {:?}", request.url);

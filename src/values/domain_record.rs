@@ -1,3 +1,5 @@
+//! Values Domain Record documentation.
+
 use super::HasResponse;
 use api::domain_records::{DomainRecordsResponse, DomainRecordsListResponse};
 

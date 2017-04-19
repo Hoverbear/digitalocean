@@ -1,3 +1,5 @@
+//! Domain record specific documentation.
+
 use std::fmt::Display;
 use serde::Serialize;
 use request::Request;
@@ -42,12 +44,11 @@ impl HasValue for DomainRecordsListResponse {
 
 impl Request<Get, Domain> {
     /// https://developers.digitalocean.com/documentation/v2/#list-all-domain-records
-    pub fn records<'a>(&'a mut self) -> &'a mut Request<List, Vec<DomainRecord>> {
+    pub fn records(mut self) -> Request<List, Vec<DomainRecord>> {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push("records");
 
-        // Yay type inferencing.
         self.action()
             .value()
     }
@@ -55,23 +56,23 @@ impl Request<Get, Domain> {
 
 impl Request<List, Vec<DomainRecord>> {
     /// https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record
-    pub fn create<'a, S>(&'a mut self, kind: S, name: S, data: S) -> &'a mut Request<Create, DomainRecord>
+    pub fn create<S>(mut self, kind: S, name: S, data: S) -> Request<Create, DomainRecord>
     where S: AsRef<str> + Display + Serialize {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR);
 
-        self.body(json!({
+        self.body = json!({
             "type": kind,
             "name": name,
             "data": data,
-        }));
+        });
 
         self.action()
             .value()
     }
 
     /// https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain-record
-    pub fn get<'a>(&'a mut self, id: usize) -> &'a mut Request<Get, DomainRecord> {
+    pub fn get(mut self, id: usize) -> Request<Get, DomainRecord> {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
@@ -81,7 +82,7 @@ impl Request<List, Vec<DomainRecord>> {
     }
 
     /// https://developers.digitalocean.com/documentation/v2/#update-a-domain-record
-    pub fn update<'a>(&'a mut self, id: usize) -> &'a mut Request<Update, DomainRecord> {
+    pub fn update(mut self, id: usize) -> Request<Update, DomainRecord> {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
@@ -91,7 +92,7 @@ impl Request<List, Vec<DomainRecord>> {
     }
 
     /// https://developers.digitalocean.com/documentation/v2/#delete-a-domain-record
-    pub fn delete<'a>(&'a mut self, id: usize) -> &'a mut Request<Delete, DomainRecord> {
+    pub fn delete(mut self, id: usize) -> Request<Delete, ()> {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
@@ -105,14 +106,14 @@ impl Request<Create, DomainRecord> {
     /// The priority for SRV and MX records.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn priority<'a>(&'a mut self, val: Option<usize>) -> &'a mut Self {
+    pub fn priority(mut self, val: Option<usize>) -> Self {
         self.body["port"] = json!(val);
         self
     }
     /// The port for SRV records.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn port<'a>(&'a mut self, val: Option<usize>) -> &'a mut Self {
+    pub fn port(mut self, val: Option<usize>) -> Self {
         self.body["port"] = json!(val);
         self
     }
@@ -121,14 +122,14 @@ impl Request<Create, DomainRecord> {
     /// refresh should be requested.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn ttl<'a>(&'a mut self, val: usize) -> &'a mut Self {
+    pub fn ttl(mut self, val: usize) -> Self {
         self.body["ttl"] = json!(val);
         self
     }
     /// The weight for SRV records.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn weight<'a>(&'a mut self, val: Option<usize>) -> &'a mut Self {
+    pub fn weight(mut self, val: Option<usize>) -> Self {
         self.body["weight"] = json!(val);
         self
     }
@@ -138,14 +139,16 @@ impl Request<Update, DomainRecord> {
     /// The record type (A, MX, CNAME, etc).
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn kind<'a>(&'a mut self, val: String) -> &'a mut Self {
+    pub fn kind<S>(mut self, val: S) -> Self
+    where S: AsRef<str> + Display + Serialize {
         self.body["type"] = json!(val);
         self
     }
     /// The host name, alias, or service being defined by the record.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn name<'a>(&'a mut self, val: String) -> &'a mut Self {
+    pub fn name<S>(mut self, val: S) -> Self
+    where S: AsRef<str> + Display + Serialize {
         self.body["name"] = json!(val);
         self
     }
@@ -153,21 +156,22 @@ impl Request<Update, DomainRecord> {
     /// for more detail on each record type.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn data<'a>(&'a mut self, val: String) -> &'a mut Self {
+    pub fn data<S>(mut self, val: S) -> Self
+    where S: AsRef<str> + Display + Serialize {
         self.body["data"] = json!(val);
         self
     }
     /// The priority for SRV and MX records.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn priority<'a>(&'a mut self, val: Option<usize>) -> &'a mut Self {
+    pub fn priority(mut self, val: Option<usize>) -> Self {
         self.body["priority"] = json!(val);
         self
     }
     /// The port for SRV records.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn port<'a>(&'a mut self, val: Option<usize>) -> &'a mut Self {
+    pub fn port(mut self, val: Option<usize>) -> Self {
         self.body["port"] = json!(val);
         self
     }
@@ -176,14 +180,14 @@ impl Request<Update, DomainRecord> {
     /// refresh should be requested.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn ttl<'a>(&'a mut self, val: usize) -> &'a mut Self {
+    pub fn ttl(mut self, val: usize) -> Self {
         self.body["ttl"] = json!(val);
         self
     }
     /// The weight for SRV records.
     ///
     /// https://developers.digitalocean.com/documentation/v2/#domain-records
-    pub fn weight<'a>(&'a mut self, val: Option<usize>) -> &'a mut Self {
+    pub fn weight(mut self, val: Option<usize>) -> Self {
         self.body["weight"] = json!(val);
         self
     }

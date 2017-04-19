@@ -1,139 +1,79 @@
 extern crate digitalocean;
-extern crate dotenv;
-extern crate env_logger;
-extern crate uuid;
+#[macro_use] extern crate log;
+#[macro_use] extern crate serde_json;
+extern crate url;
+extern crate url_serde;
 
+mod utils;
+
+use serde_json::Value;
 use std::net::IpAddr;
 use std::str::FromStr;
-use dotenv::dotenv;
 use std::env;
-use uuid::Uuid;
-use digitalocean::request::Retrievable;
 
 use digitalocean::api::Domains;
-use digitalocean::DigitalOcean;
-
+use digitalocean::{Retrievable, DigitalOcean};
 use digitalocean::request::Request;
-use digitalocean::values::{Domain, DomainRecord};
-use digitalocean::action::{Get, List, Create, Update};
+use digitalocean::values::Domain;
+use digitalocean::action::{Get, List, Create, Delete};
 
-// These are more "does it compile" tests.
+use utils::before;
+
 #[test]
-fn usage() {
-    let mut request = Domains::get("blah.com")
-        .records()
-        .create("A", "blah", "192.168.0.1")
-        .priority(Some(10));
-    
-    let mut request = Domains::get("blah.com")
-        .records()
-        .create("A", "blah", "192.168.0.1");
-    request.priority(Some(10));
+fn list_produces_correct_request() {
+    before();
+
+    let correct_url = "https://api.digitalocean.com/v2/domains";
+
+    let req: Request<List, Vec<Domain>> = Domains::list();
+    info!("{:#?}", req);
+
+    assert_eq!(req.url.as_str(), correct_url);
+    assert_eq!(req.body, Value::Null);
 }
 
 #[test]
-fn endpoints() {
-    // Setup for tests
-    dotenv().ok();
-    env_logger::init()
-        .unwrap();
-    let api_key = env::var("API_KEY").expect("A valid Digital Ocean API key must be set as API_KEY in .env");
+fn create_produces_correct_request() {
+    before();
 
-    // Initialization
-    let digital_ocean = DigitalOcean::new(api_key)
-        .unwrap();
+    let domain = "example.com";
+    let ip_address = IpAddr::from_str("192.168.0.1").unwrap();
+    let correct_url = "https://api.digitalocean.com/v2/domains";
 
-    // Test values
-    let name = format!("{}.com", Uuid::new_v4()); // Needs to be unique.
-    let ip_address = IpAddr::from_str("1.2.3.4").unwrap();
+    let req: Request<Create, Domain> = Domains::create(domain, ip_address);
+    info!("{:#?}", req);
 
-    // Create
-    let response = Domains::create(name.clone(), ip_address)
-        .retrieve(&digital_ocean);
-    println!("Create Domain: {:#?}", response);
-    match response {
-        Ok(response) => assert_eq!(response.name, name),
-        Err(e) => panic!("Unexpected error: {:?}", e),
-    };
+    assert_eq!(req.url.as_str(), correct_url);
+    assert_eq!(req.body, json!({
+        "name": domain,
+        "ip_address": ip_address,
+    }));
+}
 
-    // Get specific
-    let response = Domains::get(name.clone())
-        .retrieve(&digital_ocean);
-    println!("Get Domain: {:#?}", response);
-    match response {
-        Ok(response) => assert_eq!(response.name, name),
-        Err(e) => panic!("Unexpected error: {:?}", e),
-    };
+#[test]
+fn get_produces_correct_request() {
+    before();
 
-    // Check the records
-    let response = Domains::get(name.clone())
-        .records()
-        .retrieve(&digital_ocean);
-    println!("List Records: {:#?}", response);
-    match response {
-        Ok(_) => (),
-        Err(e) => panic!("Unexpected error: {:?}", e),
-    };
+    let domain = "example.com";
+    let correct_url = format!("https://api.digitalocean.com/v2/domains/{}", domain);
 
-    // Retrieve a record id.
-    let record_id = response.unwrap()
-        .get(0).unwrap()
-        .id;
-    
-    // Check specific record
-    let response = Domains::get(name.clone())
-        .records()
-        .get(record_id)
-        .retrieve(&digital_ocean);
-    println!("Get Record: {:#?}", response);
-    match response {
-        Ok(_) => (),
-        Err(e) => panic!("Unexpected error: {:?}", e),
-    };
+    let req: Request<Get, Domain> = Domains::get(domain);
+    info!("{:#?}", req);
 
-    // Create a specific record
-    let response = Domains::get(name.clone())
-        .records()
-        .create("A", "test", "192.168.0.1")
-        .priority(Some(10))
-        .ttl(5)
-        .retrieve(&digital_ocean);
-    println!("Create record {:#?}", response);
-    match response {
-        Ok(_) => (),
-        Err(e) => panic!("Unexpected error: {:?}", e),
-    }
+    assert_eq!(req.url.as_str(), correct_url);
+    assert_eq!(req.body, Value::Null);
+}
 
-    // Update a specific record.
-    let response = Domains::get(name.clone())
-        .records()
-        .update(record_id)
-        .kind("A".into())
-        .name("tested".into())
-        .data("192.168.0.1".into())
-        .ttl(5)
-        .retrieve(&digital_ocean);
-    println!("Update record {:#?}", response);
-    match response {
-        Ok(_) => (),
-        Err(e) => panic!("Unexpected error: {:?}", e),
-    }
+#[test]
+fn delete_produces_correct_request() {
+    before();
 
-    // Get Domain list
-    let response = Domains::list()
-        .retrieve(&digital_ocean);
-    println!("List Domains: {:#?}", response);
-    match response {
-        Ok(_) => (),
-        Err(e) => panic!("Unexpected error: {:?}", e),
-    };
+    let domain = "example.com";
+    let correct_url = format!("https://api.digitalocean.com/v2/domains/{}", domain);
 
-    // Delete
-    let response = Domains::delete(name.clone())
-        .retrieve(&digital_ocean);
-    println!("Delete Domain: {:#?}", response);
-    match response {
-        Ok(_) => (),
-        Err(e) => panic!("Unexpected error: {:?}", e),
-    };
+    let req: Request<Delete, ()> = Domains::delete(domain);
+    info!("{:#?}", req);
+
+    assert_eq!(req.url.as_str(), correct_url);
+    assert_eq!(req.body, Value::Null);
 }

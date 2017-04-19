@@ -1,3 +1,5 @@
+// Values used and returned by the API.
+
 mod domain;
 pub use self::domain::Domain;
 

@@ -1,3 +1,5 @@
+//! Values Domain documentation.
+
 use super::HasResponse;
 use api::domains::{DomainsResponse, DomainsListResponse};
 
