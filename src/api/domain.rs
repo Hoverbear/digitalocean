@@ -84,15 +84,15 @@ impl Domain {
 
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
-pub struct DomainsResponse {
+pub struct DomainResponse {
     domain: Domain,
 }
 
 impl HasResponse for Domain {
-    type Response = DomainsResponse;
+    type Response = DomainResponse;
 }
 
-impl HasValue for DomainsResponse {
+impl HasValue for DomainResponse {
     type Value = Domain;
     fn value(self) -> Domain {
         self.domain
@@ -101,23 +101,23 @@ impl HasValue for DomainsResponse {
 
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
-pub struct DomainsListResponse {
+pub struct DomainListResponse {
     domains: Vec<Domain>,
     links: ApiLinks,
     meta: ApiMeta,
 }
 
 impl HasResponse for Vec<Domain> {
-    type Response = DomainsListResponse;
+    type Response = DomainListResponse;
 }
 
-impl HasPagination for DomainsListResponse {
+impl HasPagination for DomainListResponse {
     fn next_page(&self) -> Option<Url> {
         self.links.next()
     }
 }
 
-impl HasValue for DomainsListResponse {
+impl HasValue for DomainListResponse {
     type Value = Vec<Domain>;
     fn value(self) -> Vec<Domain> {
         self.domains

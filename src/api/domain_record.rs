@@ -194,12 +194,12 @@ impl Request<Update, DomainRecord> {
 
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
-pub struct DomainRecordsResponse {
+pub struct DomainRecordResponse {
     domain_record: DomainRecord,
 }
 
 
-impl HasValue for DomainRecordsResponse {
+impl HasValue for DomainRecordResponse {
     type Value = DomainRecord;
     fn value(self) -> DomainRecord {
         self.domain_record
@@ -207,28 +207,28 @@ impl HasValue for DomainRecordsResponse {
 }
 
 impl HasResponse for DomainRecord {
-    type Response = DomainRecordsResponse;
+    type Response = DomainRecordResponse;
 }
 
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
-pub struct DomainRecordsListResponse {
+pub struct DomainRecordListResponse {
     domain_records: Vec<DomainRecord>,
     links: ApiLinks,
     meta: ApiMeta,
 }
 
 impl HasResponse for Vec<DomainRecord> {
-    type Response = DomainRecordsListResponse;
+    type Response = DomainRecordListResponse;
 }
 
-impl HasPagination for DomainRecordsListResponse {
+impl HasPagination for DomainRecordListResponse {
     fn next_page(&self) -> Option<Url> {
         self.links.next()
     }
 }
 
-impl HasValue for DomainRecordsListResponse {
+impl HasValue for DomainRecordListResponse {
     type Value = Vec<DomainRecord>;
     fn value(self) -> Vec<DomainRecord> {
         self.domain_records

@@ -1,6 +1,6 @@
 //! Abstract types representing requests and how they are executed.
 
-use error::{Error, Result};
+use error::*;
 use url::Url;
 use serde_json::Value;
 use std::marker::PhantomData;
