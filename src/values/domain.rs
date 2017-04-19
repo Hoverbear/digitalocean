@@ -3,7 +3,7 @@
 use super::HasResponse;
 use api::domains::{DomainsResponse, DomainsListResponse};
 
-/// https://developers.digitalocean.com/documentation/v2/#domains
+/// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
 #[derive(Deserialize, Debug, Clone)]
 pub struct Domain {
     pub name: String,

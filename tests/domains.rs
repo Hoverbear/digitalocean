@@ -9,10 +9,8 @@ mod utils;
 use serde_json::Value;
 use std::net::IpAddr;
 use std::str::FromStr;
-use std::env;
 
 use digitalocean::api::Domains;
-use digitalocean::{Retrievable, DigitalOcean};
 use digitalocean::request::Request;
 use digitalocean::values::Domain;
 use digitalocean::action::{Get, List, Create, Delete};

@@ -2,12 +2,14 @@
 
 pub mod domains;
 pub mod domain_records;
+pub mod ssh_keys;
 
 use url::Url;
 use serde::Deserialize;
 use url_serde::SerdeUrl;
 
 pub use self::domains::Domains;
+pub use self::ssh_keys::SshKeys;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;

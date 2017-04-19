@@ -6,6 +6,9 @@ pub use self::domain::Domain;
 mod domain_record;
 pub use self::domain_record::DomainRecord;
 
+mod ssh_key;
+pub use self::ssh_key::SshKey;
+
 mod image;
 pub use self::image::Image;
 

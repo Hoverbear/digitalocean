@@ -16,7 +16,7 @@ const DOMAINS_SEGMENT: &'static str = "domains";
 pub struct Domains;
 
 impl Domains {
-    /// https://developers.digitalocean.com/documentation/v2/#create-a-new-domain
+    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain)
     pub fn create<N, I>(name: N, ip_address: I) -> Request<Create, Domain>
     where N: AsRef<str> + Serialize + Display, I: Into<IpAddr> + Serialize + Display {
         let mut url = ROOT_URL.clone();
@@ -30,7 +30,7 @@ impl Domains {
         }))
     }
 
-    /// https://developers.digitalocean.com/documentation/v2/#list-all-domains
+    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domains)
     pub fn list() -> Request<List, Vec<Domain>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -40,7 +40,7 @@ impl Domains {
         Request::new(url)
     }
 
-    /// https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain
+    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain)
     pub fn get<N>(name: N) -> Request<Get, Domain> 
     where N: AsRef<str> + Display {        
         let mut url = ROOT_URL.clone();
@@ -52,7 +52,7 @@ impl Domains {
         Request::new(url)
     }
 
-    /// https://developers.digitalocean.com/documentation/v2/#delete-a-domain
+    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain)
     pub fn delete<N>(name: N) -> Request<Delete, ()> 
     where N: AsRef<str> + Display {
         let mut url = ROOT_URL.clone();

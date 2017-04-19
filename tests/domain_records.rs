@@ -7,11 +7,8 @@ extern crate url_serde;
 mod utils;
 
 use serde_json::Value;
-use std::net::IpAddr;
-use std::str::FromStr;
 
 use digitalocean::api::Domains;
-
 use digitalocean::request::Request;
 use digitalocean::values::DomainRecord;
 use digitalocean::action::{Get, List, Create, Update, Delete};
