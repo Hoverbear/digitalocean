@@ -119,24 +119,24 @@ impl Request<Update, SshKey> {
 
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
-pub struct SshKeysListResponse {
+pub struct SshKeyListResponse {
     ssh_keys: Vec<SshKey>,
     links: ApiLinks,
     meta: ApiMeta,
 }
 
 impl HasResponse for Vec<SshKey> {
-    type Response = SshKeysListResponse;
+    type Response = SshKeyListResponse;
 }
 
 
-impl HasPagination for SshKeysListResponse {
+impl HasPagination for SshKeyListResponse {
     fn next_page(&self) -> Option<Url> {
         self.links.next()
     }
 }
 
-impl HasValue for SshKeysListResponse {
+impl HasValue for SshKeyListResponse {
     type Value = Vec<SshKey>;
     fn value(self) -> Vec<SshKey> {
         self.ssh_keys
@@ -145,15 +145,15 @@ impl HasValue for SshKeysListResponse {
 
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
-pub struct SshKeysResponse {
+pub struct SshKeyResponse {
     ssh_key: SshKey,
 }
 
 impl HasResponse for SshKey {
-    type Response = SshKeysResponse;
+    type Response = SshKeyResponse;
 }
 
-impl HasValue for SshKeysResponse {
+impl HasValue for SshKeyResponse {
     type Value = SshKey;
     fn value(self) -> SshKey {
         self.ssh_key
