@@ -42,8 +42,7 @@ pub struct FloatingIpAction {
     /// with.
     pub resource_id: usize,
     /// (deprecated) A slug representing the region where the action occurred.
-    #[deprecated(since = "0.0.1",
-    note="DigitalOcean has deprecated this.")]
+    #[deprecated(since = "0.0.1", note="DigitalOcean has deprecated this.")]
     pub region: Option<String>,
     /// A slug representing the region where the action occurred.
     pub region_slug: Option<String>,
