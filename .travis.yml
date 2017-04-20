@@ -1,0 +1,20 @@
+language: rust
+sudo: false
+env:
+  global:
+    - RUST_BACKTRACE=1
+cache: cargo
+
+matrix:
+  include:
+    - rust: nightly
+      install:
+      - cargo install clippy
+      script:
+        - cargo clippy
+        - cargo build
+        - cargo test --all
+    - rust: stable
+      script:
+        - cargo build
+        - cargo test --all
