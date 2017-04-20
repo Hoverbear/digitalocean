@@ -16,7 +16,8 @@ const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
 /// domain.
 ///
 /// Requests with this output this type are accessed via [`Domain::get(..).records()`](../request/struct.Request.html#method.records).
-/// Make sure to check the builders for [`Create`](../request/struct.Request.html#method.priority) and [`Update`](../request/struct.Request.html#method.kind).
+/// Make sure to check the builders for [`Create`](../request/struct.Request.html#method.priority)
+/// and [`Update`](../request/struct.Request.html#method.kind).
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
 #[derive(Deserialize, Debug, Clone)]

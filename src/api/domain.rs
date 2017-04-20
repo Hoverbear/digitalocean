@@ -56,8 +56,6 @@ impl Domain {
         Request::new(url)
     }
 
-    /// Access [`DomainRecord`](struct.DomainRecord.html) types via [`.records()`](../request/struct.Request.html#method.records)
-    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain)
     pub fn get<N>(name: N) -> Request<Get, Domain> 
     where N: AsRef<str> + Display {        
