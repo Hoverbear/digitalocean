@@ -18,7 +18,7 @@ use utils::before;
 fn list_produces_correct_request() {
     before();
 
-    let correct_url = "https://api.digitalocean.com/v2/images";
+    let correct_url = "https://api.digitalocean.com/v2/sizes";
 
     let req: Request<List, Vec<Size>> = Size::list();
     info!("{:#?}", req);

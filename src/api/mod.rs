@@ -8,11 +8,15 @@ mod image;
 mod image_action;
 mod snapshot;
 mod size;
+mod droplet;
+mod floating_ip;
+mod floating_ip_action;
 
 use url::Url;
 use serde::Deserialize;
 use url_serde::SerdeUrl;
 
+pub use self::droplet::Droplet;
 pub use self::domain::Domain;
 pub use self::ssh_key::SshKey;
 pub use self::domain_record::DomainRecord;
@@ -21,6 +25,8 @@ pub use self::image::Image;
 pub use self::image_action::ImageAction;
 pub use self::snapshot::Snapshot;
 pub use self::size::Size;
+pub use self::floating_ip::FloatingIp;
+pub use self::floating_ip_action::FloatingIpAction;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;

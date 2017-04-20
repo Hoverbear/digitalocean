@@ -41,6 +41,8 @@ pub struct ImageAction {
     /// The type of resource that the action is associated with.
     pub resource_type: String,
     /// (deprecated) A slug representing the region where the action occurred.
+    #[deprecated(since = "0.0.1",
+    note="DigitalOcean has deprecated this.")]
     pub region: Option<String>,
     /// A slug representing the region where the action occurred.
     pub region_slug: Option<String>,
