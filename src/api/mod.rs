@@ -5,6 +5,7 @@ mod domain_record;
 mod ssh_key;
 mod region;
 mod image;
+mod image_action;
 
 use url::Url;
 use serde::Deserialize;
@@ -15,6 +16,7 @@ pub use self::ssh_key::SshKey;
 pub use self::domain_record::DomainRecord;
 pub use self::region::Region;
 pub use self::image::Image;
+pub use self::image_action::ImageAction;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;

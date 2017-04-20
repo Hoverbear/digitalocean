@@ -48,10 +48,10 @@ fn create_produces_correct_request() {
 fn get_produces_correct_request() {
     before();
 
-    let id = 123.to_string();
-    let correct_url = format!("https://api.digitalocean.com/v2/account/keys/{}", id);
+    let key_id = 123;
+    let correct_url = format!("https://api.digitalocean.com/v2/account/keys/{}", key_id);
 
-    let req: Request<Get, SshKey> = SshKey::get(id);
+    let req: Request<Get, SshKey> = SshKey::get(key_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -62,11 +62,11 @@ fn get_produces_correct_request() {
 fn update_produces_correct_request() {
     before();
 
-    let id = 123.to_string();
-    let correct_url = format!("https://api.digitalocean.com/v2/account/keys/{}", id);
+    let key_id = 123.to_string();
+    let correct_url = format!("https://api.digitalocean.com/v2/account/keys/{}", key_id);
     let name = "new name";
 
-    let req: Request<Update, SshKey> = SshKey::update(id)
+    let req: Request<Update, SshKey> = SshKey::update(key_id)
         .name(name);
     info!("{:#?}", req);
 
@@ -80,10 +80,10 @@ fn update_produces_correct_request() {
 fn delete_produces_correct_request() {
     before();
 
-    let id = 123.to_string();
-    let correct_url = format!("https://api.digitalocean.com/v2/account/keys/{}", id);
+    let key_id = 123.to_string();
+    let correct_url = format!("https://api.digitalocean.com/v2/account/keys/{}", key_id);
 
-    let req: Request<Delete, ()> = SshKey::delete(id);
+    let req: Request<Delete, ()> = SshKey::delete(key_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

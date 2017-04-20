@@ -31,10 +31,10 @@ fn list_produces_correct_request() {
 fn get_produces_correct_request() {
     before();
 
-    let id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/images/{}", id);
+    let image_id = 123;
+    let correct_url = format!("https://api.digitalocean.com/v2/images/{}", image_id);
 
-    let req: Request<Get, Image> = Image::get(id);
+    let req: Request<Get, Image> = Image::get(image_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -45,11 +45,11 @@ fn get_produces_correct_request() {
 fn update_produces_correct_request() {
     before();
 
-    let id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/images/{}", id);
+    let image_id = 123;
+    let correct_url = format!("https://api.digitalocean.com/v2/images/{}", image_id);
     let name = "blah-blah";
 
-    let req: Request<Update, Image> = Image::update(id)
+    let req: Request<Update, Image> = Image::update(image_id)
         .name(name);
     info!("{:#?}", req);
 
@@ -63,10 +63,10 @@ fn update_produces_correct_request() {
 fn delete_produces_correct_request() {
     before();
 
-    let id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/images/{}", id);
+    let image_id = 123;
+    let correct_url = format!("https://api.digitalocean.com/v2/images/{}", image_id);
 
-    let req: Request<Delete, ()> = Image::delete(id);
+    let req: Request<Delete, ()> = Image::delete(image_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

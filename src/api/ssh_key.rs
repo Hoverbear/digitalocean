@@ -68,39 +68,39 @@ impl SshKey {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key)
     pub fn get<S>(id: S) -> Request<Get, SshKey> 
-    where S: AsRef<str> + Serialize + Display {
+    where S: Serialize + Display {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(ACCOUNT_SEGMENT)
             .push(KEYS_SEGMENT)
-            .push(id.as_ref());
+            .push(&format!("{}", id));
 
         Request::new(url)
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key)
     pub fn update<S>(id: S) -> Request<Update, SshKey> 
-    where S: AsRef<str> + Serialize + Display {
+    where S: Serialize + Display {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(ACCOUNT_SEGMENT)
             .push(KEYS_SEGMENT)
-            .push(id.as_ref());
+            .push(&format!("{}", id));
 
         Request::new(url)
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain)
     pub fn delete<S>(id: S) -> Request<Delete, ()> 
-    where S: AsRef<str> + Serialize + Display {
+    where S: Serialize + Display {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(ACCOUNT_SEGMENT)
             .push(KEYS_SEGMENT)
-            .push(id.as_ref());
+            .push(&format!("{}", id));
         
         Request::new(url)
     }
