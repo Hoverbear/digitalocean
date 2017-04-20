@@ -5,7 +5,7 @@ use url::Url;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
-const IMAGES_SEGMENT: &'static str = "images";
+const SIZES_SEGMENT: &'static str = "sizes";
 
 /// The sizes objects represent different packages of hardware resources that 
 /// can be used for Droplets. When a Droplet is created, a size must be 
@@ -54,7 +54,7 @@ impl Size {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
-            .push(IMAGES_SEGMENT);
+            .push(SIZES_SEGMENT);
 
         Request::new(url)
     }
