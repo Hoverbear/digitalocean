@@ -87,7 +87,7 @@ impl Snapshot {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-snapshot)
-    pub fn delete(id: usize) -> Request<Delete, Snapshot> {
+    pub fn delete(id: usize) -> Request<Delete, ()> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)

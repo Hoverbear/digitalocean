@@ -74,7 +74,7 @@ fn delete_produces_correct_request() {
     let snapshot_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/snapshots/{}", snapshot_id);
 
-    let req: Request<Delete, Snapshot> = Snapshot::delete(snapshot_id);
+    let req: Request<Delete, ()> = Snapshot::delete(snapshot_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

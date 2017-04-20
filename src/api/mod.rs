@@ -1,5 +1,6 @@
 //! API specific documentation.
 
+mod account;
 mod domain;
 mod domain_record;
 mod ssh_key;
@@ -16,6 +17,7 @@ use url::Url;
 use serde::Deserialize;
 use url_serde::SerdeUrl;
 
+pub use self::account::Account;
 pub use self::droplet::Droplet;
 pub use self::domain::Domain;
 pub use self::ssh_key::SshKey;

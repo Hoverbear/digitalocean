@@ -82,7 +82,7 @@ impl FloatingIp {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip)
-    pub fn delete<I>(id: I) -> Request<Delete, FloatingIp>
+    pub fn delete<I>(id: I) -> Request<Delete, ()>
     where I: Into<IpAddr> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
