@@ -6,6 +6,7 @@ use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use serde_json::Value;
 use chrono::{DateTime, UTC};
+use super::Droplet;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
@@ -120,7 +121,7 @@ impl Request<List, Vec<DropletAction>> {
     where D: Display {
         self.body = json!({
             "type": "restore",
-            "image": format!("{}", val),
+            "image": format!("{}", image),
         });
 
         self.action()
@@ -137,7 +138,7 @@ impl Request<List, Vec<DropletAction>> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#resize-a-droplet)
     pub fn resize<S>(mut self, size: S, disk: bool) -> Request<Create, DropletAction>
-    where S: AsRef<Str> + Serialize + Display {
+    where S: AsRef<str> + Serialize + Display {
         self.body = json!({
             "type": "resize",
             "disk": disk,
@@ -149,7 +150,7 @@ impl Request<List, Vec<DropletAction>> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#resize-a-droplet)
     pub fn rebuild<S>(mut self, image: S) -> Request<Create, DropletAction>
-    where S: AsRef<Str> + Serialize + Display {
+    where S: AsRef<str> + Serialize + Display {
         self.body = json!({
             "type": "rebuild",
             "image": image.as_ref(),
@@ -160,7 +161,7 @@ impl Request<List, Vec<DropletAction>> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#rename-a-droplet)
     pub fn rename<S>(mut self, name: S) -> Request<Create, DropletAction>
-    where S: AsRef<Str> + Serialize + Display {
+    where S: AsRef<str> + Serialize + Display {
         self.body = json!({
             "type": "rename",
             "name": name.as_ref(),
@@ -170,7 +171,7 @@ impl Request<List, Vec<DropletAction>> {
             .value()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#change-the-kernel)
-    pub fn change_kernel(mut self, kernel: usize) -> Request<Create, DropletAction> {
+    pub fn kernel(mut self, kernel: usize) -> Request<Create, DropletAction> {
         self.body = json!({
             "type": "change_kernel",
             "kernel": kernel,
@@ -209,10 +210,10 @@ impl Request<List, Vec<DropletAction>> {
             .value()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-droplet-action)
-    pub fn get(mut self, id: usize) -> Request<Create, DropletAction> {
+    pub fn get(mut self, id: usize) -> Request<Get, DropletAction> {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
-            .push(id.to_string());
+            .push(&id.to_string());
 
         self.action()
             .value()

@@ -3,13 +3,14 @@
 mod account;
 mod domain;
 mod domain_record;
+mod droplet;
+mod droplet_action;
 mod ssh_key;
 mod region;
 mod image;
 mod image_action;
 mod snapshot;
 mod size;
-mod droplet;
 mod floating_ip;
 mod floating_ip_action;
 
@@ -19,6 +20,7 @@ use url_serde::SerdeUrl;
 
 pub use self::account::Account;
 pub use self::droplet::Droplet;
+pub use self::droplet_action::DropletAction;
 pub use self::domain::Domain;
 pub use self::ssh_key::SshKey;
 pub use self::domain_record::DomainRecord;
