@@ -7,7 +7,7 @@ use digitalocean::DigitalOcean;
 use digitalocean::api::Domain;
 use digitalocean::request::Executable;
 
-/// cargo run --example show_domain_records -- $DOMAIN $DOMAIN2...
+// cargo run --example show_domain_records -- $DOMAIN $DOMAIN2...
 fn main() {
     dotenv::dotenv().ok();
     env_logger::init().ok();

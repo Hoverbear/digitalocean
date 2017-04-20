@@ -7,8 +7,8 @@ use digitalocean::DigitalOcean;
 use digitalocean::api::Image;
 use digitalocean::request::Executable;
 
-/// cargo run --example get_image -- $IMAGE
-/// cargo run --example get_image -- $IMAGE --actions
+// cargo run --example get_image -- $IMAGE
+// cargo run --example get_image -- $IMAGE --actions
 fn main() {
     dotenv::dotenv().ok();
     env_logger::init().ok();
@@ -30,8 +30,9 @@ fn main() {
     let req = Image::get(id);
 
     // Calling `.action()` makes returns a different type than what `req` is.
-    match actions_flag {
-        true => println!("{:#?}", req.actions().execute(&client)),
-        false => println!("{:#?}", req.execute(&client))
+    if actions_flag {
+        println!("{:#?}", req.actions().execute(&client));
+    } else {
+        println!("{:#?}", req.execute(&client))
     }
 }

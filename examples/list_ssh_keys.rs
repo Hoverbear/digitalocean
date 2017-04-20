@@ -7,7 +7,7 @@ use digitalocean::DigitalOcean;
 use digitalocean::api::SshKey;
 use digitalocean::request::Executable;
 
-/// cargo run --example list_ssh_keys
+// cargo run --example list_ssh_keys
 fn main() {
     dotenv::dotenv().ok();
     env_logger::init().ok();
