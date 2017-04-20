@@ -1,16 +1,17 @@
 [package]
 authors = ["hoverbear <andrew@hoverbear.org>"]
-name = "digitalocean"
-version = "0.1.0"
+categories = ["development-tools"]
 description = "A crate for interfacing with Digital Ocean's V2 API."
 documentation = ""
 homepage = "https://github.com/hoverbear/digitalocean"
-repository = "https://github.com/hoverbear/digitalocean"
 keywords = ["DigitalOcean", "IaaS", "Provisioning"]
-categories = ["development-tools"]
 license = "MIT"
+name = "digitalocean"
+repository = "https://github.com/hoverbear/digitalocean"
+version = "0.1.0"
 
 [dependencies]
+chrono = { version = "0.3.0", features = ["serde"] }
 error-chain = "0.10.0"
 lazy_static = "0.2.5"
 log = "0.3.7"

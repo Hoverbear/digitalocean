@@ -4,6 +4,7 @@ use request::Request;
 use action::{List, Get, Create};
 use url::Url;
 use STATIC_URL_ERROR;
+use chrono::{DateTime, UTC};
 use super::Image;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
@@ -31,10 +32,10 @@ pub struct ImageAction {
     pub kind: String, // 'type' is reserved in Rust.
     /// A time value given in ISO8601 combined date and time format that 
     /// represents when the action was initiated.
-    pub started_at: String,
+    pub started_at: DateTime<UTC>,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the action was completed.
-    pub completed_at: String,
+    pub completed_at: DateTime<UTC>,
     /// A unique identifier for the resource that the action is associated with.
     pub resource_id: usize,
     /// The type of resource that the action is associated with.

@@ -4,6 +4,7 @@ use request::Request;
 use action::{List, Get, Update, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
+use chrono::{DateTime, UTC};
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
@@ -51,7 +52,7 @@ pub struct Image {
     pub size_gigabytes: f32,
     /// A time value given in ISO8601 combined date and time format that 
     /// represents when the Image was created.
-    pub created_at: String,
+    pub created_at: DateTime<UTC>,
 }
 
 impl Image {
@@ -105,6 +106,7 @@ impl Image {
     }
 
     /// `id` is either an `id` (numeric) or a `slug` (string).
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id)
     pub fn get<S>(id: S) -> Request<Get, Image>
     where S: Display {
@@ -118,6 +120,7 @@ impl Image {
     }
 
     /// `id` is either an `id` (numeric) or a `slug` (string).
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-an-image)
     pub fn update<S>(id: S) -> Request<Update, Image>
     where S: Display {
@@ -131,6 +134,7 @@ impl Image {
     }
 
     /// `id` is either an `id` (numeric) or a `slug` (string).
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-an-image)
     pub fn delete<S>(id: S) -> Request<Delete, ()>
     where S: Display {

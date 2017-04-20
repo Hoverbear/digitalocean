@@ -25,7 +25,7 @@ pub struct SshKey {
     ///
     /// *Note:* This is a `String` to allow for `id` and `fingerprint` to be
     /// used in `Get`, `Update`, and `Delete` calls like the API describes.
-    pub id: String,
+    pub id: usize,
     /// This attribute contains the fingerprint value that is generated from
     /// the public key. This is a unique identifier that will differentiate 
     /// it from other keys using a format that SSH recognizes.

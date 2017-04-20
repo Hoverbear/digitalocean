@@ -8,6 +8,7 @@ extern crate reqwest;
 extern crate serde;
 extern crate url_serde;
 extern crate url;
+extern crate chrono;
 #[macro_use] extern crate error_chain;
 
 pub mod api;
