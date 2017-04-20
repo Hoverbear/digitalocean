@@ -1,5 +1,3 @@
-//! Domain specific documentation.
-
 use serde::Serialize;
 use std::fmt::Display;
 use request::Request;
