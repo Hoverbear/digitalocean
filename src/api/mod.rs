@@ -1,38 +1,40 @@
 //! API specific documentation.
 
-mod action;
 mod account;
-mod domain;
+mod action;
+mod certificate;
 mod domain_record;
-mod droplet;
+mod domain;
 mod droplet_action;
-mod volume_action;
-mod ssh_key;
-mod region;
-mod image;
-mod image_action;
-mod snapshot;
-mod size;
-mod volume;
-mod floating_ip;
+mod droplet;
 mod floating_ip_action;
+mod floating_ip;
+mod image_action;
+mod image;
+mod region;
+mod size;
+mod snapshot;
+mod ssh_key;
+mod volume_action;
+mod volume;
 
 use url::Url;
 use serde::Deserialize;
 use url_serde::SerdeUrl;
 
-pub use self::action::Action;
 pub use self::account::Account;
-pub use self::droplet::{Droplet, droplet_fields};
-pub use self::domain::Domain;
-pub use self::ssh_key::SshKey;
+pub use self::action::Action;
+pub use self::certificate::Certificate;
 pub use self::domain_record::DomainRecord;
-pub use self::region::Region;
-pub use self::image::Image;
-pub use self::volume::Volume;
-pub use self::snapshot::Snapshot;
-pub use self::size::Size;
+pub use self::domain::Domain;
+pub use self::droplet::{Droplet, droplet_fields};
 pub use self::floating_ip::FloatingIp;
+pub use self::image::Image;
+pub use self::region::Region;
+pub use self::size::Size;
+pub use self::snapshot::Snapshot;
+pub use self::ssh_key::SshKey;
+pub use self::volume::Volume;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;
