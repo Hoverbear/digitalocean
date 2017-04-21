@@ -1,7 +1,7 @@
 use serde::Serialize;
 use std::fmt::Display;
 use request::Request;
-use action::{List, Get, Update, Delete};
+use method::{List, Get, Update, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};

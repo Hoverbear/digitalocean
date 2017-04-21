@@ -1,5 +1,5 @@
 use request::Request;
-use action::List;
+use method::List;
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use super::{ApiLinks, ApiMeta};

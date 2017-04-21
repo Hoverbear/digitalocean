@@ -10,7 +10,7 @@ use serde_json::Value;
 
 use digitalocean::api::Account;
 use digitalocean::request::Request;
-use digitalocean::action::Get;
+use digitalocean::method::Get;
 
 use utils::before;
 

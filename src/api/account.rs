@@ -1,5 +1,5 @@
 use request::Request;
-use action::Get;
+use method::Get;
 use {ROOT_URL, STATIC_URL_ERROR};
 use super::{HasValue, HasResponse};
 

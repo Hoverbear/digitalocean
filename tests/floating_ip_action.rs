@@ -10,9 +10,9 @@ use serde_json::Value;
 use std::net::IpAddr;
 use std::str::FromStr;
 
-use digitalocean::api::{FloatingIpAction, FloatingIp};
+use digitalocean::api::{Action, FloatingIp};
 use digitalocean::request::Request;
-use digitalocean::action::{Get, Create, List};
+use digitalocean::method::{Get, Create, List};
 
 use utils::before;
 
@@ -23,7 +23,7 @@ fn list_produces_correct_request() {
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
     let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions", floating_ip);
 
-    let req: Request<List, Vec<FloatingIpAction>> = FloatingIp::get(floating_ip)
+    let req: Request<List, Vec<Action>> = FloatingIp::get(floating_ip)
         .actions();
     info!("{:#?}", req);
 
@@ -39,9 +39,8 @@ fn get_produces_correct_request() {
     let action_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions/{}", floating_ip, action_id);
 
-    let req: Request<Get, FloatingIpAction> = FloatingIp::get(floating_ip)
-        .actions()
-        .get(action_id);
+    let req: Request<Get, Action> = FloatingIp::get(floating_ip)
+        .action(action_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -56,8 +55,7 @@ fn assign_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions", floating_ip);
     let droplet_id = 123;
 
-    let req: Request<Create, FloatingIpAction> = FloatingIp::get(floating_ip)
-        .actions()
+    let req: Request<Create, Action> = FloatingIp::get(floating_ip)
         .assign(droplet_id);
     info!("{:#?}", req);
 
@@ -75,8 +73,7 @@ fn unassign_produces_correct_request() {
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
     let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions", floating_ip);
 
-    let req: Request<Create, FloatingIpAction> = FloatingIp::get(floating_ip)
-        .actions()
+    let req: Request<Create, Action> = FloatingIp::get(floating_ip)
         .unassign();
     info!("{:#?}", req);
 

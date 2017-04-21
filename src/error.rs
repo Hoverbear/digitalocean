@@ -30,5 +30,10 @@ error_chain! {
             description("Unexpected status code")
             display("Unexpected status code: {}", t)
         }
+        /// The item does not exist or otherwise cannot be found.
+        NotFound {
+            description("Not found")
+            display("Not found")
+        }
     }
 }

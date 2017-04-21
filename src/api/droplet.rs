@@ -1,15 +1,14 @@
 use serde::Serialize;
 use std::fmt::Display;
-use std::net::IpAddr;
 use request::Request;
-use action::{List, Get, Create, Delete};
+use method::{List, Get, Create, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};
 use super::{Size, Region, Image, Snapshot};
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
-use self::droplet_fields::{Network, Kernel, Networks, NextBackupWindow};
+use self::droplet_fields::{Kernel, Networks, NextBackupWindow};
 
 const DROPLETS_SEGMENT: &'static str = "droplets";
 const REPORTS_SEGMENT: &'static str = "reports";
@@ -97,7 +96,6 @@ pub struct Droplet {
 
 /// Fields which exists inside Droplets.
 pub mod droplet_fields {
-    use serde::Deserialize;
     use chrono::{DateTime, UTC};
     use std::net::IpAddr;
     /// This exists in the `networks` field of a droplet.
@@ -389,7 +387,7 @@ impl Request<Get, Droplet> {
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOTS_SEGMENT);
         
-        self.action()
+        self.method()
             .value()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-backups-for-a-droplet)
@@ -398,7 +396,7 @@ impl Request<Get, Droplet> {
             .expect(STATIC_URL_ERROR)
             .push(BACKUPS_SEGMENT);
         
-        self.action()
+        self.method()
             .value()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-neighbors-for-a-droplet)
@@ -407,7 +405,7 @@ impl Request<Get, Droplet> {
             .expect(STATIC_URL_ERROR)
             .push(NEIGHBORS_SEGMENT);
         
-        self.action()
+        self.method()
             .value()
     }
 }

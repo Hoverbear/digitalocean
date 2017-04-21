@@ -5,7 +5,7 @@ use url::Url;
 use serde_json::Value;
 use std::marker::PhantomData;
 use api::{HasPagination, HasResponse};
-use action::{Action, List, Get, Create, Delete, Update};
+use method::{Method, List, Get, Create, Delete, Update};
 use DigitalOcean;
 
 /// A consuming builder which can be used to build up API calls.
@@ -13,22 +13,22 @@ use DigitalOcean;
 /// In general consumers of the crate should not need to use this type directly.
 /// Instead, build up requests from what is found in [`api::*`](../api/index.html).
 #[derive(Debug, Clone)]
-pub struct Request<A, R> where A: Action {
+pub struct Request<A, R> where A: Method {
     pub url: Url,
     pub body: Value,
-    action: PhantomData<A>,
+    method: PhantomData<A>,
     value: PhantomData<R>,
 }
 
 impl<A, V> Request<A, V>
-where A: Action {
+where A: Method {
     /// Create a request pointing at the given url. `V` is the value ultimately
     /// returned when the call is executed.
     pub fn new(url: Url) -> Self {
         Request {
             url: url,
             body: Value::Null,
-            action: PhantomData,
+            method: PhantomData,
             value: PhantomData,
         }
     }
@@ -42,9 +42,9 @@ where A: Action {
         self.url = url;
         self
     }
-    /// Transmute the request into a different action.
-    pub fn action<B>(self) -> Request<B, V>
-    where B: Action {
+    /// Transmute the request into a different method.
+    pub fn method<B>(self) -> Request<B, V>
+    where B: Method {
         Request::new(self.url).body(self.body)
     }
     /// Transmute the request to expect a different return type.

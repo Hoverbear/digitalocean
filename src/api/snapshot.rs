@@ -1,5 +1,5 @@
 use request::Request;
-use action::{List, Get, Delete};
+use method::{List, Get, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};

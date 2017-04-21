@@ -10,7 +10,7 @@ use serde_json::Value;
 
 use digitalocean::api::{Droplet, Snapshot};
 use digitalocean::request::Request;
-use digitalocean::action::{Get, List, Create, Delete};
+use digitalocean::method::{Get, List, Create, Delete};
 
 use utils::before;
 

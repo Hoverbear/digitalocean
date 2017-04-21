@@ -4,10 +4,10 @@ extern crate env_logger;
 
 use std::env;
 use digitalocean::DigitalOcean;
-use digitalocean::api::SshKey;
+use digitalocean::api::Account;
 use digitalocean::request::Executable;
 
-// cargo run --example list_ssh_keys
+// cargo run --example account
 fn main() {
     dotenv::dotenv().ok();
     env_logger::init().ok();
@@ -17,7 +17,8 @@ fn main() {
     let client = DigitalOcean::new(api_key)
         .unwrap();
 
-    let req = SshKey::list();
+    let req = Account::get();
+
     let result = req.execute(&client)
         .unwrap();
 

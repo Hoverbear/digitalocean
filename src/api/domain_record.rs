@@ -1,7 +1,7 @@
 use std::fmt::Display;
 use serde::Serialize;
 use request::Request;
-use action::{Get, List, Create, Delete, Update};
+use method::{Get, List, Create, Delete, Update};
 use STATIC_URL_ERROR;
 use url::Url;
 use super::domain::Domain;
@@ -52,7 +52,7 @@ impl Request<Get, Domain> {
             .expect(STATIC_URL_ERROR)
             .push(DOMAIN_RECORDS_SEGMENT);
 
-        self.action()
+        self.method()
             .value()
     }
 }
@@ -70,7 +70,7 @@ impl Request<List, Vec<DomainRecord>> {
             "data": data,
         });
 
-        self.action()
+        self.method()
             .value()
     }
 
@@ -80,7 +80,7 @@ impl Request<List, Vec<DomainRecord>> {
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.action()
+        self.method()
             .value()
     }
 
@@ -90,7 +90,7 @@ impl Request<List, Vec<DomainRecord>> {
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.action()
+        self.method()
             .value()
     }
 
@@ -100,7 +100,7 @@ impl Request<List, Vec<DomainRecord>> {
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.action()
+        self.method()
             .value()
     }
 }

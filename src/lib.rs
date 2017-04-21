@@ -13,7 +13,7 @@ extern crate chrono;
 
 pub mod api;
 mod error;
-pub mod action;
+pub mod method;
 pub mod request;
 
 use error::*;
@@ -24,7 +24,7 @@ use reqwest::header::{Authorization, Bearer};
 use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
 use request::{Request, Executable};
-use action::{Action, List, Get, Create, Delete, Update};
+use method::{Method, List, Get, Create, Delete, Update};
 use api::{HasValue, HasPagination, HasResponse};
 use url::Url;
 
@@ -52,7 +52,7 @@ impl DigitalOcean {
     }
 
     pub fn execute<A,V>(&self, request: Request<A,V>) -> Result<V>
-    where A: Action, 
+    where A: Method, 
           Request<A,V>: Executable<V>,
           V: HasResponse {
         request.execute(self)
@@ -67,7 +67,9 @@ impl DigitalOcean {
         
         match *response.status() {
             // Successes
-            StatusCode::Ok => (), // Get success
+            StatusCode::Ok => (),
+            // Not Found
+            StatusCode::NotFound => Err(ErrorKind::NotFound)?,
             // Errors
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
@@ -92,7 +94,9 @@ impl DigitalOcean {
             
             match *response.status() {
                 // Successes
-                StatusCode::Ok => (), // Get success
+                StatusCode::Ok => (),
+                // Not Found
+                StatusCode::NotFound => Err(ErrorKind::NotFound)?,
                 // Errors
                 e => Err(ErrorKind::UnexpectedStatus(e))?,
             };

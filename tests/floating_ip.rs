@@ -12,7 +12,7 @@ use std::str::FromStr;
 
 use digitalocean::api::FloatingIp;
 use digitalocean::request::Request;
-use digitalocean::action::{Create, Delete, Get, List};
+use digitalocean::method::{Create, Delete, Get, List};
 
 use utils::before;
 

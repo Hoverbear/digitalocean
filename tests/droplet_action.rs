@@ -7,12 +7,10 @@ extern crate url_serde;
 mod utils;
 
 use serde_json::Value;
-use std::net::IpAddr;
-use std::str::FromStr;
 
-use digitalocean::api::{DropletAction, Droplet};
+use digitalocean::api::{Action, Droplet};
 use digitalocean::request::Request;
-use digitalocean::action::{Get, Create, List};
+use digitalocean::method::{Get, Create, List};
 
 use utils::before;
 
@@ -23,7 +21,7 @@ fn list_produces_correct_request() {
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
-    let req: Request<List, Vec<DropletAction>> = Droplet::get(droplet_id)
+    let req: Request<List, Vec<Action>> = Droplet::get(droplet_id)
         .actions();
     info!("{:#?}", req);
 
@@ -32,27 +30,31 @@ fn list_produces_correct_request() {
 }
 
 #[test]
-fn backups_produces_correct_request() {
+fn enable_backups_produces_correct_request() {
     before();
 
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
-    // Turn on.
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
-        .backups(true);
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
+        .enable_backups();
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
     assert_eq!(req.body, json!({
         "type": "enable_backups",
     }));
+}
 
-    // Turn off.
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
-        .backups(false);
+#[test]
+fn disable_backups_produces_correct_request() {
+    before();
+
+    let droplet_id = 123;
+    let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
+
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
+        .disable_backups();
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -69,8 +71,7 @@ fn reboot_produces_correct_request() {
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .reboot();
     info!("{:#?}", req);
 
@@ -87,8 +88,7 @@ fn power_cycle_produces_correct_request() {
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .power_cycle();
     info!("{:#?}", req);
 
@@ -105,8 +105,7 @@ fn shutdown_produces_correct_request() {
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .shutdown();
     info!("{:#?}", req);
 
@@ -124,8 +123,7 @@ fn power_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
     // Off
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .power(false);
     info!("{:#?}", req);
 
@@ -135,8 +133,7 @@ fn power_produces_correct_request() {
     }));
 
     // On
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .power(true);
     info!("{:#?}", req);
 
@@ -155,8 +152,7 @@ fn restore_produces_correct_request() {
 
     // As slug
     let image_id = "test";
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .restore(image_id);
     info!("{:#?}", req);
 
@@ -168,8 +164,7 @@ fn restore_produces_correct_request() {
 
     // As id
     let image_id = 456;
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .restore(image_id);
     info!("{:#?}", req);
 
@@ -187,8 +182,7 @@ fn password_reset_produces_correct_request() {
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .password_reset();
     info!("{:#?}", req);
 
@@ -206,8 +200,7 @@ fn resize_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
     let (size, disk) = ("1gb", false);
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .resize(size, disk);
     info!("{:#?}", req);
 
@@ -227,8 +220,7 @@ fn rebuild_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
     let image_id = "test";
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .rebuild(image_id.clone());
     info!("{:#?}", req);
 
@@ -247,8 +239,7 @@ fn rename_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
     let new_name = "test";
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .rename(new_name.clone());
     info!("{:#?}", req);
 
@@ -267,8 +258,7 @@ fn kernel_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
     let kernel_id = 456;
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .kernel(kernel_id);
     info!("{:#?}", req);
 
@@ -286,8 +276,7 @@ fn enable_ipv6_kernel_produces_correct_request() {
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .enable_ipv6();
     info!("{:#?}", req);
 
@@ -304,8 +293,7 @@ fn enable_private_networking_produces_correct_request() {
     let droplet_id = 123;
     let correct_url =  format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .enable_private_networking();
     info!("{:#?}", req);
 
@@ -323,8 +311,7 @@ fn snapshot_produces_correct_request() {
     let correct_url = format!( "https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
     let name = "blahblah";
 
-    let req: Request<Create, DropletAction> = Droplet::get(droplet_id)
-        .actions()
+    let req: Request<Create, Action> = Droplet::get(droplet_id)
         .snapshot(name);
     info!("{:#?}", req);
 
@@ -343,9 +330,8 @@ fn get_produces_correct_request() {
     let action_id = 456;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions/{}", droplet_id, action_id);
 
-    let req: Request<Get, DropletAction> = Droplet::get(droplet_id)
-        .actions()
-        .get(action_id);
+    let req: Request<Get, Action> = Droplet::get(droplet_id)
+        .action(action_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

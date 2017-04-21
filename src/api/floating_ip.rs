@@ -1,7 +1,7 @@
 use serde::Serialize;
 use std::fmt::Display;
 use request::Request;
-use action::{Create, Delete, Get, List};
+use method::{Create, Delete, Get, List};
 use super::{Region, Droplet};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;

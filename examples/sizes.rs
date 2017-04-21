@@ -4,10 +4,10 @@ extern crate env_logger;
 
 use std::env;
 use digitalocean::DigitalOcean;
-use digitalocean::api::Account;
+use digitalocean::api::Size;
 use digitalocean::request::Executable;
 
-// cargo run --example account_info
+// cargo run --example sizes
 fn main() {
     dotenv::dotenv().ok();
     env_logger::init().ok();
@@ -17,9 +17,7 @@ fn main() {
     let client = DigitalOcean::new(api_key)
         .unwrap();
 
-    let req = Account::get();
-
-    let result = req.execute(&client)
+    let result = Size::list().execute(&client)
         .unwrap();
 
     println!("{:#?}", result);

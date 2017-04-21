@@ -10,7 +10,7 @@ use serde_json::Value;
 
 use digitalocean::api::Snapshot;
 use digitalocean::request::Request;
-use digitalocean::action::{Get, List, Delete};
+use digitalocean::method::{Get, List, Delete};
 
 use utils::before;
 

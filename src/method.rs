@@ -2,29 +2,29 @@
 
 /// A marker trait used by [`Request`](../request/struct.Request.html)
 /// to signal which execution path should be taken.
-pub trait Action {}
+pub trait Method {}
 
-/// A list action uses a GET request with pagination.
+/// A list method uses a GET request with pagination.
 #[derive(Debug, Clone, Copy)]
 pub struct List;
-impl Action for List {}
+impl Method for List {}
 
-/// A get action uses a GET request.
+/// A get method uses a GET request.
 #[derive(Debug, Clone, Copy)]
 pub struct Get;
-impl Action for Get {}
+impl Method for Get {}
 
-/// A create action uses a POST request.
+/// A create method uses a POST request.
 #[derive(Debug, Clone, Copy)]
 pub struct Create;
-impl Action for Create {}
+impl Method for Create {}
 
-/// An update action uses a PUT request.
+/// An update method uses a PUT request.
 #[derive(Debug, Clone, Copy)]
 pub struct Update;
-impl Action for Update {}
+impl Method for Update {}
 
-/// A delete action uses a DELETE request.
+/// A delete method uses a DELETE request.
 #[derive(Debug, Clone, Copy)]
 pub struct Delete;
-impl Action for Delete {}
+impl Method for Delete {}
