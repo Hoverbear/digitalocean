@@ -6,6 +6,7 @@ mod domain;
 mod domain_record;
 mod droplet;
 mod droplet_action;
+mod volume_action;
 mod ssh_key;
 mod region;
 mod image;
