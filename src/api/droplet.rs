@@ -1,14 +1,15 @@
 use serde::Serialize;
 use std::fmt::Display;
+use std::net::IpAddr;
 use request::Request;
 use action::{List, Get, Create, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use serde_json::Value;
 use chrono::{DateTime, UTC};
 use super::{Size, Region, Image, Snapshot};
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use self::droplet_fields::{Network, Kernel, Networks, NextBackupWindow};
 
 const DROPLETS_SEGMENT: &'static str = "droplets";
 const REPORTS_SEGMENT: &'static str = "reports";
@@ -51,7 +52,7 @@ pub struct Droplet {
     /// An array of backup IDs of any backups that have been taken of the 
     /// Droplet instance. Droplet backups are enabled at the time of the 
     /// instance creation.
-    pub backup_ids: Vec<String>,
+    pub backup_ids: Vec<usize>,
     /// An array of snapshot IDs of any snapshots created from the Droplet 
     /// instance.
     pub snapshot_ids: Vec<usize>,
@@ -79,19 +80,58 @@ pub struct Droplet {
     /// an individual IP resource allocated to the Droplet. These will define
     /// attributes like the IP address, netmask, and gateway of the specific
     /// network depending on the type of network it is.
-    pub networks: Value,
+    pub networks: Networks,
     /// The current kernel. This will initially be set to the kernel of the 
     /// base image when the Droplet is created.
-    pub kernel: Value,
+    pub kernel: Option<Kernel>,
     /// The details of the Droplet's backups feature, if backups are configured
     /// for the Droplet. This object contains keys for the start and end times 
     /// of the window during which the backup will start.
-    pub next_backup_window: Value,
+    pub next_backup_window: Option<NextBackupWindow>,
     /// An array of Tags the Droplet has been tagged with.
     pub tags: Vec<String>,
     /// A flat array including the unique identifier for each Block Storage 
     /// volume attached to the Droplet.
     pub volume_ids: Vec<String>,
+}
+
+/// Fields which exists inside Droplets.
+pub mod droplet_fields {
+    use serde::Deserialize;
+    use chrono::{DateTime, UTC};
+    use std::net::IpAddr;
+    /// This exists in the `networks` field of a droplet.
+    #[derive(Deserialize, Debug, Clone)]
+    pub struct Networks {
+        v4: Vec<Network>,
+        v6: Vec<Network>,
+    }
+
+    /// These exist in the `networks` field of a droplet.
+    #[derive(Deserialize, Debug, Clone)]
+    pub struct Network {
+        gateway: IpAddr,
+        ip_address: IpAddr,
+        netmask: IpAddr,
+        /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
+        #[serde(rename = "type")]
+        kind: String,
+    }
+
+    /// This exists in the `next_backup_window` field of a droplet.
+    #[derive(Deserialize, Debug, Clone)]
+    pub struct NextBackupWindow {
+        end: DateTime<UTC>,
+        start: DateTime<UTC>,
+    }
+
+    /// This exists in the `kernel` field of a droplet.
+    #[derive(Deserialize, Debug, Clone)]
+    pub struct Kernel {
+        id: usize,
+        name: String,
+        version: String,
+    }
 }
 
 impl Droplet {

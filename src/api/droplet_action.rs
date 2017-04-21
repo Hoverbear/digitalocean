@@ -1,10 +1,9 @@
 use serde::Serialize;
 use std::fmt::Display;
 use request::Request;
-use action::{List, Get, Create, Delete};
-use {ROOT_URL, STATIC_URL_ERROR};
+use action::{List, Get, Create};
+use STATIC_URL_ERROR;
 use url::Url;
-use serde_json::Value;
 use chrono::{DateTime, UTC};
 use super::Droplet;
 use super::{ApiLinks, ApiMeta};

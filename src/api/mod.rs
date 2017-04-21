@@ -19,7 +19,7 @@ use serde::Deserialize;
 use url_serde::SerdeUrl;
 
 pub use self::account::Account;
-pub use self::droplet::Droplet;
+pub use self::droplet::{Droplet, droplet_fields};
 pub use self::droplet_action::DropletAction;
 pub use self::domain::Domain;
 pub use self::ssh_key::SshKey;
