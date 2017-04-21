@@ -110,7 +110,7 @@ impl Request<Create, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn priority(mut self, val: Option<usize>) -> Self {
-        self.body["port"] = json!(val);
+        self.body["priority"] = json!(val);
         self
     }
     /// The port for SRV records.

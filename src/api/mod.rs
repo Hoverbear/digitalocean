@@ -12,6 +12,7 @@ mod image;
 mod image_action;
 mod snapshot;
 mod size;
+mod volume;
 mod floating_ip;
 mod floating_ip_action;
 
@@ -27,6 +28,7 @@ pub use self::ssh_key::SshKey;
 pub use self::domain_record::DomainRecord;
 pub use self::region::Region;
 pub use self::image::Image;
+pub use self::volume::Volume;
 pub use self::snapshot::Snapshot;
 pub use self::size::Size;
 pub use self::floating_ip::FloatingIp;

@@ -101,7 +101,7 @@ impl Snapshot {
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
 pub struct SnapshotListResponse {
-    ssh_keys: Vec<Snapshot>,
+    snapshots: Vec<Snapshot>,
     links: ApiLinks,
     meta: ApiMeta,
 }
@@ -120,14 +120,14 @@ impl HasPagination for SnapshotListResponse {
 impl HasValue for SnapshotListResponse {
     type Value = Vec<Snapshot>;
     fn value(self) -> Vec<Snapshot> {
-        self.ssh_keys
+        self.snapshots
     }
 }
 
 /// Response type returned from Digital Ocean.
 #[derive(Deserialize, Debug, Clone)]
 pub struct SnapshotResponse {
-    ssh_key: Snapshot,
+    snapshot: Snapshot,
 }
 
 impl HasResponse for Snapshot {
@@ -137,6 +137,6 @@ impl HasResponse for Snapshot {
 impl HasValue for SnapshotResponse {
     type Value = Snapshot;
     fn value(self) -> Snapshot {
-        self.ssh_key
+        self.snapshot
     }
 }
