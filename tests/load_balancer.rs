@@ -129,7 +129,6 @@ fn update_produces_correct_request() {
     }));
 }
 
-
 #[test]
 fn delete_produces_correct_request() {
     before();
@@ -142,4 +141,90 @@ fn delete_produces_correct_request() {
 
     assert_eq!(req.url.as_str(), correct_url);
     assert_eq!(req.body, Value::Null);
+}
+
+#[test]
+fn add_droplets_produces_correct_request() {
+    before();
+
+    let load_balancer_id = "123";
+    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/droplets", load_balancer_id);
+    let droplet_ids = vec![123, 456, 789];
+
+    let req: Request<Create, ()> = LoadBalancer::get(load_balancer_id)
+        .add_droplets(droplet_ids.clone());
+    info!("{:#?}", req);
+
+    assert_eq!(req.url.as_str(), correct_url);
+    assert_eq!(req.body, json!({
+        "droplet_ids": droplet_ids,
+    }));
+}
+
+#[test]
+fn remove_droplets_produces_correct_request() {
+    before();
+
+    let load_balancer_id = "123";
+    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/droplets", load_balancer_id);
+    let droplet_ids = vec![123, 456, 789];
+
+    let req: Request<Delete, ()> = LoadBalancer::get(load_balancer_id)
+        .remove_droplets(droplet_ids.clone());
+    info!("{:#?}", req);
+
+    assert_eq!(req.url.as_str(), correct_url);
+    assert_eq!(req.body, json!({
+        "droplet_ids": droplet_ids,
+    }));
+}
+
+#[test]
+fn add_forwarding_rule_produces_correct_request() {
+    before();
+
+    let load_balancer_id = "123";
+    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/forwarding_rules", load_balancer_id);
+    let (e_protocol, e_port, t_protocol, t_port) = ("tcp", 22, "tcp", 22);
+
+    let req: Request<Create, ()> = LoadBalancer::get(load_balancer_id)
+        .add_forwarding_rule(e_protocol, e_port, t_protocol, t_port, None, None);
+    info!("{:#?}", req);
+
+    assert_eq!(req.url.as_str(), correct_url);
+    assert_eq!(req.body, json!({
+        "forwarding_rules": [
+            {
+                "entry_protocol": e_protocol,
+                "entry_port": e_port,
+                "target_protocol": t_protocol,
+                "target_port": t_port,
+            },
+        ],
+    }));
+}
+
+#[test]
+fn remove_forwarding_rule_produces_correct_request() {
+    before();
+
+    let load_balancer_id = "123";
+    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/forwarding_rules", load_balancer_id);
+    let (e_protocol, e_port, t_protocol, t_port) = ("tcp", 22, "tcp", 22);
+
+    let req: Request<Delete, ()> = LoadBalancer::get(load_balancer_id)
+        .remove_forwarding_rule(e_protocol, e_port, t_protocol, t_port, None, None);
+    info!("{:#?}", req);
+
+    assert_eq!(req.url.as_str(), correct_url);
+    assert_eq!(req.body, json!({
+        "forwarding_rules": [
+            {
+                "entry_protocol": e_protocol,
+                "entry_port": e_port,
+                "target_protocol": t_protocol,
+                "target_port": t_port,
+            },
+        ],
+    }));
 }
