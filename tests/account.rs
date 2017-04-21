@@ -15,7 +15,7 @@ use digitalocean::method::Get;
 use utils::before;
 
 #[test]
-fn list_produces_correct_request() {
+fn get_produces_correct_request() {
     before();
 
     let correct_url = "https://api.digitalocean.com/v2/account";

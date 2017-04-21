@@ -18,6 +18,7 @@ mod snapshot;
 mod ssh_key;
 mod volume_action;
 mod volume;
+mod tag;
 
 use url::Url;
 use serde::Deserialize;
@@ -37,6 +38,7 @@ pub use self::size::Size;
 pub use self::snapshot::Snapshot;
 pub use self::ssh_key::SshKey;
 pub use self::volume::Volume;
+pub use self::tag::Tag;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;
