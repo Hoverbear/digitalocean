@@ -101,34 +101,34 @@ pub mod droplet_fields {
     /// This exists in the `networks` field of a droplet.
     #[derive(Deserialize, Debug, Clone)]
     pub struct Networks {
-        v4: Vec<Network>,
-        v6: Vec<Network>,
+        pub v4: Vec<Network>,
+        pub v6: Vec<Network>,
     }
 
     /// These exist in the `networks` field of a droplet.
     #[derive(Deserialize, Debug, Clone)]
     pub struct Network {
-        gateway: IpAddr,
-        ip_address: IpAddr,
-        netmask: IpAddr,
+        pub gateway: IpAddr,
+        pub ip_address: IpAddr,
+        pub netmask: IpAddr,
         /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
         #[serde(rename = "type")]
-        kind: String,
+        pub kind: String,
     }
 
     /// This exists in the `next_backup_window` field of a droplet.
     #[derive(Deserialize, Debug, Clone)]
     pub struct NextBackupWindow {
-        end: DateTime<UTC>,
-        start: DateTime<UTC>,
+        pub end: DateTime<UTC>,
+        pub start: DateTime<UTC>,
     }
 
     /// This exists in the `kernel` field of a droplet.
     #[derive(Deserialize, Debug, Clone)]
     pub struct Kernel {
-        id: usize,
-        name: String,
-        version: String,
+        pub id: usize,
+        pub name: String,
+        pub version: String,
     }
 }
 
