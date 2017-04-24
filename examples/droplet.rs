@@ -19,15 +19,38 @@ fn main() {
 
     let mut args = env::args().skip(1);
     let id = args.next();
+    let action = args.next();
 
-    match id {
-        Some(id) => {
+    match (id, action) {
+        (Some(id), Some(action)) => {
+            let parsed_id = id.parse::<usize>()
+                .expect("Did not pass a valid id.");
+            do_droplet_action(&client, parsed_id, action)
+        }
+        (Some(id), None) => {
             let parsed_id = id.parse::<usize>()
                 .expect("Did not pass a valid id.");
             show_droplet_info(&client, parsed_id)
         },
-        None => list_droplets(&client),
+        _ => list_droplets(&client),
     }
+}
+
+fn do_droplet_action<S>(client: &DigitalOcean, id: usize, action: S) 
+where S: AsRef<str> {
+    let req = Droplet::get(id);
+
+    let req = match action.as_ref() {
+        "reboot" => req.reboot(),
+        "poweroff" => req.power(false),
+        "poweron" => req.power(true),
+        _ => panic!("Unknown command"),
+    };
+
+    let result = req.execute(&client)
+        .unwrap();
+
+    println!("{:#?}", result);
 }
 
 fn show_droplet_info(client: &DigitalOcean, id: usize) {
@@ -36,7 +59,7 @@ fn show_droplet_info(client: &DigitalOcean, id: usize) {
     let result = req.execute(&client)
         .unwrap();
 
-    print_result(result);
+    println!("{:#?}", result);
 }
 
 fn list_droplets(client: &DigitalOcean) {
@@ -46,14 +69,6 @@ fn list_droplets(client: &DigitalOcean) {
         .unwrap();
 
     for result in results {
-        print_result(result)
+        println!("{:#?}", result)
     }
-}
-
-fn print_result(result: Droplet) {
-    println!("id: {}, name: {}, size: {}, status: {}", 
-        result.id,
-        result.name,
-        result.size.slug,
-        result.status);
 }

@@ -3,6 +3,7 @@ use method::{List, Get};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};
+use super::Region;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
@@ -35,7 +36,7 @@ pub struct Action {
     pub started_at: DateTime<UTC>,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the action was completed.
-    pub completed_at: DateTime<UTC>,
+    pub completed_at: Option<DateTime<UTC>>,
     /// A unique identifier for the resource that the action is associated 
     /// with.
     pub resource_id: usize,
@@ -43,7 +44,7 @@ pub struct Action {
     pub resource_type: String,
     /// (deprecated) A slug representing the region where the action occurred.
     #[deprecated(since = "0.0.1", note="DigitalOcean has deprecated this.")]
-    pub region: Option<String>,
+    pub region: Option<Region>,
     /// A slug representing the region where the action occurred.
     pub region_slug: Option<String>,
 }
