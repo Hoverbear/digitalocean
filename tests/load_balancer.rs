@@ -48,25 +48,13 @@ fn create_produces_correct_request() {
 
     let correct_url = "https://api.digitalocean.com/v2/load_balancers";
     let (name, region, algo) = ("test", "tor1", "least_connections");
-    let (e_protocol, e_port, t_protocol, t_port) = ("tcp", 22, "tcp", 22);
-    let (e_protocol_2, e_port_2, t_protocol_2, t_port_2) = ("http", 443, "http", 443);
+    let rule_1 = ("tcp", 22, "tcp", 22);
+    let rule_2 = ("http", 443, "http", 443, None, false);
 
     let req: Request<Create, LoadBalancer> = LoadBalancer::create(name, region)
         .algorithm(algo)
-        .forwarding_rule(
-            e_protocol.clone(),
-            e_port,
-            t_protocol.clone(),
-            t_port,
-            None,
-            None)
-        .forwarding_rule(
-            e_protocol_2.clone(),
-            e_port_2,
-            t_protocol_2.clone(),
-            t_port_2,
-            None,
-            None);
+        .forwarding_rule(rule_1)
+        .forwarding_rule(rule_2);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -76,16 +64,20 @@ fn create_produces_correct_request() {
         "algorithm": algo,
         "forwarding_rules": [
             {
-                "entry_protocol": e_protocol,
-                "entry_port": e_port,
-                "target_protocol": t_protocol,
-                "target_port": t_port,
+                "entry_protocol": rule_1.0,
+                "entry_port": rule_1.1,
+                "target_protocol": rule_1.2,
+                "target_port": rule_1.3,
+                "certificate_id": Value::Null,
+                "tls_passthrough": false,
             },
             {
-                "entry_protocol": e_protocol_2,
-                "entry_port": e_port_2,
-                "target_protocol": t_protocol_2,
-                "target_port": t_port_2,
+                "entry_protocol": rule_2.0,
+                "entry_port": rule_2.1,
+                "target_protocol": rule_2.2,
+                "target_port": rule_2.3,
+                "certificate_id": Value::Null,
+                "tls_passthrough": false,
             },
         ],
     }));
@@ -104,13 +96,7 @@ fn update_produces_correct_request() {
         .name(name)
         .region(region)
         .tag(tag)
-        .forwarding_rule(
-            e_protocol.clone(),
-            e_port,
-            t_protocol.clone(),
-            t_port,
-            None,
-            None);
+        .forwarding_rule((e_protocol.clone(), e_port, t_protocol.clone(), t_port));
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -124,6 +110,8 @@ fn update_produces_correct_request() {
                 "entry_port": e_port,
                 "target_protocol": t_protocol,
                 "target_port": t_port,
+                "certificate_id": Value::Null,
+                "tls_passthrough": false,
             },
         ],
     }));
@@ -188,7 +176,7 @@ fn add_forwarding_rule_produces_correct_request() {
     let (e_protocol, e_port, t_protocol, t_port) = ("tcp", 22, "tcp", 22);
 
     let req: Request<Create, ()> = LoadBalancer::get(load_balancer_id)
-        .add_forwarding_rule(e_protocol, e_port, t_protocol, t_port, None, None);
+        .add_forwarding_rules(vec![(e_protocol, e_port, t_protocol, t_port, None, true)]);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -199,6 +187,8 @@ fn add_forwarding_rule_produces_correct_request() {
                 "entry_port": e_port,
                 "target_protocol": t_protocol,
                 "target_port": t_port,
+                "certificate_id": Value::Null,
+                "tls_passthrough": true,
             },
         ],
     }));
@@ -213,7 +203,7 @@ fn remove_forwarding_rule_produces_correct_request() {
     let (e_protocol, e_port, t_protocol, t_port) = ("tcp", 22, "tcp", 22);
 
     let req: Request<Delete, ()> = LoadBalancer::get(load_balancer_id)
-        .remove_forwarding_rule(e_protocol, e_port, t_protocol, t_port, None, None);
+        .remove_forwarding_rules(vec![(e_protocol, e_port, t_protocol, t_port, None, false)]);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -224,6 +214,8 @@ fn remove_forwarding_rule_produces_correct_request() {
                 "entry_port": e_port,
                 "target_protocol": t_protocol,
                 "target_port": t_port,
+                "certificate_id": Value::Null,
+                "tls_passthrough": false,
             },
         ],
     }));

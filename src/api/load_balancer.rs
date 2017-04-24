@@ -19,7 +19,7 @@ const FORWARDING_RULES_SEGMENT: &'static str = "forwarding_rules";
 /// Droplets.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#load-balancers)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct LoadBalancer {
     /// A unique ID that can be used to identify and reference a Load Balancer.
     pub id: String,
@@ -69,7 +69,7 @@ pub mod load_balancer_fields {
     /// specifying an SSL certificate) or to pass the encrypted traffic 
     /// through to the Droplet. Currently, each Load Balancer may have up to 15
     /// forwarding rules.
-    #[derive(Deserialize, Debug, Clone)]
+    #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct ForwardingRule {
         /// The protocol used for traffic to the Load Balancer. The possible
         /// values are: "http", "https", or "tcp". 
@@ -83,10 +83,54 @@ pub mod load_balancer_fields {
         /// the Load Balancer will send traffic.
         pub target_port: usize,
         /// The ID of the TLS certificate used for SSL termination if enabled.
-        pub certificate_id: String,
+        pub certificate_id: Option<String>,
         /// A boolean value indicating whether SSL encrypted traffic will be 
         /// passed through to the backend Droplets.
         pub tls_passthrough: bool,
+    }
+    impl ForwardingRule {
+        pub fn new<S>(entry_protocol: S, entry_port: usize, target_protocol: S, 
+                  target_port: usize) -> Self
+        where S: AsRef<str> {
+            ForwardingRule {
+                entry_protocol: entry_protocol.as_ref().to_string(),
+                entry_port: entry_port,
+                target_protocol: target_protocol.as_ref().to_string(),
+                target_port: target_port,
+                certificate_id: None,
+                tls_passthrough: false,
+            }
+        }
+        pub fn certificate_id<S>(mut self, certificate_id: Option<S>) -> Self
+        where S: AsRef<str> {
+            self.certificate_id = certificate_id.map(|v| v.as_ref().to_string());
+            self
+        }
+        pub fn tls_passthrough(mut self, tls_passthrough: bool) -> Self {
+            self.tls_passthrough = tls_passthrough;
+            self
+        }
+    }
+    impl<S> From<(S, usize, S, usize)> for ForwardingRule
+    where S: AsRef<str> {
+        fn from(val: (S, usize, S, usize)) -> Self {
+            ForwardingRule::new(val.0, val.1, val.2, val.3)
+        }
+    }
+    impl<S> From<(S, usize, S, usize, Option<S>)> for ForwardingRule
+    where S: AsRef<str> {
+        fn from(val: (S, usize, S, usize, Option<S>)) -> Self {
+            ForwardingRule::new(val.0, val.1, val.2, val.3)
+                .certificate_id(val.4)
+        }
+    }
+    impl<S> From<(S, usize, S, usize, Option<S>, bool)> for ForwardingRule
+    where S: AsRef<str> {
+        fn from(val: (S, usize, S, usize, Option<S>, bool)) -> Self {
+            ForwardingRule::new(val.0, val.1, val.2, val.3)
+                .certificate_id(val.4)
+                .tls_passthrough(val.5)
+        }
     }
 
     /// This exists in the `health_check` field of a droplet.
@@ -96,7 +140,7 @@ pub mod load_balancer_fields {
     /// traffic to unresponsive Droplets. You may specify the protocol, port,
     /// and path for a health check as well as additional setting such as the
     /// check interval and response timeout.
-    #[derive(Deserialize, Debug, Clone)]
+    #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct HealthCheck {
         /// The protocol used for health checks sent to the backend Droplets.
         /// The possible values are "http" or "tcp".
@@ -121,10 +165,12 @@ pub mod load_balancer_fields {
         pub healthy_threshold: usize,
     }
 
+    /// This exists in the `sticky_sessions` field of a droplet.
+    ///
     /// When sticky sessions are in use, follow up requests from a client will
     /// be sent to the same Droplet as the original request. Both the name of
     /// the cookie and the TTL are configurable.
-    #[derive(Deserialize, Debug, Clone)]
+    #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct StickySessions {
         /// An attribute indicating how and if requests from a client will be
         /// persistently served by the same backend Droplet. The possible 
@@ -226,15 +272,9 @@ impl Request<Create, LoadBalancer> {
     /// Load Balancer instance.
     /// 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn forwarding_rule<S>(mut self, 
-                              entry_protocol: S,
-                              entry_port: usize,
-                              target_protocol: S,
-                              target_port: usize,
-                              certificate_id: Option<S>,
-                              tls_passthrough: Option<bool>)
+    pub fn forwarding_rule<T>(mut self, val: T)
                               -> Request<Create, LoadBalancer>
-    where S: AsRef<str> + Display + Serialize {
+    where T: Into<ForwardingRule> {
         if !self.body["forwarding_rules"].is_array() {
             self.body["forwarding_rules"] = json!([]);
         }
@@ -243,21 +283,8 @@ impl Request<Create, LoadBalancer> {
             let rules = self.body["forwarding_rules"].as_array_mut()
                 .expect("forwarding_rules should always be an array.");
             
-            let mut rule = json!({
-                "entry_protocol": entry_protocol,
-                "entry_port": entry_port,
-                "target_protocol": target_protocol,
-                "target_port": target_port, 
-            });
-            if let Some(id) = certificate_id {
-                rule["certificate_id"] = json!(id);
-            }
-            if let Some(setting) = tls_passthrough {
-                rule["tls_passthrough"] = json!(setting);
-            }
-            rules.push(rule);
+            rules.push(json!(val.into()));
         }
-
         self
     }
     /// The (optional) health check settings.
@@ -375,38 +402,19 @@ impl Request<Update, LoadBalancer> {
     /// Load Balancer instance.
     /// 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn forwarding_rule<S>(mut self, 
-                              entry_protocol: S,
-                              entry_port: usize,
-                              target_protocol: S,
-                              target_port: usize,
-                              certificate_id: Option<S>,
-                              tls_passthrough: Option<bool>)
+    pub fn forwarding_rule<T>(mut self, val: T)
                               -> Request<Update, LoadBalancer>
-    where S: AsRef<str> + Display + Serialize {
+    where T: Into<ForwardingRule> {
         if !self.body["forwarding_rules"].is_array() {
             self.body["forwarding_rules"] = json!([]);
         }
-
-        {
-            let mut rules = self.body["forwarding_rules"].as_array_mut()
-                .expect("forwarding_rules should always be an array.");
-            
-            let mut rule = json!({
-                "entry_protocol": entry_protocol,
-                "entry_port": entry_port,
-                "target_protocol": target_protocol,
-                "target_port": target_port, 
-            });
-            if let Some(id) = certificate_id {
-                rule["certificate_id"] = json!(id);
-            }
-            if let Some(setting) = tls_passthrough {
-                rule["tls_passthrough"] = json!(setting);
-            }
-            rules.push(rule);
-        }
         
+        {
+            let rules = self.body["forwarding_rules"].as_array_mut()
+                .expect("forwarding_rules should always be an array.");
+
+            rules.push(json!(val.into()));
+        }
         self
     }
     /// The (optional) health check settings.
@@ -523,18 +531,10 @@ impl Request<Get, LoadBalancer> {
             .value()
     }
     /// Add a forwarding rule to the Load Balancer.
-    /// May be chained multiple times.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#add-forwarding-rules-to-a-load-balancer)
-    pub fn add_forwarding_rule<S>(mut self,
-                           entry_protocol: S,
-                           entry_port: usize,
-                           target_protocol: S,
-                           target_port: usize,
-                           certificate_id: Option<S>,
-                           tls_passthrough: Option<bool>)
-                           -> Request<Create, ()>
-    where S: AsRef<str> + Display + Serialize {
+    pub fn add_forwarding_rules<T>(mut self, items: Vec<T>) -> Request<Create, ()>
+    where T: Into<ForwardingRule> {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(FORWARDING_RULES_SEGMENT);
@@ -547,37 +547,20 @@ impl Request<Get, LoadBalancer> {
             let mut rules = self.body["forwarding_rules"].as_array_mut()
                 .expect("forwarding_rules should always be an array.");
             
-            let mut rule = json!({
-                "entry_protocol": entry_protocol,
-                "entry_port": entry_port,
-                "target_protocol": target_protocol,
-                "target_port": target_port, 
-            });
-            if let Some(id) = certificate_id {
-                rule["certificate_id"] = json!(id);
+            for item in items {
+                let rule: ForwardingRule = item.into();
+                rules.push(json!(rule));
             }
-            if let Some(setting) = tls_passthrough {
-                rule["tls_passthrough"] = json!(setting);
-            }
-            rules.push(rule);
         }
 
         self.method()
             .value()
     }
     /// Remove a forwarding rule to the Load Balancer.
-    /// May be chained multiple times.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-forwarding-rules-from-a-load-balancer)
-    pub fn remove_forwarding_rule<S>(mut self,
-                           entry_protocol: S,
-                           entry_port: usize,
-                           target_protocol: S,
-                           target_port: usize,
-                           certificate_id: Option<S>,
-                           tls_passthrough: Option<bool>)
-                           -> Request<Delete, ()>
-    where S: AsRef<str> + Display + Serialize {
+    pub fn remove_forwarding_rules<T>(mut self, items: Vec<T>) -> Request<Delete, ()>
+    where T: Into<ForwardingRule> {
         self.url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(FORWARDING_RULES_SEGMENT);
@@ -590,19 +573,10 @@ impl Request<Get, LoadBalancer> {
             let mut rules = self.body["forwarding_rules"].as_array_mut()
                 .expect("forwarding_rules should always be an array.");
             
-            let mut rule = json!({
-                "entry_protocol": entry_protocol,
-                "entry_port": entry_port,
-                "target_protocol": target_protocol,
-                "target_port": target_port, 
-            });
-            if let Some(id) = certificate_id {
-                rule["certificate_id"] = json!(id);
+            for item in items {
+                let rule: ForwardingRule = item.into();
+                rules.push(json!(rule));
             }
-            if let Some(setting) = tls_passthrough {
-                rule["tls_passthrough"] = json!(setting);
-            }
-            rules.push(rule);
         }
         
         self.method()
@@ -611,7 +585,7 @@ impl Request<Get, LoadBalancer> {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct LoadBalancerResponse {
     load_balancer: LoadBalancer,
 }
@@ -628,7 +602,7 @@ impl HasValue for LoadBalancerResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct LoadBalancerListResponse {
     load_balancers: Vec<LoadBalancer>,
     links: ApiLinks,

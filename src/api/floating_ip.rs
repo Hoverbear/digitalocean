@@ -19,7 +19,7 @@ const FLOATING_IP_SEGMENT: &'static str = "floating_ips";
 /// Floating IPs are bound to a specific region.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#floating-ips)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct FloatingIp {
     /// The public IP address of the Floating IP. It also serves as its 
     /// identifier.
@@ -95,7 +95,7 @@ impl FloatingIp {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct FloatingIpResponse {
     floating_ip: FloatingIp,
 }
@@ -112,7 +112,7 @@ impl HasValue for FloatingIpResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct FloatingIpListResponse {
     floating_ips: Vec<FloatingIp>,
     links: ApiLinks,

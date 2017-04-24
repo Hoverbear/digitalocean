@@ -20,7 +20,7 @@ const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
 /// and [`Update`](../request/struct.Request.html#method.kind).
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DomainRecord {
     /// A unique identifier for each domain record.
     pub id: usize,
@@ -197,7 +197,7 @@ impl Request<Update, DomainRecord> {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DomainRecordResponse {
     domain_record: DomainRecord,
 }
@@ -215,7 +215,7 @@ impl HasResponse for DomainRecord {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DomainRecordListResponse {
     domain_records: Vec<DomainRecord>,
     links: ApiLinks,

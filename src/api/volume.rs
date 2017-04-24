@@ -19,7 +19,7 @@ const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
 /// supported by the OS. They may be created in sizes from 1GiB to 16TiB.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Volume {
     /// The unique identifier for the Block Storage volume.
     pub id: String,
@@ -195,7 +195,7 @@ impl Request<Create, Volume> {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct VolumeListResponse {
     volumes: Vec<Volume>,
     links: ApiLinks,
@@ -221,7 +221,7 @@ impl HasValue for VolumeListResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct VolumeResponse {
     volume: Volume,
 }

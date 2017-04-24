@@ -14,7 +14,7 @@ const DOMAINS_SEGMENT: &'static str = "domains";
 /// name registrar that you are managing through the DigitalOcean DNS interface.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Domain {
     /// The name of the domain itself. This should follow the standard domain
     /// format of domain.TLD. For instance, example.com is a valid domain name.
@@ -82,7 +82,7 @@ impl Domain {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DomainResponse {
     domain: Domain,
 }
@@ -99,7 +99,7 @@ impl HasValue for DomainResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DomainListResponse {
     domains: Vec<Domain>,
     links: ApiLinks,

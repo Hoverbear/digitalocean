@@ -15,7 +15,7 @@ const SNAPSHOT_SEGMENT: &'static str = "snapshots";
 /// from the saved snapshot.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#snapshots)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Snapshot {
     /// The unique identifier for the snapshot.
     pub id: String,
@@ -99,7 +99,7 @@ impl Snapshot {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SnapshotListResponse {
     snapshots: Vec<Snapshot>,
     links: ApiLinks,
@@ -125,7 +125,7 @@ impl HasValue for SnapshotListResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SnapshotResponse {
     snapshot: Snapshot,
 }

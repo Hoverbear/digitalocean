@@ -18,7 +18,7 @@ const IMAGES_SEGMENT: &'static str = "images";
 /// application image that is used as a base to create Droplets.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Image {
     /// A unique number that can be used to identify and reference a specific
     /// image.
@@ -160,7 +160,7 @@ impl Request<Update, Image> {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct ImageResponse {
     image: Image,
 }
@@ -177,7 +177,7 @@ impl HasValue for ImageResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct ImageListResponse {
     images: Vec<Image>,
     links: ApiLinks,

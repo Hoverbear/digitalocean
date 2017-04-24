@@ -26,7 +26,7 @@ const BACKUPS_SEGMENT: &'static str = "backups";
 /// sections.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Droplet {
     /// A unique identifier for each Droplet instance. This is automatically
     /// generated upon Droplet creation.
@@ -99,14 +99,14 @@ pub mod droplet_fields {
     use chrono::{DateTime, UTC};
     use std::net::IpAddr;
     /// This exists in the `networks` field of a droplet.
-    #[derive(Deserialize, Debug, Clone)]
+    #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct Networks {
         pub v4: Vec<Network>,
         pub v6: Vec<Network>,
     }
 
     /// These exist in the `networks` field of a droplet.
-    #[derive(Deserialize, Debug, Clone)]
+    #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct Network {
         pub gateway: IpAddr,
         pub ip_address: IpAddr,
@@ -117,14 +117,14 @@ pub mod droplet_fields {
     }
 
     /// This exists in the `next_backup_window` field of a droplet.
-    #[derive(Deserialize, Debug, Clone)]
+    #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct NextBackupWindow {
         pub end: DateTime<UTC>,
         pub start: DateTime<UTC>,
     }
 
     /// This exists in the `kernel` field of a droplet.
-    #[derive(Deserialize, Debug, Clone)]
+    #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct Kernel {
         pub id: usize,
         pub name: String,
@@ -411,7 +411,7 @@ impl Request<Get, Droplet> {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DropletResponse {
     droplet: Droplet,
 }
@@ -428,7 +428,7 @@ impl HasValue for DropletResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DropletListResponse {
     droplets: Vec<Droplet>,
     links: ApiLinks,
@@ -453,7 +453,7 @@ impl HasValue for DropletListResponse {
 }
 
 /// Response type returned from Digital Ocean
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct DropletNeighborsResponse {
     neighbors: Vec<Vec<Droplet>>,
 }

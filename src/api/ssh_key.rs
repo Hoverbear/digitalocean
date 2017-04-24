@@ -15,7 +15,7 @@ const KEYS_SEGMENT: &'static str = "keys";
 /// public key is required to take advantage of this functionality.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#ssh-keys)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SshKey {
     /// This is a unique identification number for the key. This can be used
     /// to reference a specific SSH key when you wish to embed a key into a 
@@ -116,7 +116,7 @@ impl Request<Update, SshKey> {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SshKeyListResponse {
     ssh_keys: Vec<SshKey>,
     links: ApiLinks,
@@ -142,7 +142,7 @@ impl HasValue for SshKeyListResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SshKeyResponse {
     ssh_key: SshKey,
 }

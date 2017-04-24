@@ -15,7 +15,7 @@ const CERTIFICATES_SEGMENT: &'static str = "certificates";
 /// perform SSL termination on Load Balancers.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#certificates)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Certificate {
     /// A unique ID that can be used to identify and reference a certificate.
     pub id: String,
@@ -96,7 +96,7 @@ impl Request<Create, Certificate> {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct CertificateResponse {
     certificate: Certificate,
 }
@@ -113,7 +113,7 @@ impl HasValue for CertificateResponse {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct CertificateListResponse {
     certificates: Vec<Certificate>,
     links: ApiLinks,

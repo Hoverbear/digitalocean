@@ -29,7 +29,7 @@ pub use self::action::Action;
 pub use self::certificate::Certificate;
 pub use self::domain_record::DomainRecord;
 pub use self::domain::Domain;
-pub use self::load_balancer::LoadBalancer;
+pub use self::load_balancer::{LoadBalancer, load_balancer_fields};
 pub use self::droplet::{Droplet, droplet_fields};
 pub use self::floating_ip::FloatingIp;
 pub use self::image::Image;
@@ -43,7 +43,7 @@ pub use self::tag::Tag;
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 struct ApiLinks {
     pages: Option<ApiPages>,
 }
@@ -60,7 +60,7 @@ impl ApiLinks {
     }
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 struct ApiPages {
     prev: Option<SerdeUrl>,
     first: Option<SerdeUrl>,
@@ -68,7 +68,7 @@ struct ApiPages {
     last: Option<SerdeUrl>,
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 struct ApiMeta {
     total: usize,
 }

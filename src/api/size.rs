@@ -17,7 +17,7 @@ const SIZES_SEGMENT: &'static str = "sizes";
 /// details and the regions that the size is available in.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#sizes)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Size {
     /// A human-readable string that is used to uniquely identify each size.
     pub slug: String,
@@ -63,7 +63,7 @@ impl Size {
 // There is no signular size return.
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct SizeListResponse {
     sizes: Vec<Size>,
     links: ApiLinks,

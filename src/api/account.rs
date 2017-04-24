@@ -8,7 +8,7 @@ const ACCOUNT_SEGMENT: &'static str = "account";
 /// The user account.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#account)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Account {
     /// The total number of droplets the user may have.
     pub droplet_limit: usize,
@@ -40,7 +40,7 @@ impl Account {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct AccountResponse {
     account: Account,
 }

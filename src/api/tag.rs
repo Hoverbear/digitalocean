@@ -19,7 +19,7 @@ const RESOURCES_SEGMENT: &'static str = "resources";
 /// resources attribute with information about resources that have been tagged.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#tags)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Tag {
     /// Tags may contain letters, numbers, colons, dashes, and underscores.
     /// There is a limit of 255 characters per tag.
@@ -121,7 +121,7 @@ impl Request<Get, Tag> {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct TagResponse {
     tag: Tag,
 }
@@ -139,7 +139,7 @@ impl HasResponse for Tag {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct TagListResponse {
     tags: Vec<Tag>,
     links: ApiLinks,

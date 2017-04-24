@@ -15,7 +15,7 @@ const REGIONS_SEGMENT: &'static str = "regions";
 /// that there are multiple datacenters available within that area.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#regions)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Region {
     /// A human-readable string that is used as a unique identifier for each
     /// region.
@@ -47,7 +47,7 @@ impl Region {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct RegionListResponse {
     regions: Vec<Region>,
     links: ApiLinks,

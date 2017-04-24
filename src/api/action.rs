@@ -22,7 +22,7 @@ const ACTIONS_SEGMENT: &'static str = "actions";
 /// available for querying.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#actions)
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Action {
     /// A unique identifier for each Droplet action event. This is used to
     /// reference a specific action that was requested.
@@ -71,7 +71,7 @@ impl Action {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct ActionResponse {
     action: Action,
 }
@@ -89,7 +89,7 @@ impl HasResponse for Action {
 }
 
 /// Response type returned from Digital Ocean.
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct ActionListResponse {
     actions: Vec<Action>,
     links: ApiLinks,
