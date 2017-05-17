@@ -45,7 +45,7 @@ fn create_produces_correct_request() {
     before();
 
     let correct_url = "https://api.digitalocean.com/v2/volumes";
-    let (name, size, region) = ("bear", 123, "tor1");
+    let (name, size, region) = ("bear", 123, String::from("tor1"));
 
     let req: Request<Create, Volume> = Volume::create(name, size)
         .region(region.clone());

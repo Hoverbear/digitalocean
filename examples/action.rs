@@ -17,7 +17,7 @@ fn main() {
     let client = DigitalOcean::new(api_key)
         .unwrap();
 
-    let maybe_id = env::args().skip(1).next()
+    let maybe_id = env::args().nth(2)
         .map(|v| v.parse::<usize>().expect("ID was not integer"));
 
     match maybe_id {

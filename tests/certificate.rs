@@ -32,7 +32,12 @@ fn create_produces_correct_request() {
     before();
 
     let correct_url = "https://api.digitalocean.com/v2/certificates";
-    let (name, pkey, leaf, chain) = ("test", "pkey", "leaf", "chain");
+    let (name, pkey, leaf, chain) = (
+        String::from("test"), 
+        String::from("pkey"), 
+        String::from("leaf"), 
+        String::from("chain")
+    );
 
 
     let req: Request<Create, Certificate> = Certificate::create(

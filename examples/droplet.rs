@@ -49,7 +49,7 @@ where S: AsRef<str> {
         _ => panic!("Unknown command"),
     };
 
-    let result = req.execute(&client)
+    let result = req.execute(client)
         .unwrap();
 
     println!("{:#?}", result);
@@ -58,7 +58,7 @@ where S: AsRef<str> {
 fn show_droplet_info(client: &DigitalOcean, id: usize) {
     let req = Droplet::get(id);
 
-    let result = req.execute(&client)
+    let result = req.execute(client)
         .unwrap();
 
     println!("{:#?}", result);
@@ -67,7 +67,7 @@ fn show_droplet_info(client: &DigitalOcean, id: usize) {
 fn list_droplets(client: &DigitalOcean) {
     let req = Droplet::list();
 
-    let results = req.execute(&client)
+    let results = req.execute(client)
         .unwrap();
 
     for result in results {

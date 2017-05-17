@@ -90,7 +90,10 @@ fn update_produces_correct_request() {
     let load_balancer_id = "123";
     let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}", load_balancer_id);
     let (name, region, tag) = ("test", "tor1", "tag");
-    let (e_protocol, e_port, t_protocol, t_port) = ("tcp", 22, "tcp", 22);
+    let (e_protocol, e_port, t_protocol, t_port) = (
+        String::from("tcp"), 22,
+        String::from("tcp"), 22
+    );
 
     let req: Request<Update, LoadBalancer> = LoadBalancer::update(load_balancer_id)
         .name(name)

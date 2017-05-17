@@ -218,7 +218,7 @@ fn rebuild_produces_correct_request() {
 
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
-    let image_id = "test";
+    let image_id = String::from("test");
 
     let req: Request<Create, Action> = Droplet::get(droplet_id)
         .rebuild(image_id.clone());
@@ -237,7 +237,7 @@ fn rename_produces_correct_request() {
 
     let droplet_id = 123;
     let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions", droplet_id);
-    let new_name = "test";
+    let new_name = String::from("test");
 
     let req: Request<Create, Action> = Droplet::get(droplet_id)
         .rename(new_name.clone());
