@@ -1,14 +1,14 @@
 [package]
 name = "digitalocean"
-authors = ["hoverbear <andrew@hoverbear.org>"]
-categories = ["development-tools"]
-description = "A crate for interfacing with Digital Ocean's V2 API."
-documentation = ""
-homepage = "https://github.com/hoverbear/digitalocean"
-keywords = ["DigitalOcean", "IaaS", "Provisioning"]
-license = "MIT"
-repository = "https://github.com/hoverbear/digitalocean"
 version = "0.1.0"
+authors = ["hoverbear <andrew@hoverbear.org>"]
+repository = "https://github.com/hoverbear/digitalocean"
+categories = ["development-tools"]
+description = "A crate for interfacing with Digital Ocean."
+homepage = "https://github.com/hoverbear/digitalocean"
+keywords = ["DigitalOcean", "IaaS", "API"]
+license = "MIT"
+documentation = ""
 
 [features]
 default = ["reqwest"]
