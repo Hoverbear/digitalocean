@@ -21,7 +21,7 @@ mod volume;
 mod tag;
 
 use url::Url;
-use serde::Deserialize;
+use serde::de::DeserializeOwned;
 use url_serde;
 
 pub use self::account::Account;
@@ -82,7 +82,7 @@ pub trait HasPagination {
 }
 
 pub trait HasValue {
-    type Value: Deserialize;
+    type Value: DeserializeOwned;
     fn value(self) -> Self::Value;
 }
 
@@ -91,8 +91,8 @@ impl HasValue for () {
     fn value(self) -> Self::Value { () }
 }
 
-pub trait HasResponse: Deserialize + Deserialize + Clone {
-    type Response: Deserialize + Clone + HasValue<Value=Self>;
+pub trait HasResponse: DeserializeOwned + Clone {
+    type Response: DeserializeOwned + Clone + HasValue<Value=Self>;
 }
 
 impl HasResponse for () {
