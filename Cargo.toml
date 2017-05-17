@@ -1,4 +1,5 @@
 [package]
+name = "digitalocean"
 authors = ["hoverbear <andrew@hoverbear.org>"]
 categories = ["development-tools"]
 description = "A crate for interfacing with Digital Ocean's V2 API."
@@ -6,7 +7,6 @@ documentation = ""
 homepage = "https://github.com/hoverbear/digitalocean"
 keywords = ["DigitalOcean", "IaaS", "Provisioning"]
 license = "MIT"
-name = "digitalocean"
 repository = "https://github.com/hoverbear/digitalocean"
 version = "0.1.0"
 
