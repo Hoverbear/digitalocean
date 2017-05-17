@@ -22,7 +22,7 @@ mod tag;
 
 use url::Url;
 use serde::Deserialize;
-use url_serde::SerdeUrl;
+use url_serde;
 
 pub use self::account::Account;
 pub use self::action::Action;
@@ -52,7 +52,7 @@ impl ApiLinks {
     fn next(&self) -> Option<Url> {
         match self.pages {
             Some(ref pages) => match pages.next {
-                Some(ref v) => Some(v.clone().into_inner()),
+                Some(ref v) => Some(v.clone()),
                 None => None,
             },
             None => None,
@@ -62,10 +62,14 @@ impl ApiLinks {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 struct ApiPages {
-    prev: Option<SerdeUrl>,
-    first: Option<SerdeUrl>,
-    next: Option<SerdeUrl>,
-    last: Option<SerdeUrl>,
+    #[serde(with = "url_serde")]
+    prev: Option<Url>,
+    #[serde(with = "url_serde")]
+    first: Option<Url>,
+    #[serde(with = "url_serde")]
+    next: Option<Url>,
+    #[serde(with = "url_serde")]
+    last: Option<Url>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]

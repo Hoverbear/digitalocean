@@ -51,7 +51,7 @@ pub struct Action {
 
 impl Action {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-action)
-    pub fn get<N, I>(id: usize) -> Request<Get, Action> {
+    pub fn get(id: usize) -> Request<Get, Action> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)

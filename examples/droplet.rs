@@ -7,7 +7,9 @@ use digitalocean::DigitalOcean;
 use digitalocean::api::Droplet;
 use digitalocean::request::Executable;
 
-// cargo run --example droplet -- [id]
+// cargo run --example droplet
+// cargo run --example droplet -- $ID
+// cargo run --example droplet -- $ID $ACTION
 fn main() {
     dotenv::dotenv().ok();
     env_logger::init().ok();

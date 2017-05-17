@@ -1,6 +1,7 @@
 //! Abstract types representing requests and how they are executed.
 
 use error::*;
+use url_serde;
 use url::Url;
 use serde_json::Value;
 use std::marker::PhantomData;
@@ -12,8 +13,9 @@ use DigitalOcean;
 /// 
 /// In general consumers of the crate should not need to use this type directly.
 /// Instead, build up requests from what is found in [`api::*`](../api/index.html).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Request<A, R> where A: Method {
+    #[serde(with = "url_serde")]
     pub url: Url,
     pub body: Value,
     method: PhantomData<A>,
