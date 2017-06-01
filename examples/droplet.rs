@@ -7,7 +7,7 @@ extern crate env_logger;
 use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Droplet;
-use digitalocean::Executable;
+use digitalocean::request::Executable;
 
 // cargo run --example droplet
 // cargo run --example droplet -- $ID

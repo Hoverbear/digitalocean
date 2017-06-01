@@ -7,7 +7,7 @@ extern crate env_logger;
 use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Image;
-use digitalocean::Executable;
+use digitalocean::request::Executable;
 
 // cargo run --example image
 // cargo run --example image -- $IMAGE

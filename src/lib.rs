@@ -7,9 +7,7 @@ While browsing this documentation please feel encouraged to reference the
 ## A Basic Example
 
 ```rust,no_run
-use digitalocean::DigitalOcean;
-use digitalocean::Executable;
-use digitalocean::api::Droplet;
+use digitalocean::prelude::*;
 use std::env;
 
 let api_key = env::var("API_KEY")
@@ -60,6 +58,7 @@ lands it will be possible to clean up the documentation for ease of use.
 
 The crate is founded on a few design considerations:
 
+* Keep things simple and generic.
 * Map closely to the DigitalOcean API.
 * `Request`s are agnostic over `Client`s.
 * It should be impossible to make an invalid API request.
@@ -80,7 +79,9 @@ RUST_LOG=digitalocean=debug cargo run
 
 This crate is in a prototype state.
 
-Not all endpoints have been fully end-to-end tested on the production DigitalOcean API.
+Not all endpoints have been fully end-to-end tested on the production DigitalOcean API. It's very
+likely that some endpoints will have parsing errors due to unexpected values returned from the API.
+
 **If something does not work please file a bug!**
 
 Feedback, patches, and new features are encouraged. 
@@ -118,7 +119,7 @@ use method::Method;
 use api::HasResponse;
 use url::Url;
 
-const STATIC_URL_ERROR: &'static str = "Base DigitalOcean URL is malformed.";
+const STATIC_URL_ERROR: &'static str = "Staticly constructed DigitalOcean URL is malformed.";
 lazy_static! {
     static ref ROOT_URL: Url = Url::parse("https://api.digitalocean.com/v2")
         .expect(STATIC_URL_ERROR);
