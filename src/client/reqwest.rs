@@ -40,9 +40,18 @@ impl DigitalOcean {
         let mut buffer = Vec::new();
         let mut current_url = request.url.clone();
 
-        current_url
-            .query_pairs_mut()
-            .append_pair("per_page", &MAX_PER_PAGE.to_string());
+        match request.method.0 {
+            Some(limit) if limit < MAX_PER_PAGE => {
+                current_url
+                    .query_pairs_mut()
+                    .append_pair("per_page", &limit.to_string());
+            },
+            _ => {
+                current_url
+                    .query_pairs_mut()
+                    .append_pair("per_page", &MAX_PER_PAGE.to_string());
+            }
+        };
 
         loop {
             let req = self.client.get(current_url.clone());
@@ -61,10 +70,24 @@ impl DigitalOcean {
 
             let next_page = deserialized.next_page();
             buffer.extend(deserialized.value());
+
+
             current_url = match next_page {
                 Some(v) => v,
                 None => break,
             };
+            
+            if let Some(limit) = request.method.0 {
+                let buffer_size = buffer.len();
+                let remaining = limit - buffer_size;
+                if buffer_size >= limit {
+                    break;
+                } else if remaining < MAX_PER_PAGE {
+                    current_url
+                        .query_pairs_mut()
+                        .append_pair("per_page", &remaining.to_string());
+                }
+            }
             info!("Fetching next page...")
         }
 

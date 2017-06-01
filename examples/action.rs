@@ -7,7 +7,12 @@ use digitalocean::DigitalOcean;
 use digitalocean::api::Action;
 use digitalocean::request::Executable;
 
-// cargo run --example account -- [id]
+enum Choice {
+    List(Option<usize>),
+    Get(usize),
+}
+
+// cargo run --example action -- [--list [limit] | --id id]
 fn main() {
     dotenv::dotenv().ok();
     env_logger::init().ok();
@@ -15,18 +20,25 @@ fn main() {
     let api_key = env::var("API_KEY").expect("API_KEY not set.");
     let client = DigitalOcean::new(api_key).unwrap();
 
-    let maybe_id = env::args()
-        .nth(2)
-        .map(|v| v.parse::<usize>().expect("ID was not integer"));
+    let mut args = env::args().skip(1);
+    let choice = args.next().expect("No action specified.");
+    let param = args.next().map(|v| v.parse::<usize>().expect("Param was not integer"));
 
-    match maybe_id {
-        Some(id) => {
+    let choice = match choice.as_ref() {
+        "--list" => Choice::List(param),
+        "--id" => Choice::Get(param.expect("No ID specified")),
+        _ => panic!("Invalid args")
+    };
+
+    match choice {
+        Choice::Get(id) => {
             let val = Action::get(id).execute(&client).unwrap();
             println!("{:#?}", val);
         }
-        None => {
-            let val = Action::list().execute(&client).unwrap();
+        Choice::List(limit) => {
+            let val = Action::list().limit(limit).execute(&client).unwrap();
             println!("{:#?}", val);
+            println!("Total actions: {:#?}", val.len());
         }
     }
 }

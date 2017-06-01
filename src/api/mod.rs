@@ -64,13 +64,13 @@ impl ApiLinks {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 struct ApiPages {
-    #[serde(with = "url_serde")]
+    #[serde(with = "url_serde", default)]
     prev: Option<Url>,
-    #[serde(with = "url_serde")]
+    #[serde(with = "url_serde", default)]
     first: Option<Url>,
-    #[serde(with = "url_serde")]
+    #[serde(with = "url_serde", default)]
     next: Option<Url>,
-    #[serde(with = "url_serde")]
+    #[serde(with = "url_serde", default)]
     last: Option<Url>,
 }
 

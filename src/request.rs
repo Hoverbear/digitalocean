@@ -20,7 +20,7 @@ pub struct Request<A, R>
     #[serde(with = "url_serde")]
     pub url: Url,
     pub body: Value,
-    method: PhantomData<A>,
+    pub method: A,
     value: PhantomData<R>,
 }
 
@@ -33,7 +33,7 @@ impl<A, V> Request<A, V>
         Request {
             url: url,
             body: Value::Null,
-            method: PhantomData,
+            method: A::default(),
             value: PhantomData,
         }
     }
@@ -59,7 +59,14 @@ impl<A, V> Request<A, V>
     }
 }
 
-/// Describes a API call which can be executed.
+impl<V> Request<List, V> {
+    pub fn limit(mut self, limit: Option<usize>) -> Self {
+        self.method.0 = limit;
+        self
+    }
+}
+
+/// Describes an API call which can be executed.
 pub trait Executable<T>: Sized
     where T: HasResponse
 {
