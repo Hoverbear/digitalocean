@@ -1,6 +1,8 @@
 extern crate digitalocean;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 extern crate url;
 extern crate url_serde;
 
@@ -21,10 +23,10 @@ fn list_produces_correct_request() {
     before();
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions", floating_ip);
+    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions",
+                              floating_ip);
 
-    let req: Request<List, Vec<Action>> = FloatingIp::get(floating_ip)
-        .actions();
+    let req: Request<List, Vec<Action>> = FloatingIp::get(floating_ip).actions();
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -37,10 +39,11 @@ fn get_produces_correct_request() {
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
     let action_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions/{}", floating_ip, action_id);
+    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions/{}",
+                              floating_ip,
+                              action_id);
 
-    let req: Request<Get, Action> = FloatingIp::get(floating_ip)
-        .action(action_id);
+    let req: Request<Get, Action> = FloatingIp::get(floating_ip).action(action_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -52,15 +55,16 @@ fn assign_produces_correct_request() {
     before();
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions", floating_ip);
+    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions",
+                              floating_ip);
     let droplet_id = 123;
 
-    let req: Request<Create, Action> = FloatingIp::get(floating_ip)
-        .assign(droplet_id);
+    let req: Request<Create, Action> = FloatingIp::get(floating_ip).assign(droplet_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.body,
+               json!({
         "type": "assign",
         "droplet_id": droplet_id
     }));
@@ -71,10 +75,10 @@ fn unassign_produces_correct_request() {
     before();
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions", floating_ip);
+    let correct_url =
+        format!("https://api.digitalocean.com/v2/floating_ips/{}/actions", floating_ip);
 
-    let req: Request<Create, Action> = FloatingIp::get(floating_ip)
-        .unassign();
+    let req: Request<Create, Action> = FloatingIp::get(floating_ip).unassign();
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

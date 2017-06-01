@@ -75,16 +75,21 @@ Feedback, patches, and new features are encouraged.
 Please just open an issue or PR!
 */
 
-#[macro_use] extern crate lazy_static;
-#[macro_use] extern crate log;
+#[macro_use]
+extern crate lazy_static;
+#[macro_use]
+extern crate log;
 extern crate reqwest;
-#[macro_use] extern crate serde_derive;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate serde_derive;
+#[macro_use]
+extern crate serde_json;
 extern crate serde;
 extern crate url_serde;
 extern crate url;
 extern crate chrono;
-#[macro_use] extern crate error_chain;
+#[macro_use]
+extern crate error_chain;
 
 pub mod api;
 mod error;
@@ -97,7 +102,7 @@ pub use error::{Error, ErrorKind};
 
 use request::{Request, Executable};
 use method::Method;
-use api::{HasResponse};
+use api::HasResponse;
 use url::Url;
 
 const STATIC_URL_ERROR: &'static str = "Base DigitalOcean URL is malformed.";
@@ -118,15 +123,16 @@ impl DigitalOcean {
     pub fn new<T: Into<String>>(token: T) -> Result<Self> {
         info!("Created.");
         Ok(DigitalOcean {
-            client: client::Client::new()?,
-            token: token.into(),
-        })
+               client: client::Client::new()?,
+               token: token.into(),
+           })
     }
 
-    pub fn execute<A,V>(&self, request: Request<A,V>) -> Result<V>
-    where A: Method, 
-          Request<A,V>: Executable<V>,
-          V: HasResponse {
+    pub fn execute<A, V>(&self, request: Request<A, V>) -> Result<V>
+        where A: Method,
+              Request<A, V>: Executable<V>,
+              V: HasResponse
+    {
         request.execute(self)
     }
 }

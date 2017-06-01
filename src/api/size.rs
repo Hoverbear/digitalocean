@@ -7,13 +7,13 @@ use super::{HasValue, HasPagination, HasResponse};
 
 const SIZES_SEGMENT: &'static str = "sizes";
 
-/// The sizes objects represent different packages of hardware resources that 
-/// can be used for Droplets. When a Droplet is created, a size must be 
+/// The sizes objects represent different packages of hardware resources that
+/// can be used for Droplets. When a Droplet is created, a size must be
 /// selected so that the correct resources can be allocated.
 ///
-/// Each size represents a plan that bundles together specific sets of 
+/// Each size represents a plan that bundles together specific sets of
 /// resources. This includes the amount of RAM, the number of virtual CPUs,
-/// disk space, and transfer. The size object also includes the pricing 
+/// disk space, and transfer. The size object also includes the pricing
 /// details and the regions that the size is available in.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#sizes)
@@ -25,11 +25,11 @@ pub struct Size {
     /// created with this size.
     pub available: bool,
     /// The amount of transfer bandwidth that is available for Droplets created
-    /// in this size. This only counts traffic on the public interface. The 
+    /// in this size. This only counts traffic on the public interface. The
     /// value is given in terabytes.
     pub transfer: usize,
     /// This attribute describes the monthly cost of this Droplet size if the
-    /// Droplet is kept for an entire month. The value is measured in US 
+    /// Droplet is kept for an entire month. The value is measured in US
     /// dollars.
     pub price_monthly: usize,
     /// This describes the price of the Droplet size as measured hourly. The
@@ -43,7 +43,7 @@ pub struct Size {
     /// The amount of disk space set aside for Droplets of this size. The value
     /// is represented in gigabytes.
     pub disk: usize,
-    /// An array containing the region slugs where this size is available for 
+    /// An array containing the region slugs where this size is available for
     /// Droplet creates.
     pub regions: Vec<String>,
 }

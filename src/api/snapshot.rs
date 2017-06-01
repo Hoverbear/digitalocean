@@ -9,7 +9,7 @@ use super::{HasValue, HasPagination, HasResponse};
 const SNAPSHOT_SEGMENT: &'static str = "snapshots";
 
 /// Snapshots are saved instances of a Droplet or a volume, which is reflected
-/// in the `resource_type` attribute. In order to avoid problems with 
+/// in the `resource_type` attribute. In order to avoid problems with
 /// compressing filesystems, each defines a `min_disk_size` attribute which is
 /// the minimum size of the Droplet or volume disk when creating a new resource
 /// from the saved snapshot.
@@ -21,13 +21,13 @@ pub struct Snapshot {
     pub id: String,
     /// A human-readable name for the snapshot.
     pub name: String,
-    /// A time value given in ISO8601 combined date and time format that 
+    /// A time value given in ISO8601 combined date and time format that
     /// represents when the snapshot was created.
     pub created_at: DateTime<UTC>,
     /// An array of the regions that the image is available in. The regions
     /// are represented by their identifying slug values.
     pub regions: Vec<String>,
-    /// A unique identifier for the resource that the action is associated 
+    /// A unique identifier for the resource that the action is associated
     /// with.
     pub resource_id: String,
     /// The type of resource that the action is associated with.
@@ -69,8 +69,7 @@ impl Snapshot {
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOT_SEGMENT);
 
-        url.query_pairs_mut()
-            .append_pair("resource_type", "volume");
+        url.query_pairs_mut().append_pair("resource_type", "volume");
 
         Request::new(url)
     }

@@ -13,7 +13,7 @@ const IMAGES_SEGMENT: &'static str = "images";
 /// Images in DigitalOcean may refer to one of a few different kinds of objects.
 ///
 /// An image may refer to a snapshot that has been taken of a Droplet instance.
-/// It may also mean an image representing an automatic backup of a Droplet. 
+/// It may also mean an image representing an automatic backup of a Droplet.
 /// The third category that it can represent is a public Linux distribution or
 /// application image that is used as a base to create Droplets.
 ///
@@ -27,7 +27,7 @@ pub struct Image {
     /// in the control panel and is generally a descriptive title for the image
     /// in question.
     pub name: String,
-    /// The kind of image, describing the duration of how long the image is 
+    /// The kind of image, describing the duration of how long the image is
     /// stored. This is either "snapshot" or "backup".
     ///
     /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
@@ -50,7 +50,7 @@ pub struct Image {
     pub min_disk_size: usize,
     /// The size of the image in gigabytes.
     pub size_gigabytes: f32,
-    /// A time value given in ISO8601 combined date and time format that 
+    /// A time value given in ISO8601 combined date and time format that
     /// represents when the Image was created.
     pub created_at: DateTime<UTC>,
 }
@@ -73,8 +73,7 @@ impl Image {
             .expect(STATIC_URL_ERROR)
             .push(IMAGES_SEGMENT);
 
-        url.query_pairs_mut()
-            .append_pair("type", "distribution");
+        url.query_pairs_mut().append_pair("type", "distribution");
 
         Request::new(url)
     }
@@ -86,8 +85,7 @@ impl Image {
             .expect(STATIC_URL_ERROR)
             .push(IMAGES_SEGMENT);
 
-        url.query_pairs_mut()
-            .append_pair("type", "application");
+        url.query_pairs_mut().append_pair("type", "application");
 
         Request::new(url)
     }
@@ -99,8 +97,7 @@ impl Image {
             .expect(STATIC_URL_ERROR)
             .push(IMAGES_SEGMENT);
 
-        url.query_pairs_mut()
-            .append_pair("private", "true");
+        url.query_pairs_mut().append_pair("private", "true");
 
         Request::new(url)
     }
@@ -109,7 +106,8 @@ impl Image {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id)
     pub fn get<S>(id: S) -> Request<Get, Image>
-    where S: Display {
+        where S: Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -123,7 +121,8 @@ impl Image {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-an-image)
     pub fn update<S>(id: S) -> Request<Update, Image>
-    where S: Display {
+        where S: Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -137,7 +136,8 @@ impl Image {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-an-image)
     pub fn delete<S>(id: S) -> Request<Delete, ()>
-    where S: Display {
+        where S: Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -153,7 +153,8 @@ impl Request<Update, Image> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#images)
     pub fn name<S>(mut self, val: S) -> Request<Update, Image>
-    where S: Display + Serialize {
+        where S: Display + Serialize
+    {
         self.body["name"] = json!(val);
         self
     }

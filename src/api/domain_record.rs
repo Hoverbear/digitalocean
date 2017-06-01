@@ -11,7 +11,7 @@ use super::{HasValue, HasPagination, HasResponse};
 const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
 
 /// Domain record resources are used to set or retrieve information about the
-/// individual DNS records configured for a domain. This allows you to build 
+/// individual DNS records configured for a domain. This allows you to build
 /// and manage DNS zone files by adding and modifying individual records for a
 /// domain.
 ///
@@ -42,27 +42,27 @@ pub struct DomainRecord {
     /// should be requested.
     pub ttl: usize,
     /// The weight for SRV records.
-    pub weight: Option<usize>,   
+    pub weight: Option<usize>,
 }
 
 impl Request<Get, Domain> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domain-records)
     pub fn records(mut self) -> Request<List, Vec<DomainRecord>> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DOMAIN_RECORDS_SEGMENT);
 
-        self.method()
-            .value()
+        self.method().value()
     }
 }
 
 impl Request<List, Vec<DomainRecord>> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record)
     pub fn create<S>(mut self, kind: S, name: S, data: S) -> Request<Create, DomainRecord>
-    where S: AsRef<str> + Display + Serialize {
-        self.url.path_segments_mut()
-            .expect(STATIC_URL_ERROR);
+        where S: AsRef<str> + Display + Serialize
+    {
+        self.url.path_segments_mut().expect(STATIC_URL_ERROR);
 
         self.body = json!({
             "type": kind,
@@ -70,38 +70,37 @@ impl Request<List, Vec<DomainRecord>> {
             "data": data,
         });
 
-        self.method()
-            .value()
+        self.method().value()
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain-record)
     pub fn get(mut self, id: usize) -> Request<Get, DomainRecord> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.method()
-            .value()
+        self.method().value()
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-domain-record)
     pub fn update(mut self, id: usize) -> Request<Update, DomainRecord> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.method()
-            .value()
+        self.method().value()
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain-record)
     pub fn delete(mut self, id: usize) -> Request<Delete, ()> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.method()
-            .value()
+        self.method().value()
     }
 }
 
@@ -121,7 +120,7 @@ impl Request<Create, DomainRecord> {
         self
     }
     /// This value is the time to live for the record, in seconds. This defines
-    /// the time frame that clients can cache queried information before a 
+    /// the time frame that clients can cache queried information before a
     /// refresh should be requested.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
@@ -143,7 +142,8 @@ impl Request<Update, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn kind<S>(mut self, val: S) -> Self
-    where S: AsRef<str> + Display + Serialize {
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["type"] = json!(val);
         self
     }
@@ -151,7 +151,8 @@ impl Request<Update, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn name<S>(mut self, val: S) -> Self
-    where S: AsRef<str> + Display + Serialize {
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["name"] = json!(val);
         self
     }
@@ -160,7 +161,8 @@ impl Request<Update, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn data<S>(mut self, val: S) -> Self
-    where S: AsRef<str> + Display + Serialize {
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["data"] = json!(val);
         self
     }
@@ -179,7 +181,7 @@ impl Request<Update, DomainRecord> {
         self
     }
     /// This value is the time to live for the record, in seconds. This defines
-    /// the time frame that clients can cache queried information before a 
+    /// the time frame that clients can cache queried information before a
     /// refresh should be requested.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)

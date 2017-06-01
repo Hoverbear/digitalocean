@@ -1,6 +1,8 @@
 extern crate digitalocean;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 extern crate url;
 extern crate url_serde;
 
@@ -49,12 +51,12 @@ fn update_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/images/{}", image_id);
     let name = "blah-blah";
 
-    let req: Request<Update, Image> = Image::update(image_id)
-        .name(name);
+    let req: Request<Update, Image> = Image::update(image_id).name(name);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.body,
+               json!({
         "name": name,
     }));
 }

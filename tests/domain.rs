@@ -1,6 +1,8 @@
 extern crate digitalocean;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 extern crate url;
 extern crate url_serde;
 
@@ -41,7 +43,8 @@ fn create_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.body,
+               json!({
         "name": domain,
         "ip_address": ip_address,
     }));

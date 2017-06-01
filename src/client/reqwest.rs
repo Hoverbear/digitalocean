@@ -11,12 +11,13 @@ use api::{HasPagination, HasResponse, HasValue, MAX_PER_PAGE};
 
 impl DigitalOcean {
     pub fn get<V>(&self, request: Request<Get, V>) -> Result<V>
-    where V: HasResponse {
+        where V: HasResponse
+    {
         info!("GET {:?}", request.url);
         let req = self.client.get(request.url.clone());
 
         let mut response = self.fetch(req)?;
-        
+
         match *response.status() {
             // Successes
             StatusCode::Ok => (),
@@ -25,25 +26,28 @@ impl DigitalOcean {
             // Errors
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
-        
+
         let deserialized: V::Response = response.json()?;
         Ok(deserialized.value())
     }
 
     pub fn list<V>(&self, request: Request<List, Vec<V>>) -> Result<Vec<V>>
-    where Vec<V>: HasResponse, <Vec<V> as HasResponse>::Response: HasPagination {
+        where Vec<V>: HasResponse,
+              <Vec<V> as HasResponse>::Response: HasPagination
+    {
         info!("LIST {:?}", request.url);
         // This may be a paginated response. We need to buffer.
         let mut buffer = Vec::new();
         let mut current_url = request.url.clone();
 
-        current_url.query_pairs_mut()
+        current_url
+            .query_pairs_mut()
             .append_pair("per_page", &MAX_PER_PAGE.to_string());
 
         loop {
             let req = self.client.get(current_url.clone());
             let mut response = self.fetch(req)?;
-            
+
             match *response.status() {
                 // Successes
                 StatusCode::Ok => (),
@@ -85,7 +89,8 @@ impl DigitalOcean {
     }
 
     pub fn post<V>(&self, request: Request<Create, V>) -> Result<V>
-    where V: HasResponse {
+        where V: HasResponse
+    {
         info!("POST {:?}", request.url);
         let req = self.client.post(request.url.clone());
 
@@ -97,7 +102,9 @@ impl DigitalOcean {
             // Successes
             StatusCode::Created => (), // Post Success
             // Errors
-            StatusCode::UnprocessableEntity => Err(ErrorKind::UnprocessableEntity(response.json()?))?,
+            StatusCode::UnprocessableEntity => {
+                Err(ErrorKind::UnprocessableEntity(response.json()?))?
+            }
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 
@@ -106,7 +113,8 @@ impl DigitalOcean {
     }
 
     pub fn put<V>(&self, request: Request<Update, V>) -> Result<V>
-    where V: HasResponse {
+        where V: HasResponse
+    {
         info!("PUT {:?}", request.url);
         let req = self.client.put(request.url.clone());
 
@@ -118,7 +126,9 @@ impl DigitalOcean {
             // Successes
             StatusCode::Ok => (), // Update success
             // Errors
-            StatusCode::UnprocessableEntity => Err(ErrorKind::UnprocessableEntity(response.json()?))?,
+            StatusCode::UnprocessableEntity => {
+                Err(ErrorKind::UnprocessableEntity(response.json()?))?
+            }
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 
@@ -128,10 +138,9 @@ impl DigitalOcean {
 
     fn fetch(&self, dispatch: RequestBuilder) -> Result<Response> {
         let response = dispatch
-            .header(Authorization(Bearer {
-                token: self.token.clone(),
-            })).send()?;
-        
+            .header(Authorization(Bearer { token: self.token.clone() }))
+            .send()?;
+
         info!("Response status: {:?}", response.status());
         Ok(response)
     }

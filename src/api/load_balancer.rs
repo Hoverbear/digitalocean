@@ -15,7 +15,7 @@ const LOAD_BALANCERS_SEGMENT: &'static str = "load_balancers";
 const DROPLETS_SEGMENT: &'static str = "droplets";
 const FORWARDING_RULES_SEGMENT: &'static str = "forwarding_rules";
 
-/// Load Balancers provide a way to distribute traffic across multiple 
+/// Load Balancers provide a way to distribute traffic across multiple
 /// Droplets.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#load-balancers)
@@ -25,17 +25,17 @@ pub struct LoadBalancer {
     pub id: String,
     /// A human-readable name for a Load Balancer instance.
     pub name: String,
-    /// An attribute containing the public-facing IP address of the Load 
+    /// An attribute containing the public-facing IP address of the Load
     /// Balancer.
     pub ip: IpAddr,
     /// The load balancing algorithm used to determine which backend Droplet
-    /// will be selected by a client. It must be either "round_robin" or 
+    /// will be selected by a client. It must be either "round_robin" or
     /// "least_connections".
     pub algorithm: String,
     /// A status string indicating the current state of the Load Balancer.
     /// This can be "new", "active", or "errored".
     pub status: String,
-    /// A time value given in ISO8601 combined date and time format that 
+    /// A time value given in ISO8601 combined date and time format that
     /// represents when the Load Balancer was created.
     pub created_at: DateTime<UTC>,
     /// An object specifying the forwarding rules for a Load Balancer.
@@ -46,10 +46,10 @@ pub struct LoadBalancer {
     pub sticky_sessions: StickySessions,
     /// The region where the Load Balancer instance is located.
     pub region: Region,
-    /// The name of a Droplet tag corresponding to Droplets assigned to the 
+    /// The name of a Droplet tag corresponding to Droplets assigned to the
     /// Load Balancer.
     pub tag: String,
-    /// An array containing the IDs of the Droplets assigned to the Load 
+    /// An array containing the IDs of the Droplets assigned to the Load
     /// Balancer.
     pub droplet_ids: Vec<usize>,
     /// A boolean value indicating whether HTTP requests to the Load Balancer
@@ -61,37 +61,41 @@ pub struct LoadBalancer {
 pub mod load_balancer_fields {
     /// This exists in the `forwarding_rules` field of a droplet.
     ///
-    /// Forwarding rules determine how traffic will be routed from the Load 
-    /// Balancer to the Droplets assigned to it. They can be used to configure 
-    /// the type of traffic (HTTP, HTTPS, or TCP) and to map ports on the Load 
-    /// Balancer to ports on the Droplets. For SSL encrypted traffic, you may 
+    /// Forwarding rules determine how traffic will be routed from the Load
+    /// Balancer to the Droplets assigned to it. They can be used to configure
+    /// the type of traffic (HTTP, HTTPS, or TCP) and to map ports on the Load
+    /// Balancer to ports on the Droplets. For SSL encrypted traffic, you may
     /// also configure whether to use SSL termination at the Load Balancer (by
-    /// specifying an SSL certificate) or to pass the encrypted traffic 
+    /// specifying an SSL certificate) or to pass the encrypted traffic
     /// through to the Droplet. Currently, each Load Balancer may have up to 15
     /// forwarding rules.
     #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct ForwardingRule {
         /// The protocol used for traffic to the Load Balancer. The possible
-        /// values are: "http", "https", or "tcp". 
+        /// values are: "http", "https", or "tcp".
         pub entry_protocol: String,
         /// The port on which the Load Balancer instance will listen.
         pub entry_port: usize,
         /// The protocol used for traffic from the Load Balancer to the backend
         /// Droplets. The possible values are: "http", "https", or "tcp".
         pub target_protocol: String,
-        /// An integer representing the port on the backend Droplets to which 
+        /// An integer representing the port on the backend Droplets to which
         /// the Load Balancer will send traffic.
         pub target_port: usize,
         /// The ID of the TLS certificate used for SSL termination if enabled.
         pub certificate_id: Option<String>,
-        /// A boolean value indicating whether SSL encrypted traffic will be 
+        /// A boolean value indicating whether SSL encrypted traffic will be
         /// passed through to the backend Droplets.
         pub tls_passthrough: bool,
     }
     impl ForwardingRule {
-        pub fn new<S>(entry_protocol: S, entry_port: usize, target_protocol: S, 
-                  target_port: usize) -> Self
-        where S: AsRef<str> {
+        pub fn new<S>(entry_protocol: S,
+                      entry_port: usize,
+                      target_protocol: S,
+                      target_port: usize)
+                      -> Self
+            where S: AsRef<str>
+        {
             ForwardingRule {
                 entry_protocol: entry_protocol.as_ref().to_string(),
                 entry_port: entry_port,
@@ -102,7 +106,8 @@ pub mod load_balancer_fields {
             }
         }
         pub fn certificate_id<S>(mut self, certificate_id: Option<S>) -> Self
-        where S: AsRef<str> {
+            where S: AsRef<str>
+        {
             self.certificate_id = certificate_id.map(|v| v.as_ref().to_string());
             self
         }
@@ -112,20 +117,22 @@ pub mod load_balancer_fields {
         }
     }
     impl<S> From<(S, usize, S, usize)> for ForwardingRule
-    where S: AsRef<str> {
+        where S: AsRef<str>
+    {
         fn from(val: (S, usize, S, usize)) -> Self {
             ForwardingRule::new(val.0, val.1, val.2, val.3)
         }
     }
     impl<S> From<(S, usize, S, usize, Option<S>)> for ForwardingRule
-    where S: AsRef<str> {
+        where S: AsRef<str>
+    {
         fn from(val: (S, usize, S, usize, Option<S>)) -> Self {
-            ForwardingRule::new(val.0, val.1, val.2, val.3)
-                .certificate_id(val.4)
+            ForwardingRule::new(val.0, val.1, val.2, val.3).certificate_id(val.4)
         }
     }
     impl<S> From<(S, usize, S, usize, Option<S>, bool)> for ForwardingRule
-    where S: AsRef<str> {
+        where S: AsRef<str>
+    {
         fn from(val: (S, usize, S, usize, Option<S>, bool)) -> Self {
             ForwardingRule::new(val.0, val.1, val.2, val.3)
                 .certificate_id(val.4)
@@ -148,10 +155,10 @@ pub mod load_balancer_fields {
         /// An integer representing the port on the backend Droplets on which
         /// the health check will attempt a connection.
         pub port: usize,
-        /// The path on the backend Droplets to which the Load Balancer 
+        /// The path on the backend Droplets to which the Load Balancer
         /// instance will send a request.
         pub path: String,
-        /// The number of seconds between between two consecutive health 
+        /// The number of seconds between between two consecutive health
         /// checks.
         pub check_interval_seconds: usize,
         /// The number of seconds the Load Balancer instance will wait for a
@@ -173,19 +180,19 @@ pub mod load_balancer_fields {
     #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct StickySessions {
         /// An attribute indicating how and if requests from a client will be
-        /// persistently served by the same backend Droplet. The possible 
+        /// persistently served by the same backend Droplet. The possible
         /// values are "cookies" or "none".
-        /// 
+        ///
         /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
         #[serde(rename = "type")]
         pub kind: String,
         /// The name of the cookie sent to the client. This attribute is only
         /// returned when using "cookies" for the sticky sessions type.
         pub cookie_name: Option<String>,
-        /// The number of seconds until the cookie set by the Load Balancer 
+        /// The number of seconds until the cookie set by the Load Balancer
         /// expires. This attribute is only returned when using "cookies" for
         /// the sticky sessions type.
-        pub cookie_ttl_seconds: Option<String>
+        pub cookie_ttl_seconds: Option<String>,
     }
 }
 
@@ -196,7 +203,8 @@ impl LoadBalancer {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn create<S>(name: S, region: S) -> Request<Create, LoadBalancer>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -210,7 +218,8 @@ impl LoadBalancer {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-load-balancer)
     pub fn get<S>(id: S) -> Request<Get, LoadBalancer>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -234,7 +243,8 @@ impl LoadBalancer {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn update<S>(id: S) -> Request<Update, LoadBalancer>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -245,7 +255,8 @@ impl LoadBalancer {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-load-balancer)
     pub fn delete<S>(id: S) -> Request<Delete, ()>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -258,31 +269,33 @@ impl LoadBalancer {
 
 impl Request<Create, LoadBalancer> {
     /// The load balancing algorithm used to determine which backend Droplet
-    /// will be selected by a client. It must be either "round_robin" or 
+    /// will be selected by a client. It must be either "round_robin" or
     /// "least_connections". The default value is "round_robin".
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn algorithm<S>(mut self, val: S) -> Request<Create, LoadBalancer>
-    where S: Display + Serialize {
+        where S: Display + Serialize
+    {
         self.body["algorithm"] = json!(val);
         self
     }
-    /// An array of objects specifying the forwarding rules for a Load 
+    /// An array of objects specifying the forwarding rules for a Load
     /// Balancer. At least one forwarding rule is required when creating a new
     /// Load Balancer instance.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn forwarding_rule<T>(mut self, val: T)
-                              -> Request<Create, LoadBalancer>
-    where T: Into<ForwardingRule> {
+    pub fn forwarding_rule<T>(mut self, val: T) -> Request<Create, LoadBalancer>
+        where T: Into<ForwardingRule>
+    {
         if !self.body["forwarding_rules"].is_array() {
             self.body["forwarding_rules"] = json!([]);
         }
-        
+
         {
-            let rules = self.body["forwarding_rules"].as_array_mut()
+            let rules = self.body["forwarding_rules"]
+                .as_array_mut()
                 .expect("forwarding_rules should always be an array.");
-            
+
             rules.push(json!(val.into()));
         }
         self
@@ -299,7 +312,8 @@ impl Request<Create, LoadBalancer> {
                            unhealthy_threshold: Option<usize>,
                            healthy_threshold: Option<usize>)
                            -> Request<Create, LoadBalancer>
-    where S: AsRef<str> + Display + Serialize {
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["health_check"] = json!({
             "protocol": protocol,
             "port": port,
@@ -322,12 +336,17 @@ impl Request<Create, LoadBalancer> {
         self
     }
     /// The (optional) sticky sessions settings. `kind` must be `cookies` or
-    /// `none`. If `kind` is `cookies` then `cookie_name` and 
+    /// `none`. If `kind` is `cookies` then `cookie_name` and
     /// `cookie_ttl_seconds` should be set as well.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn sticky_sessions<S>(mut self, kind: S, cookie_name: Option<S>, cookie_ttl_seconds: Option<usize>) -> Request<Create, LoadBalancer>
-    where S: AsRef<str> + Display + Serialize {
+    pub fn sticky_sessions<S>(mut self,
+                              kind: S,
+                              cookie_name: Option<S>,
+                              cookie_ttl_seconds: Option<usize>)
+                              -> Request<Create, LoadBalancer>
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["sticky_sessions"] = json!({
             "type": kind,
         });
@@ -339,31 +358,32 @@ impl Request<Create, LoadBalancer> {
         }
         self
     }
-    /// A boolean value indicating whether HTTP requests to the Load Balancer 
+    /// A boolean value indicating whether HTTP requests to the Load Balancer
     /// on port 80 will be redirected to HTTPS on port 443. Default value is false.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn redirect_http_to_https(mut self, setting: bool) -> Request<Create, LoadBalancer> {
         self.body["redirect_http_to_https"] = json!(setting);
         self
     }
     /// The IDs of the Droplets to be assigned to the Load Balancer.
-    /// 
+    ///
     /// **Note:** Not intended to be used alongside the `tag` function.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn droplets(mut self, ids: Vec<usize>) -> Request<Create, LoadBalancer> {
         self.body["droplet_ids"] = json!(ids);
         self
     }
-    /// The name of a Droplet tag corresponding to Droplets to be assigned to 
+    /// The name of a Droplet tag corresponding to Droplets to be assigned to
     /// the Load Balancer.
-    /// 
+    ///
     /// **Note:** Not intended to be used alongside the `droplets` function.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn tag<S>(mut self, tag: S) -> Request<Create, LoadBalancer>
-    where S: AsRef<str> + Display + Serialize {
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["tag"] = json!(tag);
         self
     }
@@ -375,7 +395,8 @@ impl Request<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn name<S>(mut self, val: S) -> Request<Update, LoadBalancer>
-    where S: Display + Serialize {
+        where S: Display + Serialize
+    {
         self.body["name"] = json!(val);
         self
     }
@@ -383,34 +404,37 @@ impl Request<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn region<S>(mut self, val: S) -> Request<Update, LoadBalancer>
-    where S: Display + Serialize {
+        where S: Display + Serialize
+    {
         self.body["region"] = json!(val);
         self
     }
     /// The load balancing algorithm used to determine which backend Droplet
-    /// will be selected by a client. It must be either "round_robin" or 
+    /// will be selected by a client. It must be either "round_robin" or
     /// "least_connections". The default value is "round_robin".
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn algorithm<S>(mut self, val: S) -> Request<Update, LoadBalancer>
-    where S: Display + Serialize {
+        where S: Display + Serialize
+    {
         self.body["algorithm"] = json!(val);
         self
     }
-    /// An array of objects specifying the forwarding rules for a Load 
+    /// An array of objects specifying the forwarding rules for a Load
     /// Balancer. At least one forwarding rule is required when creating a new
     /// Load Balancer instance.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn forwarding_rule<T>(mut self, val: T)
-                              -> Request<Update, LoadBalancer>
-    where T: Into<ForwardingRule> {
+    pub fn forwarding_rule<T>(mut self, val: T) -> Request<Update, LoadBalancer>
+        where T: Into<ForwardingRule>
+    {
         if !self.body["forwarding_rules"].is_array() {
             self.body["forwarding_rules"] = json!([]);
         }
-        
+
         {
-            let rules = self.body["forwarding_rules"].as_array_mut()
+            let rules = self.body["forwarding_rules"]
+                .as_array_mut()
                 .expect("forwarding_rules should always be an array.");
 
             rules.push(json!(val.into()));
@@ -429,7 +453,8 @@ impl Request<Update, LoadBalancer> {
                            unhealthy_threshold: Option<usize>,
                            healthy_threshold: Option<usize>)
                            -> Request<Update, LoadBalancer>
-    where S: AsRef<str> + Display + Serialize {
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["health_check"] = json!({
             "protocol": protocol,
             "port": port,
@@ -452,12 +477,17 @@ impl Request<Update, LoadBalancer> {
         self
     }
     /// The (optional) sticky sessions settings. `kind` must be `cookies` or
-    /// `none`. If `kind` is `cookies` then `cookie_name` and 
+    /// `none`. If `kind` is `cookies` then `cookie_name` and
     /// `cookie_ttl_seconds` should be set as well.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn sticky_sessions<S>(mut self, kind: S, cookie_name: Option<S>, cookie_ttl_seconds: Option<usize>) -> Request<Update, LoadBalancer>
-    where S: AsRef<str> + Display + Serialize {
+    pub fn sticky_sessions<S>(mut self,
+                              kind: S,
+                              cookie_name: Option<S>,
+                              cookie_ttl_seconds: Option<usize>)
+                              -> Request<Update, LoadBalancer>
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["sticky_sessions"] = json!({
             "type": kind,
         });
@@ -469,31 +499,32 @@ impl Request<Update, LoadBalancer> {
         }
         self
     }
-    /// A boolean value indicating whether HTTP requests to the Load Balancer 
+    /// A boolean value indicating whether HTTP requests to the Load Balancer
     /// on port 80 will be redirected to HTTPS on port 443. Default value is false.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn redirect_http_to_https(mut self, setting: bool) -> Request<Update, LoadBalancer> {
         self.body["redirect_http_to_https"] = json!(setting);
         self
     }
     /// The IDs of the Droplets to be assigned to the Load Balancer.
-    /// 
+    ///
     /// **Note:** Not intended to be used alongside the `tag` function.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn droplets(mut self, ids: Vec<usize>) -> Request<Update, LoadBalancer> {
         self.body["droplet_ids"] = json!(ids);
         self
     }
-    /// The name of a Droplet tag corresponding to Droplets to be assigned to 
+    /// The name of a Droplet tag corresponding to Droplets to be assigned to
     /// the Load Balancer.
-    /// 
+    ///
     /// **Note:** Not intended to be used alongside the `droplets` function.
-    /// 
+    ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn tag<S>(mut self, tag: S) -> Request<Update, LoadBalancer>
-    where S: AsRef<str> + Display + Serialize {
+        where S: AsRef<str> + Display + Serialize
+    {
         self.body["tag"] = json!(tag);
         self
     }
@@ -504,7 +535,8 @@ impl Request<Get, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#add-droplets-to-a-load-balancer)
     pub fn add_droplets(mut self, ids: Vec<usize>) -> Request<Create, ()> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
@@ -512,14 +544,14 @@ impl Request<Get, LoadBalancer> {
             "droplet_ids": ids,
         });
 
-        self.method()
-            .value()
+        self.method().value()
     }
     /// Remove droplets (by id) from the load balancer.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-droplets-from-a-load-balancer)
     pub fn remove_droplets(mut self, ids: Vec<usize>) -> Request<Delete, ()> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
@@ -527,15 +559,16 @@ impl Request<Get, LoadBalancer> {
             "droplet_ids": ids,
         });
 
-        self.method()
-            .value()
+        self.method().value()
     }
     /// Add a forwarding rule to the Load Balancer.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#add-forwarding-rules-to-a-load-balancer)
     pub fn add_forwarding_rules<T>(mut self, items: Vec<T>) -> Request<Create, ()>
-    where T: Into<ForwardingRule> {
-        self.url.path_segments_mut()
+        where T: Into<ForwardingRule>
+    {
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(FORWARDING_RULES_SEGMENT);
 
@@ -544,24 +577,26 @@ impl Request<Get, LoadBalancer> {
         }
 
         {
-            let mut rules = self.body["forwarding_rules"].as_array_mut()
+            let mut rules = self.body["forwarding_rules"]
+                .as_array_mut()
                 .expect("forwarding_rules should always be an array.");
-            
+
             for item in items {
                 let rule: ForwardingRule = item.into();
                 rules.push(json!(rule));
             }
         }
 
-        self.method()
-            .value()
+        self.method().value()
     }
     /// Remove a forwarding rule to the Load Balancer.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-forwarding-rules-from-a-load-balancer)
     pub fn remove_forwarding_rules<T>(mut self, items: Vec<T>) -> Request<Delete, ()>
-    where T: Into<ForwardingRule> {
-        self.url.path_segments_mut()
+        where T: Into<ForwardingRule>
+    {
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(FORWARDING_RULES_SEGMENT);
 
@@ -570,17 +605,17 @@ impl Request<Get, LoadBalancer> {
         }
 
         {
-            let mut rules = self.body["forwarding_rules"].as_array_mut()
+            let mut rules = self.body["forwarding_rules"]
+                .as_array_mut()
                 .expect("forwarding_rules should always be an array.");
-            
+
             for item in items {
                 let rule: ForwardingRule = item.into();
                 rules.push(json!(rule));
             }
         }
-        
-        self.method()
-            .value()
+
+        self.method().value()
     }
 }
 

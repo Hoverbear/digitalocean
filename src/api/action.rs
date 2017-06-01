@@ -14,8 +14,8 @@ const ACTIONS_SEGMENT: &'static str = "actions";
 /// image to a new region.
 ///
 /// An action object is created every time one of these actions is initiated.
-/// The action object contains information about the current status of the 
-/// action, start and complete timestamps, and the associated resource type 
+/// The action object contains information about the current status of the
+/// action, start and complete timestamps, and the associated resource type
 /// and ID.
 ///
 /// Every action that creates an action object is available through this
@@ -31,13 +31,13 @@ pub struct Action {
     /// The current status of the action. The value of this attribute will be
     /// "in-progress", "completed", or "errored".
     pub status: String,
-    /// The type of action that the event is executing (reboot, power_off, 
+    /// The type of action that the event is executing (reboot, power_off,
     /// etc.).
     pub started_at: DateTime<UTC>,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the action was completed.
     pub completed_at: Option<DateTime<UTC>>,
-    /// A unique identifier for the resource that the action is associated 
+    /// A unique identifier for the resource that the action is associated
     /// with.
     pub resource_id: usize,
     /// The type of resource that the action is associated with.

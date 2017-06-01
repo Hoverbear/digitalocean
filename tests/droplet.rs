@@ -1,6 +1,8 @@
 extern crate digitalocean;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 extern crate url;
 extern crate url_serde;
 
@@ -29,7 +31,8 @@ fn create_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.body,
+               json!({
         "name": name,
         "region": region,
         "size": size,
@@ -48,10 +51,11 @@ fn create_many_produces_correct_request() {
     let (names, region, size, image) = (vec!["bear", "badger"], "tor1", "5gb", "ubuntu-14-04-x64");
     let (ssh_keys, backups, monitoring) = (vec!["test", "test2"], true, true);
 
-    let req: Request<Create, Vec<Droplet>> = Droplet::create_multiple(names.clone(), region, size, image)
-        .ssh_keys(ssh_keys.clone())
-        .backups(backups)
-        .monitoring(monitoring);
+    let req: Request<Create, Vec<Droplet>> =
+        Droplet::create_multiple(names.clone(), region, size, image)
+            .ssh_keys(ssh_keys.clone())
+            .backups(backups)
+            .monitoring(monitoring);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -96,7 +100,7 @@ fn list_produces_correct_request() {
 #[test]
 fn list_by_tag_produces_correct_request() {
     before();
-    
+
     let tag_name = "bear";
     let correct_url = format!("https://api.digitalocean.com/v2/droplets?tag_name={}", tag_name);
 

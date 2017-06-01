@@ -15,7 +15,7 @@ const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
 /// Block Storage volumes provide expanded storage capacity for your Droplets
 /// and can be moved between Droplets within a specific region. Volumes
 /// function as raw block devices, meaning they appear to the operating system
-/// as locally attached storage which can be formatted using any file system 
+/// as locally attached storage which can be formatted using any file system
 /// supported by the OS. They may be created in sizes from 1GiB to 16TiB.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
@@ -25,11 +25,11 @@ pub struct Volume {
     pub id: String,
     /// The region that the Block Storage volume is located in. When setting a
     /// region, the value should be the slug identifier for the region. When
-    /// you query a Block Storage volume, the entire region object will be 
+    /// you query a Block Storage volume, the entire region object will be
     /// returned.
     pub region: Region,
     /// An array containing the IDs of the Droplets the volume is attached to.
-    /// Note that at this time, a volume can only be attached to a single 
+    /// Note that at this time, a volume can only be attached to a single
     /// Droplet.
     pub droplet_ids: Vec<usize>,
     /// A human-readable name for the Block Storage volume. Must be lowercase
@@ -40,7 +40,7 @@ pub struct Volume {
     pub description: String,
     /// The size of the Block Storage volume in GiB (1024^3).
     pub size_gigabytes: usize,
-    /// A time value given in ISO8601 combined date and time format that 
+    /// A time value given in ISO8601 combined date and time format that
     /// represents when the Block Storage volume was created.
     pub created_at: DateTime<UTC>,
 }
@@ -57,7 +57,8 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume)
     pub fn create<S>(name: S, size_gigabytes: usize) -> Request<Create, Volume>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -70,7 +71,8 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume)
     pub fn get<S>(id: S) -> Request<Get, Volume>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -81,7 +83,8 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume-by-name)
     pub fn get_by_name<S>(name: S, region: S) -> Request<Get, Volume>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -95,7 +98,8 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-block-storage-volume)
     pub fn delete<S>(id: S) -> Request<Delete, ()>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -106,7 +110,8 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](hhttps://developers.digitalocean.com/documentation/v2/#delete-a-block-storage-volume-by-name)
     pub fn delete_by_name<S>(name: S, region: S) -> Request<Delete, ()>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -123,10 +128,12 @@ impl Volume {
 impl Request<List, Vec<Volume>> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-block-storage-volumes)
     pub fn region<S>(mut self, region: S) -> Self
-    where S: AsRef<str> + Serialize + Display {
-        self.url.query_pairs_mut()
+        where S: AsRef<str> + Serialize + Display
+    {
+        self.url
+            .query_pairs_mut()
             .append_pair("region", region.as_ref());
-        
+
         self
     }
 }
@@ -134,36 +141,37 @@ impl Request<List, Vec<Volume>> {
 impl Request<Get, Volume> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume)
     pub fn snapshots(mut self) -> Request<List, Vec<Snapshot>> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOTS_SEGMENT);
-        
-        self.method()
-            .value()
+
+        self.method().value()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume)
     pub fn snapshot<S>(mut self, name: S) -> Request<Create, Snapshot>
-    where S: AsRef<str> + Serialize + Display {
-        self.url.path_segments_mut()
+        where S: AsRef<str> + Serialize + Display
+    {
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOTS_SEGMENT);
 
         self.body = json!({
             "name": name
         });
-        
-        self.method()
-            .value()
+
+        self.method().value()
     }
-    
 }
 
 impl Request<Create, Volume> {
     /// An optional free-form text field to describe a Block Storage volume.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
-    pub fn description<S>(mut self, val: S) -> Self 
-    where S: AsRef<str> + Serialize + Display {
+    pub fn description<S>(mut self, val: S) -> Self
+        where S: AsRef<str> + Serialize + Display
+    {
         self.body["description"] = json!(val);
         self
     }
@@ -175,20 +183,22 @@ impl Request<Create, Volume> {
     /// **Note:** Should not be specified with a `snapshot_id`.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
-    pub fn region<S>(mut self, val: S) -> Self 
-    where S: AsRef<str> + Serialize + Display {
+    pub fn region<S>(mut self, val: S) -> Self
+        where S: AsRef<str> + Serialize + Display
+    {
         self.body["region"] = json!(val);
         self
     }
 
     /// The unique identifier for the volume snapshot from which to create the
-    /// volume. 
+    /// volume.
     ///
     /// **Note:** Should not be specified with a `region_id`.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
-    pub fn snapshot_id<S>(mut self, val: S) -> Self 
-    where S: AsRef<str> + Serialize + Display {
+    pub fn snapshot_id<S>(mut self, val: S) -> Self
+        where S: AsRef<str> + Serialize + Display
+    {
         self.body["snapshot_id"] = json!(val);
         self
     }

@@ -1,6 +1,8 @@
 extern crate digitalocean;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 extern crate url;
 extern crate url_serde;
 
@@ -31,8 +33,7 @@ fn list_produces_correct_request() {
     let region = "tor1";
     let correct_url = format!("https://api.digitalocean.com/v2/volumes?region={}", region);
 
-    let req: Request<List, Vec<Volume>> = Volume::list()
-        .region(region);
+    let req: Request<List, Vec<Volume>> = Volume::list().region(region);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -47,12 +48,12 @@ fn create_produces_correct_request() {
     let correct_url = "https://api.digitalocean.com/v2/volumes";
     let (name, size, region) = ("bear", 123, String::from("tor1"));
 
-    let req: Request<Create, Volume> = Volume::create(name, size)
-        .region(region.clone());
+    let req: Request<Create, Volume> = Volume::create(name, size).region(region.clone());
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.body,
+               json!({
         "name": name,
         "size_gigabytes": size,
         "region": region,
@@ -80,7 +81,8 @@ fn get_by_name_produces_correct_request() {
 
     let name = "test";
     let region = "tor1";
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
+    let correct_url =
+        format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
 
     let req: Request<Get, Volume> = Volume::get_by_name(name, region);
     info!("{:#?}", req);
@@ -109,7 +111,8 @@ fn delete_by_name_produces_correct_request() {
 
     let name = "test";
     let region = "tor1";
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
+    let correct_url =
+        format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
 
     let req: Request<Delete, ()> = Volume::delete_by_name(name, region);
     info!("{:#?}", req);
@@ -125,8 +128,7 @@ fn snapshots_produces_correct_request() {
     let volume_id = "123";
     let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/snapshots", volume_id);
 
-    let req: Request<List, Vec<Snapshot>> = Volume::get(volume_id)
-        .snapshots();
+    let req: Request<List, Vec<Snapshot>> = Volume::get(volume_id).snapshots();
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -141,8 +143,7 @@ fn snapshot_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/snapshots", volume_id);
     let snapshot_name = "test";
 
-    let req: Request<Create, Snapshot> = Volume::get(volume_id)
-        .snapshot(snapshot_name);
+    let req: Request<Create, Snapshot> = Volume::get(volume_id).snapshot(snapshot_name);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

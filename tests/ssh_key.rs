@@ -1,6 +1,8 @@
 extern crate digitalocean;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 extern crate url;
 extern crate url_serde;
 
@@ -38,7 +40,8 @@ fn create_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.body,
+               json!({
         "name": name,
         "public_key": public_key,
     }));
@@ -66,8 +69,7 @@ fn update_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/account/keys/{}", key_id);
     let name = "new name";
 
-    let req: Request<Update, SshKey> = SshKey::update(key_id)
-        .name(name);
+    let req: Request<Update, SshKey> = SshKey::update(key_id).name(name);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

@@ -22,7 +22,7 @@ pub struct Account {
     pub email_verified: bool,
     /// This value is one of "active", "warning" or "locked".
     pub status: String,
-    /// A human-readable message giving more details about the status of the 
+    /// A human-readable message giving more details about the status of the
     /// account.
     pub status_message: String,
 }

@@ -1,6 +1,8 @@
 extern crate digitalocean;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 extern crate url;
 extern crate url_serde;
 
@@ -32,21 +34,18 @@ fn create_produces_correct_request() {
     before();
 
     let correct_url = "https://api.digitalocean.com/v2/certificates";
-    let (name, pkey, leaf, chain) = (
-        String::from("test"), 
-        String::from("pkey"), 
-        String::from("leaf"), 
-        String::from("chain")
-    );
+    let (name, pkey, leaf, chain) =
+        (String::from("test"), String::from("pkey"), String::from("leaf"), String::from("chain"));
 
 
-    let req: Request<Create, Certificate> = Certificate::create(
-            name.clone(), pkey.clone(), leaf.clone()
-        ).certificate_chain(chain.clone());
+    let req: Request<Create, Certificate> =
+        Certificate::create(name.clone(), pkey.clone(), leaf.clone())
+            .certificate_chain(chain.clone());
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.body,
+               json!({
         "name": name,
         "private_key": pkey,
         "leaf_certificate": leaf,

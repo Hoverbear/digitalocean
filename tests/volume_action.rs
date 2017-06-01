@@ -1,6 +1,8 @@
 extern crate digitalocean;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 extern crate url;
 extern crate url_serde;
 
@@ -19,15 +21,16 @@ fn attach_produces_correct_request() {
     before();
 
     let volume_id = "123";
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/actions", volume_id);
+    let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/actions",
+                              volume_id);
     let droplet_id = 456;
 
-    let req: Request<Create, Action> = Volume::get(volume_id)
-        .attach(droplet_id);
+    let req: Request<Create, Action> = Volume::get(volume_id).attach(droplet_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.body,
+               json!({
         "type": "attach",
         "droplet_id": droplet_id,
     }));
@@ -60,8 +63,7 @@ fn detach_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/actions", volume_id);
     let droplet_id = 456;
 
-    let req: Request<Create, Action> = Volume::get(volume_id)
-        .detach(droplet_id);
+    let req: Request<Create, Action> = Volume::get(volume_id).detach(droplet_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -97,8 +99,7 @@ fn resize_produces_correct_request() {
     let volume_id = "123";
     let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/actions", volume_id);
 
-    let req: Request<Create, Action> = Volume::get(volume_id)
-        .resize(123);
+    let req: Request<Create, Action> = Volume::get(volume_id).resize(123);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -115,8 +116,7 @@ fn list_produces_correct_request() {
     let volume_id = "123";
     let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/actions", volume_id);
 
-    let req: Request<List, Vec<Action>> = Volume::get(volume_id)
-        .actions();
+    let req: Request<List, Vec<Action>> = Volume::get(volume_id).actions();
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);
@@ -129,10 +129,10 @@ fn get_produces_correct_request() {
 
     let volume_id = "123";
     let action_id = 456;
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/actions/{}", volume_id, action_id);
+    let correct_url =
+        format!("https://api.digitalocean.com/v2/volumes/{}/actions/{}", volume_id, action_id);
 
-    let req: Request<Get, Action> = Volume::get(volume_id)
-        .action(action_id);
+    let req: Request<Get, Action> = Volume::get(volume_id).action(action_id);
     info!("{:#?}", req);
 
     assert_eq!(req.url.as_str(), correct_url);

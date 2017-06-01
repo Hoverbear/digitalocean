@@ -24,7 +24,7 @@ pub struct Certificate {
     /// A time value given in ISO8601 combined date and time format that
     /// represents the certificate's expiration date.
     pub not_after: DateTime<UTC>,
-    /// A unique identifier generated from the SHA-1 fingerprint of the 
+    /// A unique identifier generated from the SHA-1 fingerprint of the
     /// certificate.
     pub sha1_fingerprint: String,
     /// A time value given in ISO8601 combined date and time format that
@@ -35,7 +35,8 @@ pub struct Certificate {
 impl Certificate {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-certificate)
     pub fn create<S>(name: S, private_key: S, leaf_certificate: S) -> Request<Create, Certificate>
-    where S: AsRef<str> + Serialize + Display {
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -59,8 +60,9 @@ impl Certificate {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-certificate)
-    pub fn get<N>(id: N) -> Request<Get, Certificate> 
-    where N: AsRef<str> + Display {        
+    pub fn get<N>(id: N) -> Request<Get, Certificate>
+        where N: AsRef<str> + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -71,14 +73,15 @@ impl Certificate {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-certificate)
-    pub fn delete<N>(id: N) -> Request<Delete, ()> 
-    where N: AsRef<str> + Display {
+    pub fn delete<N>(id: N) -> Request<Delete, ()>
+        where N: AsRef<str> + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(CERTIFICATES_SEGMENT)
             .push(id.as_ref());
-        
+
         Request::new(url)
     }
 }
@@ -88,8 +91,9 @@ impl Request<Create, Certificate> {
     /// certificate and your domain's SSL certificate.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-certificate)
-    pub fn certificate_chain<S>(mut self, val: S) -> Self 
-    where S: AsRef<str> + Serialize + Display {
+    pub fn certificate_chain<S>(mut self, val: S) -> Self
+        where S: AsRef<str> + Serialize + Display
+    {
         self.body["certificate_chain"] = json!(val);
         self
     }

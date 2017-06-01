@@ -12,16 +12,15 @@ fn main() {
     dotenv::dotenv().ok();
     env_logger::init().ok();
 
-    let api_key = env::var("API_KEY")
-        .expect("API_KEY not set.");
-    let client = DigitalOcean::new(api_key)
-        .unwrap();
+    let api_key = env::var("API_KEY").expect("API_KEY not set.");
+    let client = DigitalOcean::new(api_key).unwrap();
 
     if env::args().len() <= 1 {
         panic!("No domains provided.");
     }
 
-    let results = env::args().skip(1)
+    let results = env::args()
+        .skip(1)
         .map(|arg| (arg.clone(), Domain::get(arg).records()))
         .map(|(arg, req)| (arg, req.execute(&client).unwrap()));
 

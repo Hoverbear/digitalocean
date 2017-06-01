@@ -51,10 +51,12 @@ struct ApiLinks {
 impl ApiLinks {
     fn next(&self) -> Option<Url> {
         match self.pages {
-            Some(ref pages) => match pages.next {
-                Some(ref v) => Some(v.clone()),
-                None => None,
-            },
+            Some(ref pages) => {
+                match pages.next {
+                    Some(ref v) => Some(v.clone()),
+                    None => None,
+                }
+            }
             None => None,
         }
     }
@@ -88,11 +90,13 @@ pub trait HasValue {
 
 impl HasValue for () {
     type Value = ();
-    fn value(self) -> Self::Value { () }
+    fn value(self) -> Self::Value {
+        ()
+    }
 }
 
 pub trait HasResponse: DeserializeOwned + Clone {
-    type Response: DeserializeOwned + Clone + HasValue<Value=Self>;
+    type Response: DeserializeOwned + Clone + HasValue<Value = Self>;
 }
 
 impl HasResponse for () {

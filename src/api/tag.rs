@@ -11,7 +11,7 @@ use super::{HasValue, HasPagination, HasResponse};
 const TAG_SEGMENT: &'static str = "tags";
 const RESOURCES_SEGMENT: &'static str = "resources";
 
-/// A Tag is a label that can be applied to a resource (currently only 
+/// A Tag is a label that can be applied to a resource (currently only
 /// Droplets) in order to better organize or facilitate the lookups and actions
 ///  on it.
 ///
@@ -31,8 +31,9 @@ pub struct Tag {
 
 impl Tag {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-tag)
-    pub fn create<S>(name: S) -> Request<Create, Tag> 
-    where S: AsRef<str> + Serialize + Display {
+    pub fn create<S>(name: S) -> Request<Create, Tag>
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -43,8 +44,9 @@ impl Tag {
         }))
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag)
-    pub fn get<S>(name: S) -> Request<Get, Tag> 
-    where S: AsRef<str> + Serialize + Display {
+    pub fn get<S>(name: S) -> Request<Get, Tag>
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -63,8 +65,9 @@ impl Tag {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-tag)
-    pub fn delete<S>(name: S) -> Request<Delete, ()> 
-    where S: AsRef<str> + Serialize + Display {
+    pub fn delete<S>(name: S) -> Request<Delete, ()>
+        where S: AsRef<str> + Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -79,44 +82,56 @@ impl Request<Get, Tag> {
     /// Accepts tuples matching `(id, type)`. Currently the only `type` is `"droplet"`.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#tag-a-resource)
-    pub fn add_resources<S>(mut self, resources: Vec<(S,S)>) -> Request<Create, ()> 
-    where S: AsRef<str> + Serialize + Display {
-        self.url.path_segments_mut()
+    pub fn add_resources<S>(mut self, resources: Vec<(S, S)>) -> Request<Create, ()>
+        where S: AsRef<str> + Serialize + Display
+    {
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(RESOURCES_SEGMENT);
-        
-        let resources = resources.into_iter().map(|(id, kind)| json!({
+
+        let resources = resources
+            .into_iter()
+            .map(|(id, kind)| {
+                     json!({
             "resource_id": id,
             "resource_type": kind,
-        })).collect::<Vec<_>>();
+        })
+                 })
+            .collect::<Vec<_>>();
 
         self.body = json!({
             "resources": resources,
         });
 
-        self.method()
-            .value()
+        self.method().value()
     }
     /// Accepts tuples matching `(id, type)`. Currently the only `type` is `"droplet"`.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#untag-a-resource)
-    pub fn remove_resources<S>(mut self, resources: Vec<(S,S)>) -> Request<Delete, ()> 
-    where S: AsRef<str> + Serialize + Display {
-        self.url.path_segments_mut()
+    pub fn remove_resources<S>(mut self, resources: Vec<(S, S)>) -> Request<Delete, ()>
+        where S: AsRef<str> + Serialize + Display
+    {
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(RESOURCES_SEGMENT);
-        
-        let resources = resources.into_iter().map(|(id, kind)| json!({
+
+        let resources = resources
+            .into_iter()
+            .map(|(id, kind)| {
+                     json!({
             "resource_id": id,
             "resource_type": kind,
-        })).collect::<Vec<_>>();
+        })
+                 })
+            .collect::<Vec<_>>();
 
         self.body = json!({
             "resources": resources,
         });
 
-        self.method()
-            .value()
+        self.method().value()
     }
 }
 

@@ -22,7 +22,7 @@ const BACKUPS_SEGMENT: &'static str = "backups";
 ///
 /// Some of the attributes will have an object value. The region and image
 /// objects will all contain the standard attributes of their associated types.
-/// Find more information about each of these objects in their respective 
+/// Find more information about each of these objects in their respective
 /// sections.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
@@ -39,7 +39,7 @@ pub struct Droplet {
     pub vcpus: usize,
     /// The size of the Droplet's disk in gigabytes.
     pub disk: usize,
-    /// A boolean value indicating whether the Droplet has been locked, 
+    /// A boolean value indicating whether the Droplet has been locked,
     /// preventing actions by users.
     pub locked: bool,
     /// A time value given in ISO8601 combined date and time format that
@@ -48,16 +48,16 @@ pub struct Droplet {
     /// A status string indicating the state of the Droplet instance. This may
     /// be "new", "active", "off", or "archive".
     pub status: String,
-    /// An array of backup IDs of any backups that have been taken of the 
-    /// Droplet instance. Droplet backups are enabled at the time of the 
+    /// An array of backup IDs of any backups that have been taken of the
+    /// Droplet instance. Droplet backups are enabled at the time of the
     /// instance creation.
     pub backup_ids: Vec<usize>,
-    /// An array of snapshot IDs of any snapshots created from the Droplet 
+    /// An array of snapshot IDs of any snapshots created from the Droplet
     /// instance.
     pub snapshot_ids: Vec<usize>,
     /// An array of features enabled on this Droplet.
     pub features: Vec<String>,
-    /// The region that the Droplet instance is deployed in. When setting a 
+    /// The region that the Droplet instance is deployed in. When setting a
     /// region, the value should be the slug identifier for the region. When
     /// you query a Droplet, the entire region object will be returned.
     pub region: Region,
@@ -66,30 +66,30 @@ pub struct Droplet {
     /// Droplet, the entire image object will be returned.
     pub image: Image,
     /// The current size object describing the Droplet. When setting a size,
-    /// the value is set to the size slug. When querying the Droplet, the 
+    /// the value is set to the size slug. When querying the Droplet, the
     /// entire size object will be returned. Note that the disk volume of a
     /// Droplet may not match the size's disk due to Droplet resize actions.
     /// The disk attribute on the Droplet should always be referenced.
     pub size: Size,
     /// The unique slug identifier for the size of this Droplet.
     pub size_slug: String,
-    /// The details of the network that are configured for the Droplet 
+    /// The details of the network that are configured for the Droplet
     /// instance. This is an object that contains keys for IPv4 and IPv6.
     /// The value of each of these is an array that contains objects describing
     /// an individual IP resource allocated to the Droplet. These will define
     /// attributes like the IP address, netmask, and gateway of the specific
     /// network depending on the type of network it is.
     pub networks: Networks,
-    /// The current kernel. This will initially be set to the kernel of the 
+    /// The current kernel. This will initially be set to the kernel of the
     /// base image when the Droplet is created.
     pub kernel: Option<Kernel>,
     /// The details of the Droplet's backups feature, if backups are configured
-    /// for the Droplet. This object contains keys for the start and end times 
+    /// for the Droplet. This object contains keys for the start and end times
     /// of the window during which the backup will start.
     pub next_backup_window: Option<NextBackupWindow>,
     /// An array of Tags the Droplet has been tagged with.
     pub tags: Vec<String>,
-    /// A flat array including the unique identifier for each Block Storage 
+    /// A flat array including the unique identifier for each Block Storage
     /// volume attached to the Droplet.
     pub volume_ids: Vec<String>,
 }
@@ -135,7 +135,9 @@ pub mod droplet_fields {
 impl Droplet {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn create<S, D>(name: S, region: S, size: S, image: D) -> Request<Create, Droplet>
-    where S: AsRef<str> + Serialize + Display, D: Serialize + Display {
+        where S: AsRef<str> + Serialize + Display,
+              D: Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -150,8 +152,14 @@ impl Droplet {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets)
-    pub fn create_multiple<S, D>(names: Vec<S>, region: S, size: S, image: D) -> Request<Create, Vec<Droplet>>
-    where S: AsRef<str> + Serialize + Display, D: Serialize + Display {
+    pub fn create_multiple<S, D>(names: Vec<S>,
+                                 region: S,
+                                 size: S,
+                                 image: D)
+                                 -> Request<Create, Vec<Droplet>>
+        where S: AsRef<str> + Serialize + Display,
+              D: Serialize + Display
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -188,14 +196,14 @@ impl Droplet {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#listing-droplets-by-tag)
     pub fn list_by_tag<S>(name: S) -> Request<List, Vec<Droplet>>
-    where S: AsRef<str> + Serialize {
+        where S: AsRef<str> + Serialize
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
-        url.query_pairs_mut()
-            .append_pair("tag_name", name.as_ref());
+        url.query_pairs_mut().append_pair("tag_name", name.as_ref());
 
         Request::new(url)
     }
@@ -213,14 +221,14 @@ impl Droplet {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#deleting-droplets-by-tag)
     pub fn delete_by_tag<S>(name: S) -> Request<Delete, ()>
-    where S: AsRef<str> + Serialize {
+        where S: AsRef<str> + Serialize
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
-        url.query_pairs_mut()
-            .append_pair("tag_name", name.as_ref());
+        url.query_pairs_mut().append_pair("tag_name", name.as_ref());
 
         Request::new(url)
     }
@@ -243,7 +251,8 @@ impl Request<Create, Droplet> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn ssh_keys<D>(mut self, val: Vec<D>) -> Self
-    where D: Display + Serialize {
+        where D: Display + Serialize
+    {
         self.body["ssh_keys"] = json!(val);
         self
     }
@@ -272,8 +281,8 @@ impl Request<Create, Droplet> {
         self.body["private_networking"] = json!(val);
         self
     }
-    /// A string containing 'user data' which may be used to configure the 
-    /// Droplet on first boot, often a 'cloud-config' file or Bash script. 
+    /// A string containing 'user data' which may be used to configure the
+    /// Droplet on first boot, often a 'cloud-config' file or Bash script.
     /// It must be plain text and may not exceed 64 KiB in size.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
@@ -315,7 +324,8 @@ impl Request<Create, Vec<Droplet>> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn ssh_keys<D>(mut self, val: Vec<D>) -> Self
-    where D: Display + Serialize {
+        where D: Display + Serialize
+    {
         self.body["ssh_keys"] = json!(val);
         self
     }
@@ -344,8 +354,8 @@ impl Request<Create, Vec<Droplet>> {
         self.body["private_networking"] = json!(val);
         self
     }
-    /// A string containing 'user data' which may be used to configure the 
-    /// Droplet on first boot, often a 'cloud-config' file or Bash script. 
+    /// A string containing 'user data' which may be used to configure the
+    /// Droplet on first boot, often a 'cloud-config' file or Bash script.
     /// It must be plain text and may not exceed 64 KiB in size.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
@@ -383,30 +393,30 @@ impl Request<Create, Vec<Droplet>> {
 impl Request<Get, Droplet> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-droplet)
     pub fn snapshots(mut self) -> Request<List, Vec<Snapshot>> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOTS_SEGMENT);
-        
-        self.method()
-            .value()
+
+        self.method().value()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-backups-for-a-droplet)
     pub fn backups(mut self) -> Request<List, Vec<Snapshot>> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(BACKUPS_SEGMENT);
-        
-        self.method()
-            .value()
+
+        self.method().value()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-neighbors-for-a-droplet)
     pub fn neighbors(mut self) -> Request<List, Vec<Droplet>> {
-        self.url.path_segments_mut()
+        self.url
+            .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(NEIGHBORS_SEGMENT);
-        
-        self.method()
-            .value()
+
+        self.method().value()
     }
 }
 

@@ -11,9 +11,9 @@ use super::{HasValue, HasPagination, HasResponse};
 
 const FLOATING_IP_SEGMENT: &'static str = "floating_ips";
 
-/// Floating IP objects represent a publicly-accessible static IP addresses 
-/// that can be mapped to one of your Droplets. They can be used to create 
-/// highly available setups or other configurations requiring movable 
+/// Floating IP objects represent a publicly-accessible static IP addresses
+/// that can be mapped to one of your Droplets. They can be used to create
+/// highly available setups or other configurations requiring movable
 /// addresses.
 ///
 /// Floating IPs are bound to a specific region.
@@ -21,14 +21,14 @@ const FLOATING_IP_SEGMENT: &'static str = "floating_ips";
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#floating-ips)
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct FloatingIp {
-    /// The public IP address of the Floating IP. It also serves as its 
+    /// The public IP address of the Floating IP. It also serves as its
     /// identifier.
     pub ip: IpAddr,
-    /// The region that the Floating IP is reserved to. When you query a 
+    /// The region that the Floating IP is reserved to. When you query a
     /// Floating IP, the entire region object will be returned.
     pub region: Region,
     /// The Droplet that the Floating IP has been assigned to. When you query
-    /// a Floating IP, if it is assigned to a Droplet, the entire Droplet 
+    /// a Floating IP, if it is assigned to a Droplet, the entire Droplet
     /// object will be returned. If it is not assigned, the value will be null.
     pub droplet: Option<Droplet>,
 }
@@ -58,7 +58,8 @@ impl FloatingIp {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-reserved-to-a-region)
     pub fn for_region<S>(id: S) -> Request<Create, FloatingIp>
-    where S: AsRef<str> + Display + Serialize {
+        where S: AsRef<str> + Display + Serialize
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -71,7 +72,8 @@ impl FloatingIp {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip)
     pub fn get<I>(id: I) -> Request<Get, FloatingIp>
-    where I: Into<IpAddr> {
+        where I: Into<IpAddr>
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -83,7 +85,8 @@ impl FloatingIp {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip)
     pub fn delete<I>(id: I) -> Request<Delete, ()>
-    where I: Into<IpAddr> {
+        where I: Into<IpAddr>
+    {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)

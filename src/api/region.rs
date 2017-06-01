@@ -11,7 +11,7 @@ const REGIONS_SEGMENT: &'static str = "regions";
 /// deployed and images can be transferred.
 ///
 /// Each region represents a specific datacenter in a geographic location. Some
-/// geographical locations may have multiple "regions" available. This means 
+/// geographical locations may have multiple "regions" available. This means
 /// that there are multiple datacenters available within that area.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#regions)
@@ -26,7 +26,7 @@ pub struct Region {
     /// This attribute is set to an array which contains the identifying slugs
     ///  for the sizes available in this region.
     pub sizes: Vec<String>,
-    /// This is a boolean value that represents whether new Droplets can be 
+    /// This is a boolean value that represents whether new Droplets can be
     /// created in this region.
     pub available: bool,
     /// This attribute is set to an array which contains features available in
