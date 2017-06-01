@@ -4,11 +4,12 @@ version = "0.1.0"
 authors = ["hoverbear <andrew@hoverbear.org>"]
 repository = "https://github.com/hoverbear/digitalocean"
 categories = ["development-tools"]
-description = "A crate for interfacing with Digital Ocean."
 homepage = "https://github.com/hoverbear/digitalocean"
 keywords = ["DigitalOcean", "IaaS", "API"]
 license = "MIT"
-documentation = ""
+documentation = """
+A crate for accessing and interacting with the DigitalOcean API.
+"""
 
 [features]
 default = ["reqwest"]

@@ -27,14 +27,14 @@ pub struct Size {
     /// The amount of transfer bandwidth that is available for Droplets created
     /// in this size. This only counts traffic on the public interface. The
     /// value is given in terabytes.
-    pub transfer: usize,
+    pub transfer: f64,
     /// This attribute describes the monthly cost of this Droplet size if the
     /// Droplet is kept for an entire month. The value is measured in US
     /// dollars.
-    pub price_monthly: usize,
+    pub price_monthly: f64,
     /// This describes the price of the Droplet size as measured hourly. The
     /// value is measured in US dollars.
-    pub price_hourly: usize,
+    pub price_hourly: f64,
     /// The amount of RAM allocated to Droplets created of this size. The value
     /// is represented in megabytes.
     pub memory: usize,

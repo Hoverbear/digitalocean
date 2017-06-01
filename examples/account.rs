@@ -1,11 +1,11 @@
+// Demonstrates the simplest usage.
+
 extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
 use std::env;
-use digitalocean::DigitalOcean;
-use digitalocean::api::Account;
-use digitalocean::request::Executable;
+use digitalocean::prelude::*;
 
 // cargo run --example account
 fn main() {
@@ -17,7 +17,7 @@ fn main() {
 
     let req = Account::get();
 
-    let result = req.execute(&client).unwrap();
+    let result = client.execute(req).unwrap();
 
     println!("{:#?}", result);
 }

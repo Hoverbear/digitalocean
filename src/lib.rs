@@ -8,7 +8,7 @@ While browsing this documentation please feel encouraged to reference the
 
 ```rust,no_run
 use digitalocean::DigitalOcean;
-use digitalocean::request::Executable;
+use digitalocean::Executable;
 use digitalocean::api::Droplet;
 use std::env;
 
@@ -31,8 +31,6 @@ Calling an action will return a [`Request<_,_>`](request/struct.Request.html) ty
 [`Request<Create, Droplet>`](request/struct.Request.html#method.ssh_keys). This type may then
 have specific futher functions to futher build up the request or transform it into some other
 request.
-In order to realize any action [`.execute()`](digitalocean/request/trait.Executable.html#tymethod.execute)
-must be called with a [DigitalOcean](digitalocean/struct.DigitalOcean.html#method.new) client.
 
 ```rust,no_run
 use digitalocean::DigitalOcean;
@@ -50,8 +48,13 @@ let req = Domain::get("foo.com").records();
 let req = Domain::get("foo.com").records().create("CNAME", "test", "127.0.0.1");
 ```
 
-In order to use the entire API it is recommended to reference
-[`Request<_,_>`](request/struct.Request.html) frequently.
+In order to realize any action [`.execute()`](request/trait.Executable.html#tymethod.execute)
+must be called with a [DigitalOcean](struct.DigitalOcean.html#method.new) client. It is also 
+possible to call [`do_client.execute(some_request)`](struct.DigitalOcean.html#method.execute).
+
+In order to use the entire API it is recommended to reference [`Request<_,_>`](request/struct.Request.html) 
+frequently. Once [`rust-lang/rust#42027`](https://github.com/rust-lang/rust/pull/42027) 
+lands it will be possible to clean up the documentation for ease of use.
 
 ## Design
 
@@ -61,12 +64,21 @@ The crate is founded on a few design considerations:
 * `Request`s are agnostic over `Client`s.
 * It should be impossible to make an invalid API request.
 * Use static dispatch as much as possible.
+* Only the bare minimum amount of information should be carried around.
 * Allow for easy construction of separate clients (`hyper`, etc.)
+* No caching (yet). (DigitalOcean does not have [ETags](https://en.wikipedia.org/wiki/HTTP_ETag))
 
+## Debugging
+
+This crate uses the [`log`](https://doc.rust-lang.org/log/log/index.html) crate. You can see `digitalocean` logs by passing an environment variable such as:
+
+```bash
+RUST_LOG=digitalocean=debug cargo run
+```
 
 ## Development Status
 
-This library is in a prototype state.
+This crate is in a prototype state.
 
 Not all endpoints have been fully end-to-end tested on the production DigitalOcean API.
 **If something does not work please file a bug!**
@@ -96,6 +108,7 @@ mod error;
 pub mod method;
 pub mod request;
 mod client;
+pub mod prelude;
 
 use error::*;
 pub use error::{Error, ErrorKind};

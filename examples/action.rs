@@ -1,3 +1,5 @@
+// Demonstrates using `Request<_,_>::execute()`
+
 extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
@@ -5,7 +7,7 @@ extern crate env_logger;
 use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Action;
-use digitalocean::request::Executable;
+use digitalocean::Executable;
 
 enum Choice {
     List(Option<usize>),
@@ -22,12 +24,13 @@ fn main() {
 
     let mut args = env::args().skip(1);
     let choice = args.next().expect("No action specified.");
-    let param = args.next().map(|v| v.parse::<usize>().expect("Param was not integer"));
+    let param = args.next()
+        .map(|v| v.parse::<usize>().expect("Param was not integer"));
 
     let choice = match choice.as_ref() {
         "--list" => Choice::List(param),
         "--id" => Choice::Get(param.expect("No ID specified")),
-        _ => panic!("Invalid args")
+        _ => panic!("Invalid args"),
     };
 
     match choice {

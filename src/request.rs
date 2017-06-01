@@ -1,4 +1,6 @@
 //! Abstract types representing requests and how they are executed.
+//!
+//!
 
 use error::*;
 use url_serde;
@@ -60,6 +62,7 @@ impl<A, V> Request<A, V>
 }
 
 impl<V> Request<List, V> {
+    /// Impose a limit on the number of values which may be retrieved from a request.
     pub fn limit(mut self, limit: Option<usize>) -> Self {
         self.method.0 = limit;
         self

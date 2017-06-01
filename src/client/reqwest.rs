@@ -10,7 +10,7 @@ use method::{Get, Update, Delete, Create, List};
 use api::{HasPagination, HasResponse, HasValue, MAX_PER_PAGE};
 
 impl DigitalOcean {
-    pub fn get<V>(&self, request: Request<Get, V>) -> Result<V>
+    pub(crate) fn get<V>(&self, request: Request<Get, V>) -> Result<V>
         where V: HasResponse
     {
         info!("GET {:?}", request.url);
@@ -31,7 +31,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    pub fn list<V>(&self, request: Request<List, Vec<V>>) -> Result<Vec<V>>
+    pub(crate) fn list<V>(&self, request: Request<List, Vec<V>>) -> Result<Vec<V>>
         where Vec<V>: HasResponse,
               <Vec<V> as HasResponse>::Response: HasPagination
     {
@@ -45,7 +45,7 @@ impl DigitalOcean {
                 current_url
                     .query_pairs_mut()
                     .append_pair("per_page", &limit.to_string());
-            },
+            }
             _ => {
                 current_url
                     .query_pairs_mut()
@@ -76,7 +76,7 @@ impl DigitalOcean {
                 Some(v) => v,
                 None => break,
             };
-            
+
             if let Some(limit) = request.method.0 {
                 let buffer_size = buffer.len();
                 let remaining = limit - buffer_size;
@@ -95,7 +95,7 @@ impl DigitalOcean {
     }
 
     // Delete requests do not return content.
-    pub fn delete<V>(&self, request: Request<Delete, V>) -> Result<()> {
+    pub(crate) fn delete<V>(&self, request: Request<Delete, V>) -> Result<()> {
         info!("DELETE {:?}", request.url);
         let req = self.client.delete(request.url.clone());
 
@@ -111,7 +111,7 @@ impl DigitalOcean {
         Ok(())
     }
 
-    pub fn post<V>(&self, request: Request<Create, V>) -> Result<V>
+    pub(crate) fn post<V>(&self, request: Request<Create, V>) -> Result<V>
         where V: HasResponse
     {
         info!("POST {:?}", request.url);
@@ -135,7 +135,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    pub fn put<V>(&self, request: Request<Update, V>) -> Result<V>
+    pub(crate) fn put<V>(&self, request: Request<Update, V>) -> Result<V>
         where V: HasResponse
     {
         info!("PUT {:?}", request.url);

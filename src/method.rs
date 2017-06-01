@@ -1,11 +1,15 @@
 //! Marker types for requests.
+use std::fmt::Debug;
+
 pub type Limit = usize;
 
 /// A marker trait used by [`Request`](../request/struct.Request.html)
 /// to signal which execution path should be taken.
-pub trait Method: Default {}
+pub trait Method: Default + Debug + Clone + Copy {}
 
 /// A list method uses a GET request with pagination.
+///
+/// This method enables the [`limit()`](../request/struct.Request.html#method.limit) call on requests.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct List(pub Option<Limit>);
 impl Method for List {}

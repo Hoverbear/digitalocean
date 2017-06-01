@@ -1,3 +1,5 @@
+// Demonstrates using the API as part of a map chain.
+
 extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
@@ -5,7 +7,7 @@ extern crate env_logger;
 use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Domain;
-use digitalocean::request::Executable;
+use digitalocean::Executable;
 
 // cargo run --example records -- $DOMAIN $DOMAIN2...
 fn main() {

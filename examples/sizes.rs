@@ -1,11 +1,11 @@
+// Demonstrates `DigitalOcean::execute(...)`
+
 extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
 use std::env;
-use digitalocean::DigitalOcean;
-use digitalocean::api::Size;
-use digitalocean::request::Executable;
+use digitalocean::prelude::*;
 
 // cargo run --example sizes
 fn main() {
@@ -15,7 +15,7 @@ fn main() {
     let api_key = env::var("API_KEY").expect("API_KEY not set.");
     let client = DigitalOcean::new(api_key).unwrap();
 
-    let result = Size::list().execute(&client).unwrap();
+    let result = client.execute(Size::list()).unwrap();
 
     println!("{:#?}", result);
 }

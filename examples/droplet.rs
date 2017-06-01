@@ -1,3 +1,5 @@
+// Demonstrates doing actions on `Request<_,_>`s
+
 extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
@@ -5,7 +7,7 @@ extern crate env_logger;
 use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Droplet;
-use digitalocean::request::Executable;
+use digitalocean::Executable;
 
 // cargo run --example droplet
 // cargo run --example droplet -- $ID
