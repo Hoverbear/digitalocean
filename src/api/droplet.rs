@@ -26,72 +26,92 @@ const BACKUPS_SEGMENT: &'static str = "backups";
 /// sections.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct Droplet {
     /// A unique identifier for each Droplet instance. This is automatically
     /// generated upon Droplet creation.
-    pub id: usize,
+    #[get = "pub"]
+    id: usize,
     /// The human-readable name set for the Droplet instance.
-    pub name: String,
+    #[get = "pub"]
+    name: String,
     /// Memory of the Droplet in megabytes.
-    pub memory: usize,
+    #[get = "pub"]
+    memory: usize,
     /// The number of virtual CPUs.
-    pub vcpus: usize,
+    #[get = "pub"]
+    vcpus: usize,
     /// The size of the Droplet's disk in gigabytes.
-    pub disk: usize,
+    #[get = "pub"]
+    disk: usize,
     /// A boolean value indicating whether the Droplet has been locked,
     /// preventing actions by users.
-    pub locked: bool,
+    #[get = "pub"]
+    locked: bool,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Droplet was created.
-    pub created_at: DateTime<UTC>,
+    #[get = "pub"]
+    created_at: DateTime<UTC>,
     /// A status string indicating the state of the Droplet instance. This may
     /// be "new", "active", "off", or "archive".
-    pub status: String,
+    #[get = "pub"]
+    status: String,
     /// An array of backup IDs of any backups that have been taken of the
     /// Droplet instance. Droplet backups are enabled at the time of the
     /// instance creation.
-    pub backup_ids: Vec<usize>,
+    #[get = "pub"]
+    backup_ids: Vec<usize>,
     /// An array of snapshot IDs of any snapshots created from the Droplet
     /// instance.
-    pub snapshot_ids: Vec<usize>,
+    #[get = "pub"]
+    snapshot_ids: Vec<usize>,
     /// An array of features enabled on this Droplet.
-    pub features: Vec<String>,
+    #[get = "pub"]
+    features: Vec<String>,
     /// The region that the Droplet instance is deployed in. When setting a
     /// region, the value should be the slug identifier for the region. When
     /// you query a Droplet, the entire region object will be returned.
-    pub region: Region,
+    #[get = "pub"]
+    region: Region,
     /// The base image used to create the Droplet instance. When setting an
     /// image, the value is set to the image id or slug. When querying the
     /// Droplet, the entire image object will be returned.
-    pub image: Image,
+    #[get = "pub"]
+    image: Image,
     /// The current size object describing the Droplet. When setting a size,
     /// the value is set to the size slug. When querying the Droplet, the
     /// entire size object will be returned. Note that the disk volume of a
     /// Droplet may not match the size's disk due to Droplet resize actions.
     /// The disk attribute on the Droplet should always be referenced.
-    pub size: Size,
+    #[get = "pub"]
+    size: Size,
     /// The unique slug identifier for the size of this Droplet.
-    pub size_slug: String,
+    #[get = "pub"]
+    size_slug: String,
     /// The details of the network that are configured for the Droplet
     /// instance. This is an object that contains keys for IPv4 and IPv6.
     /// The value of each of these is an array that contains objects describing
     /// an individual IP resource allocated to the Droplet. These will define
     /// attributes like the IP address, netmask, and gateway of the specific
     /// network depending on the type of network it is.
-    pub networks: Networks,
+    #[get = "pub"]
+    networks: Networks,
     /// The current kernel. This will initially be set to the kernel of the
     /// base image when the Droplet is created.
-    pub kernel: Option<Kernel>,
+    #[get = "pub"]
+    kernel: Option<Kernel>,
     /// The details of the Droplet's backups feature, if backups are configured
     /// for the Droplet. This object contains keys for the start and end times
     /// of the window during which the backup will start.
-    pub next_backup_window: Option<NextBackupWindow>,
+    #[get = "pub"]
+    next_backup_window: Option<NextBackupWindow>,
     /// An array of Tags the Droplet has been tagged with.
-    pub tags: Vec<String>,
+    #[get = "pub"]
+    tags: Vec<String>,
     /// A flat array including the unique identifier for each Block Storage
     /// volume attached to the Droplet.
-    pub volume_ids: Vec<String>,
+    #[get = "pub"]
+    volume_ids: Vec<String>,
 }
 
 /// Fields which exists inside Droplets.

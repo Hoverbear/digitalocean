@@ -19,42 +19,55 @@ const FORWARDING_RULES_SEGMENT: &'static str = "forwarding_rules";
 /// Droplets.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#load-balancers)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct LoadBalancer {
     /// A unique ID that can be used to identify and reference a Load Balancer.
-    pub id: String,
+    #[get = "pub"]
+    id: String,
     /// A human-readable name for a Load Balancer instance.
-    pub name: String,
+    #[get = "pub"]
+    name: String,
     /// An attribute containing the public-facing IP address of the Load
     /// Balancer.
-    pub ip: IpAddr,
+    #[get = "pub"]
+    ip: IpAddr,
     /// The load balancing algorithm used to determine which backend Droplet
     /// will be selected by a client. It must be either "round_robin" or
     /// "least_connections".
-    pub algorithm: String,
+    #[get = "pub"]
+    algorithm: String,
     /// A status string indicating the current state of the Load Balancer.
     /// This can be "new", "active", or "errored".
-    pub status: String,
+    #[get = "pub"]
+    status: String,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Load Balancer was created.
-    pub created_at: DateTime<UTC>,
+    #[get = "pub"]
+    created_at: DateTime<UTC>,
     /// An object specifying the forwarding rules for a Load Balancer.
-    pub forwarding_rules: Vec<ForwardingRule>,
+    #[get = "pub"]
+    forwarding_rules: Vec<ForwardingRule>,
     /// An object specifying health check settings for the Load Balancer.
-    pub health_check: HealthCheck,
+    #[get = "pub"]
+    health_check: HealthCheck,
     /// An object specifying sticky sessions settings for the Load Balancer.
-    pub sticky_sessions: StickySessions,
+    #[get = "pub"]
+    sticky_sessions: StickySessions,
     /// The region where the Load Balancer instance is located.
-    pub region: Region,
+    #[get = "pub"]
+    region: Region,
     /// The name of a Droplet tag corresponding to Droplets assigned to the
     /// Load Balancer.
-    pub tag: String,
+    #[get = "pub"]
+    tag: String,
     /// An array containing the IDs of the Droplets assigned to the Load
     /// Balancer.
-    pub droplet_ids: Vec<usize>,
+    #[get = "pub"]
+    droplet_ids: Vec<usize>,
     /// A boolean value indicating whether HTTP requests to the Load Balancer
     /// on port 80 will be redirected to HTTPS on port 443.
-    pub redirect_http_to_https: bool,
+    #[get = "pub"]
+    redirect_http_to_https: bool,
 }
 
 /// Fields which exists inside Droplets.

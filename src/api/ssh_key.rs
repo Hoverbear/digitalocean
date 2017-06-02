@@ -15,7 +15,7 @@ const KEYS_SEGMENT: &'static str = "keys";
 /// public key is required to take advantage of this functionality.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#ssh-keys)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct SshKey {
     /// This is a unique identification number for the key. This can be used
     /// to reference a specific SSH key when you wish to embed a key into a
@@ -23,18 +23,22 @@ pub struct SshKey {
     ///
     /// *Note:* This is a `String` to allow for `id` and `fingerprint` to be
     /// used in `Get`, `Update`, and `Delete` calls like the API describes.
-    pub id: usize,
+    #[get = "pub"]
+    id: usize,
     /// This attribute contains the fingerprint value that is generated from
     /// the public key. This is a unique identifier that will differentiate
     /// it from other keys using a format that SSH recognizes.
-    pub fingerprint: String,
+    #[get = "pub"]
+    fingerprint: String,
     /// This attribute contains the entire public key string that was uploaded.
     /// This is what is embedded into the root user's authorized_keys file if
     /// you choose to include this SSH key during Droplet creation.
-    pub public_key: String,
+    #[get = "pub"]
+    public_key: String,
     /// This is the human-readable display name for the given SSH key. This
     /// is used to easily identify the SSH keys when they are displayed.
-    pub name: String,
+    #[get = "pub"]
+    name: String,
 }
 
 impl SshKey {

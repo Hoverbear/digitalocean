@@ -19,30 +19,37 @@ const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
 /// supported by the OS. They may be created in sizes from 1GiB to 16TiB.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct Volume {
     /// The unique identifier for the Block Storage volume.
-    pub id: String,
+    #[get = "pub"]
+    id: String,
     /// The region that the Block Storage volume is located in. When setting a
     /// region, the value should be the slug identifier for the region. When
     /// you query a Block Storage volume, the entire region object will be
     /// returned.
-    pub region: Region,
+    #[get = "pub"]
+    region: Region,
     /// An array containing the IDs of the Droplets the volume is attached to.
     /// Note that at this time, a volume can only be attached to a single
     /// Droplet.
-    pub droplet_ids: Vec<usize>,
+    #[get = "pub"]
+    droplet_ids: Vec<usize>,
     /// A human-readable name for the Block Storage volume. Must be lowercase
     /// and be composed only of numbers, letters and "-", up to a limit of 64
     /// characters.
-    pub name: String,
+    #[get = "pub"]
+    name: String,
     /// An optional free-form text field to describe a Block Storage volume.
-    pub description: String,
+    #[get = "pub"]
+    description: String,
     /// The size of the Block Storage volume in GiB (1024^3).
-    pub size_gigabytes: usize,
+    #[get = "pub"]
+    size_gigabytes: usize,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Block Storage volume was created.
-    pub created_at: DateTime<UTC>,
+    #[get = "pub"]
+    created_at: DateTime<UTC>,
 }
 
 impl Volume {

@@ -96,6 +96,8 @@ extern crate reqwest;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
+extern crate getset;
+#[macro_use]
 extern crate serde_json;
 extern crate serde;
 extern crate url_serde;

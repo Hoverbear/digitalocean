@@ -19,14 +19,16 @@ const RESOURCES_SEGMENT: &'static str = "resources";
 /// resources attribute with information about resources that have been tagged.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#tags)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct Tag {
     /// Tags may contain letters, numbers, colons, dashes, and underscores.
     /// There is a limit of 255 characters per tag.
-    pub name: String,
+    #[get = "pub"]
+    name: String,
     /// An embedded object containing key value pairs of resource type and
     /// resource statistics.
-    pub resources: Value,
+    #[get = "pub"]
+    resources: Value,
 }
 
 impl Tag {

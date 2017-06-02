@@ -15,27 +15,35 @@ const SNAPSHOT_SEGMENT: &'static str = "snapshots";
 /// from the saved snapshot.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#snapshots)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct Snapshot {
     /// The unique identifier for the snapshot.
-    pub id: String,
+    #[get = "pub"]
+    id: String,
     /// A human-readable name for the snapshot.
-    pub name: String,
+    #[get = "pub"]
+    name: String,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the snapshot was created.
-    pub created_at: DateTime<UTC>,
+    #[get = "pub"]
+    created_at: DateTime<UTC>,
     /// An array of the regions that the image is available in. The regions
     /// are represented by their identifying slug values.
-    pub regions: Vec<String>,
+    #[get = "pub"]
+    regions: Vec<String>,
     /// A unique identifier for the resource that the action is associated
     /// with.
-    pub resource_id: String,
+    #[get = "pub"]
+    resource_id: String,
     /// The type of resource that the action is associated with.
-    pub resource_type: String,
+    #[get = "pub"]
+    resource_type: String,
     /// The minimum size in GB required for a volume or Droplet to use this snapshot.
-    pub min_disk_size: usize,
+    #[get = "pub"]
+    min_disk_size: usize,
     /// The billable size of the snapshot in gigabytes.
-    pub size_gigabytes: usize,
+    #[get = "pub"]
+    size_gigabytes: usize,
 }
 
 impl Snapshot {

@@ -8,23 +8,30 @@ const ACCOUNT_SEGMENT: &'static str = "account";
 /// The user account.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#account)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct Account {
     /// The total number of droplets the user may have.
-    pub droplet_limit: usize,
+    #[get = "pub"]
+    droplet_limit: usize,
     /// The total number of floating IPs the user may have.
-    pub floating_ip_limit: usize,
+    #[get = "pub"]
+    floating_ip_limit: usize,
     /// The email the user has registered for Digital Ocean with.
-    pub email: String,
+    #[get = "pub"]
+    email: String,
     /// The universal identifier for this user.
-    pub uuid: String,
+    #[get = "pub"]
+    uuid: String,
     /// If true, the user has verified their account via email. False otherwise.
-    pub email_verified: bool,
+    #[get = "pub"]
+    email_verified: bool,
     /// This value is one of "active", "warning" or "locked".
-    pub status: String,
+    #[get = "pub"]
+    status: String,
     /// A human-readable message giving more details about the status of the
     /// account.
-    pub status_message: String,
+    #[get = "pub"]
+    status_message: String,
 }
 
 impl Account {

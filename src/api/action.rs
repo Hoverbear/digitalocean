@@ -23,30 +23,38 @@ const ACTIONS_SEGMENT: &'static str = "actions";
 /// available for querying.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#actions)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct Action {
     /// A unique identifier for each Droplet action event. This is used to
     /// reference a specific action that was requested.
-    pub id: usize,
+    #[get = "pub"]
+    id: usize,
     /// The current status of the action. The value of this attribute will be
     /// "in-progress", "completed", or "errored".
-    pub status: String,
+    #[get = "pub"]
+    status: String,
     /// The type of action that the event is executing (reboot, power_off,
     /// etc.).
-    pub started_at: DateTime<UTC>,
+    #[get = "pub"]
+    started_at: DateTime<UTC>,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the action was completed.
-    pub completed_at: Option<DateTime<UTC>>,
+    #[get = "pub"]
+    completed_at: Option<DateTime<UTC>>,
     /// A unique identifier for the resource that the action is associated
     /// with.
-    pub resource_id: usize,
+    #[get = "pub"]
+    resource_id: usize,
     /// The type of resource that the action is associated with.
-    pub resource_type: String,
+    #[get = "pub"]
+    resource_type: String,
     /// (deprecated) A slug representing the region where the action occurred.
+    #[get = "pub"]
     #[deprecated(since = "0.0.1", note="DigitalOcean has deprecated this.")]
-    pub region: Option<Region>,
+    region: Option<Region>,
     /// A slug representing the region where the action occurred.
-    pub region_slug: Option<String>,
+    #[get = "pub"]
+    region_slug: Option<String>,
 }
 
 impl Action {

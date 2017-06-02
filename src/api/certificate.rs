@@ -15,21 +15,26 @@ const CERTIFICATES_SEGMENT: &'static str = "certificates";
 /// perform SSL termination on Load Balancers.
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#certificates)
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct Certificate {
     /// A unique ID that can be used to identify and reference a certificate.
-    pub id: String,
+    #[get = "pub"]
+    id: String,
     /// A unique human-readable name referring to a certificate.
-    pub name: String,
+    #[get = "pub"]
+    name: String,
     /// A time value given in ISO8601 combined date and time format that
     /// represents the certificate's expiration date.
-    pub not_after: DateTime<UTC>,
+    #[get = "pub"]
+    not_after: DateTime<UTC>,
     /// A unique identifier generated from the SHA-1 fingerprint of the
     /// certificate.
-    pub sha1_fingerprint: String,
+    #[get = "pub"]
+    sha1_fingerprint: String,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the certificate was created.
-    pub created_at: DateTime<UTC>,
+    #[get = "pub"]
+    created_at: DateTime<UTC>,
 }
 
 impl Certificate {

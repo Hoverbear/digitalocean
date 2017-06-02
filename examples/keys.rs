@@ -7,7 +7,6 @@ extern crate env_logger;
 use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::SshKey;
-use digitalocean::request::Executable;
 
 // cargo run --example keys
 fn main() {
