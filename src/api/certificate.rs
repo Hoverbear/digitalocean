@@ -48,7 +48,7 @@ impl Certificate {
             .push(CERTIFICATES_SEGMENT);
 
         let mut req = Request::new(url);
-        
+
         req.set_body(json!({
             "name": name,
             "private_key": private_key,

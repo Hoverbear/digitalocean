@@ -50,7 +50,7 @@ pub struct Action {
     resource_type: String,
     /// (deprecated) A slug representing the region where the action occurred.
     #[get = "pub"]
-    #[deprecated(since = "0.0.1", note="DigitalOcean has deprecated this.")]
+    #[deprecated(since = "0.0.1", note = "DigitalOcean has deprecated this.")]
     region: Option<Region>,
     /// A slug representing the region where the action occurred.
     #[get = "pub"]

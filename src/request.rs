@@ -19,11 +19,15 @@ use DigitalOcean;
 pub struct Request<A, R>
     where A: Method
 {
-    #[get_mut = "pub"] #[set = "pub"] #[get = "pub"]
+    #[get_mut = "pub"]
+    #[set = "pub"]
+    #[get = "pub"]
     #[serde(with = "url_serde")]
     url: Url,
-    /// The JSON body of the request. 
-    #[get_mut = "pub"] #[set = "pub"] #[get = "pub"]
+    /// The JSON body of the request.
+    #[get_mut = "pub"]
+    #[set = "pub"]
+    #[get = "pub"]
     body: Value,
     #[get = "pub"]
     method: A,
@@ -44,7 +48,8 @@ impl<A, V> Request<A, V>
         }
     }
     pub(crate) fn transmute<C, D>(self) -> Request<C, D>
-    where C: Method {
+        where C: Method
+    {
         let mut req = Request::new(self.url);
         req.set_body(self.body);
         req

@@ -31,8 +31,9 @@ fn create_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(),
-               json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "name": name,
         "region": region,
         "size": size,
@@ -40,7 +41,8 @@ fn create_produces_correct_request() {
         "ssh_keys": ssh_keys,
         "backups": backups,
         "monitoring": monitoring,
-    }));
+    })
+    );
 }
 
 #[test]

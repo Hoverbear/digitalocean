@@ -61,8 +61,9 @@ fn create_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(),
-               json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "name": name,
         "region": region,
         "algorithm": algo,
@@ -84,7 +85,8 @@ fn create_produces_correct_request() {
                 "tls_passthrough": false,
             },
         ],
-    }));
+    })
+    );
 }
 
 #[test]
@@ -92,8 +94,7 @@ fn update_produces_correct_request() {
     before();
 
     let load_balancer_id = "123";
-    let correct_url =
-        format!("https://api.digitalocean.com/v2/load_balancers/{}", load_balancer_id);
+    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}", load_balancer_id);
     let (name, region, tag) = ("test", "tor1", "tag");
     let (e_protocol, e_port, t_protocol, t_port) =
         (String::from("tcp"), 22, String::from("tcp"), 22);
@@ -129,8 +130,7 @@ fn delete_produces_correct_request() {
     before();
 
     let load_balancer_id = "123";
-    let correct_url =
-        format!("https://api.digitalocean.com/v2/load_balancers/{}", load_balancer_id);
+    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}", load_balancer_id);
 
     let req: Request<Delete, ()> = LoadBalancer::delete(load_balancer_id);
     info!("{:#?}", req);
@@ -144,8 +144,7 @@ fn add_droplets_produces_correct_request() {
     before();
 
     let load_balancer_id = "123";
-    let correct_url =
-        format!("https://api.digitalocean.com/v2/load_balancers/{}/droplets", load_balancer_id);
+    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/droplets", load_balancer_id);
     let droplet_ids = vec![123, 456, 789];
 
     let req: Request<Create, ()> = LoadBalancer::get(load_balancer_id)
@@ -163,8 +162,7 @@ fn remove_droplets_produces_correct_request() {
     before();
 
     let load_balancer_id = "123";
-    let correct_url =
-        format!("https://api.digitalocean.com/v2/load_balancers/{}/droplets", load_balancer_id);
+    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/droplets", load_balancer_id);
     let droplet_ids = vec![123, 456, 789];
 
     let req: Request<Delete, ()> = LoadBalancer::get(load_balancer_id)

@@ -97,11 +97,11 @@ impl Request<Get, Tag> {
         let resources = resources
             .into_iter()
             .map(|(id, kind)| {
-                     json!({
+                json!({
             "resource_id": id,
             "resource_type": kind,
         })
-                 })
+            })
             .collect::<Vec<_>>();
 
         self.set_body(json!({
@@ -124,11 +124,11 @@ impl Request<Get, Tag> {
         let resources = resources
             .into_iter()
             .map(|(id, kind)| {
-                     json!({
+                json!({
             "resource_id": id,
             "resource_type": kind,
         })
-                 })
+            })
             .collect::<Vec<_>>();
 
         self.set_body(json!({

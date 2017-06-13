@@ -52,12 +52,14 @@ fn create_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(),
-               json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "name": name,
         "size_gigabytes": size,
         "region": region,
-    }));
+    })
+    );
 }
 
 
@@ -81,8 +83,7 @@ fn get_by_name_produces_correct_request() {
 
     let name = "test";
     let region = "tor1";
-    let correct_url =
-        format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
+    let correct_url = format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
 
     let req: Request<Get, Volume> = Volume::get_by_name(name, region);
     info!("{:#?}", req);
@@ -111,8 +112,7 @@ fn delete_by_name_produces_correct_request() {
 
     let name = "test";
     let region = "tor1";
-    let correct_url =
-        format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
+    let correct_url = format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
 
     let req: Request<Delete, ()> = Volume::delete_by_name(name, region);
     info!("{:#?}", req);

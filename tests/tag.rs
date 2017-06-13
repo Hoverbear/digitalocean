@@ -54,10 +54,12 @@ fn create_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(),
-               json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "name": tag,
-    }));
+    })
+    );
 }
 
 #[test]

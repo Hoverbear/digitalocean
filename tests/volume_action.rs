@@ -29,11 +29,13 @@ fn attach_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(),
-               json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "type": "attach",
         "droplet_id": droplet_id,
-    }));
+    })
+    );
 }
 
 #[test]
@@ -129,8 +131,7 @@ fn get_produces_correct_request() {
 
     let volume_id = "123";
     let action_id = 456;
-    let correct_url =
-        format!("https://api.digitalocean.com/v2/volumes/{}/actions/{}", volume_id, action_id);
+    let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/actions/{}", volume_id, action_id);
 
     let req: Request<Get, Action> = Volume::get(volume_id).action(action_id);
     info!("{:#?}", req);
