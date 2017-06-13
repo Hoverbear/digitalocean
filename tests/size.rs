@@ -24,6 +24,6 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Size>> = Size::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

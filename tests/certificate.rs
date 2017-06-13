@@ -25,8 +25,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Certificate>> = Certificate::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -43,8 +43,8 @@ fn create_produces_correct_request() {
             .certificate_chain(chain.clone());
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "name": name,
         "private_key": pkey,
@@ -63,8 +63,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, Certificate> = Certificate::get(certificate_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -77,6 +77,6 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = Certificate::delete(certificate_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

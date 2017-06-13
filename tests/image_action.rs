@@ -27,8 +27,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Action>> = Image::get(image_id).actions();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -44,8 +44,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, Action> = Image::get(image_id).action(action_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -60,8 +60,8 @@ fn transfer_produces_correct_request() {
     let req: Request<Create, Action> = Image::get(image_id).transfer(region);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "type": "transfer",
         "region": region,
@@ -78,8 +78,8 @@ fn convert_produces_correct_request() {
     let req: Request<Create, Action> = Image::get(image_id).convert();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "type": "convert",
     }));
 }

@@ -13,8 +13,8 @@ impl DigitalOcean {
     pub(crate) fn get<V>(&self, request: Request<Get, V>) -> Result<V>
         where V: HasResponse
     {
-        info!("GET {:?}", request.url);
-        let req = self.client.get(request.url.clone());
+        info!("GET {:?}", request.url());
+        let req = self.client.get(request.url().clone());
 
         let mut response = self.fetch(req)?;
 
@@ -35,12 +35,12 @@ impl DigitalOcean {
         where Vec<V>: HasResponse,
               <Vec<V> as HasResponse>::Response: HasPagination
     {
-        info!("LIST {:?}", request.url);
+        info!("LIST {:?}", request.url());
         // This may be a paginated response. We need to buffer.
         let mut buffer = Vec::new();
-        let mut current_url = request.url.clone();
+        let mut current_url = request.url().clone();
 
-        match request.method.0 {
+        match request.method().0 {
             Some(limit) if limit < MAX_PER_PAGE => {
                 current_url
                     .query_pairs_mut()
@@ -77,7 +77,7 @@ impl DigitalOcean {
                 None => break,
             };
 
-            if let Some(limit) = request.method.0 {
+            if let Some(limit) = request.method().0 {
                 let buffer_size = buffer.len();
                 let remaining = limit - buffer_size;
                 if buffer_size >= limit {
@@ -96,8 +96,8 @@ impl DigitalOcean {
 
     // Delete requests do not return content.
     pub(crate) fn delete<V>(&self, request: Request<Delete, V>) -> Result<()> {
-        info!("DELETE {:?}", request.url);
-        let req = self.client.delete(request.url.clone());
+        info!("DELETE {:?}", request.url());
+        let req = self.client.delete(request.url().clone());
 
         let response = self.fetch(req)?;
 
@@ -114,10 +114,10 @@ impl DigitalOcean {
     pub(crate) fn post<V>(&self, request: Request<Create, V>) -> Result<V>
         where V: HasResponse
     {
-        info!("POST {:?}", request.url);
-        let req = self.client.post(request.url.clone());
+        info!("POST {:?}", request.url());
+        let req = self.client.post(request.url().clone());
 
-        let req = req.json(&request.body.clone());
+        let req = req.json(&request.body().clone());
 
         let mut response = self.fetch(req)?;
 
@@ -138,10 +138,10 @@ impl DigitalOcean {
     pub(crate) fn put<V>(&self, request: Request<Update, V>) -> Result<V>
         where V: HasResponse
     {
-        info!("PUT {:?}", request.url);
-        let req = self.client.put(request.url.clone());
+        info!("PUT {:?}", request.url());
+        let req = self.client.put(request.url().clone());
 
-        let req = req.json(&request.body.clone());
+        let req = req.json(&request.body().clone());
 
         let mut response = self.fetch(req)?;
 

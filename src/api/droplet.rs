@@ -163,12 +163,14 @@ impl Droplet {
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "name": name,
             "region": region,
             "size": size,
             "image": format!("{}", image),
-        }))
+        }));
+        req
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets)
@@ -185,12 +187,14 @@ impl Droplet {
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "names": names,
             "region": region,
             "size": size,
             "image": format!("{}", image),
-        }))
+        }));
+        req
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-droplet-by-id)
@@ -273,7 +277,7 @@ impl Request<Create, Droplet> {
     pub fn ssh_keys<D>(mut self, val: Vec<D>) -> Self
         where D: Display + Serialize
     {
-        self.body["ssh_keys"] = json!(val);
+        self.body_mut()["ssh_keys"] = json!(val);
         self
     }
     /// A boolean indicating whether automated backups should be enabled for
@@ -282,14 +286,14 @@ impl Request<Create, Droplet> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn backups(mut self, val: bool) -> Self {
-        self.body["backups"] = json!(val);
+        self.body_mut()["backups"] = json!(val);
         self
     }
     /// A boolean indicating whether IPv6 is enabled on the Droplet.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn ipv6(mut self, val: bool) -> Self {
-        self.body["ipv6"] = json!(val);
+        self.body_mut()["ipv6"] = json!(val);
         self
     }
     /// A boolean indicating whether private networking is enabled for the
@@ -298,7 +302,7 @@ impl Request<Create, Droplet> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn private_networking(mut self, val: bool) -> Self {
-        self.body["private_networking"] = json!(val);
+        self.body_mut()["private_networking"] = json!(val);
         self
     }
     /// A string containing 'user data' which may be used to configure the
@@ -307,7 +311,7 @@ impl Request<Create, Droplet> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn user_data(mut self, val: bool) -> Self {
-        self.body["user_data"] = json!(val);
+        self.body_mut()["user_data"] = json!(val);
         self
     }
     /// A boolean indicating whether to install the DigitalOcean agent
@@ -315,7 +319,7 @@ impl Request<Create, Droplet> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn monitoring(mut self, val: bool) -> Self {
-        self.body["monitoring"] = json!(val);
+        self.body_mut()["monitoring"] = json!(val);
         self
     }
     /// A flat array including the unique string identifier for each Block
@@ -324,7 +328,7 @@ impl Request<Create, Droplet> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn volumes(mut self, val: Vec<String>) -> Self {
-        self.body["volumes"] = json!(val);
+        self.body_mut()["volumes"] = json!(val);
         self
     }
     /// A flat array of tag names as strings to apply to the Droplet after it
@@ -332,7 +336,7 @@ impl Request<Create, Droplet> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn tags(mut self, val: Vec<String>) -> Self {
-        self.body["tags"] = json!(val);
+        self.body_mut()["tags"] = json!(val);
         self
     }
 }
@@ -346,7 +350,7 @@ impl Request<Create, Vec<Droplet>> {
     pub fn ssh_keys<D>(mut self, val: Vec<D>) -> Self
         where D: Display + Serialize
     {
-        self.body["ssh_keys"] = json!(val);
+        self.body_mut()["ssh_keys"] = json!(val);
         self
     }
     /// A boolean indicating whether automated backups should be enabled for
@@ -355,14 +359,14 @@ impl Request<Create, Vec<Droplet>> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn backups(mut self, val: bool) -> Self {
-        self.body["backups"] = json!(val);
+        self.body_mut()["backups"] = json!(val);
         self
     }
     /// A boolean indicating whether IPv6 is enabled on the Droplet.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn ipv6(mut self, val: bool) -> Self {
-        self.body["ipv6"] = json!(val);
+        self.body_mut()["ipv6"] = json!(val);
         self
     }
     /// A boolean indicating whether private networking is enabled for the
@@ -371,7 +375,7 @@ impl Request<Create, Vec<Droplet>> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn private_networking(mut self, val: bool) -> Self {
-        self.body["private_networking"] = json!(val);
+        self.body_mut()["private_networking"] = json!(val);
         self
     }
     /// A string containing 'user data' which may be used to configure the
@@ -380,7 +384,7 @@ impl Request<Create, Vec<Droplet>> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn user_data(mut self, val: bool) -> Self {
-        self.body["user_data"] = json!(val);
+        self.body_mut()["user_data"] = json!(val);
         self
     }
     /// A boolean indicating whether to install the DigitalOcean agent
@@ -388,7 +392,7 @@ impl Request<Create, Vec<Droplet>> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn monitoring(mut self, val: bool) -> Self {
-        self.body["monitoring"] = json!(val);
+        self.body_mut()["monitoring"] = json!(val);
         self
     }
     /// A flat array including the unique string identifier for each Block
@@ -397,7 +401,7 @@ impl Request<Create, Vec<Droplet>> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn volumes(mut self, val: Vec<String>) -> Self {
-        self.body["volumes"] = json!(val);
+        self.body_mut()["volumes"] = json!(val);
         self
     }
     /// A flat array of tag names as strings to apply to the Droplet after it
@@ -405,7 +409,7 @@ impl Request<Create, Vec<Droplet>> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn tags(mut self, val: Vec<String>) -> Self {
-        self.body["tags"] = json!(val);
+        self.body_mut()["tags"] = json!(val);
         self
     }
 }
@@ -413,30 +417,30 @@ impl Request<Create, Vec<Droplet>> {
 impl Request<Get, Droplet> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-droplet)
     pub fn snapshots(mut self) -> Request<List, Vec<Snapshot>> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOTS_SEGMENT);
 
-        self.method().value()
+        self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-backups-for-a-droplet)
     pub fn backups(mut self) -> Request<List, Vec<Snapshot>> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(BACKUPS_SEGMENT);
 
-        self.method().value()
+        self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-neighbors-for-a-droplet)
     pub fn neighbors(mut self) -> Request<List, Vec<Droplet>> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(NEIGHBORS_SEGMENT);
 
-        self.method().value()
+        self.transmute()
     }
 }
 

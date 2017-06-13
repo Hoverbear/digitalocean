@@ -28,8 +28,8 @@ fn attach_produces_correct_request() {
     let req: Request<Create, Action> = Volume::get(volume_id).attach(droplet_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "type": "attach",
         "droplet_id": droplet_id,
@@ -47,8 +47,8 @@ fn attach_by_name_produces_correct_request() {
     let req: Request<Create, Action> = Volume::attach(volume_id, droplet_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "type": "attach",
         "droplet_id": droplet_id,
         "volume_name": volume_id
@@ -66,8 +66,8 @@ fn detach_produces_correct_request() {
     let req: Request<Create, Action> = Volume::get(volume_id).detach(droplet_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "type": "detach",
         "droplet_id": droplet_id,
     }));
@@ -84,8 +84,8 @@ fn detach_by_name_produces_correct_request() {
     let req: Request<Create, Action> = Volume::detach(volume_id, droplet_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "type": "detach",
         "droplet_id": droplet_id,
         "volume_name": volume_id
@@ -102,8 +102,8 @@ fn resize_produces_correct_request() {
     let req: Request<Create, Action> = Volume::get(volume_id).resize(123);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "type": "resize",
         "size_gigabytes": 123,
     }));
@@ -119,8 +119,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Action>> = Volume::get(volume_id).actions();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -135,6 +135,6 @@ fn get_produces_correct_request() {
     let req: Request<Get, Action> = Volume::get(volume_id).action(action_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

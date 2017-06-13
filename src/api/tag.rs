@@ -41,9 +41,11 @@ impl Tag {
             .expect(STATIC_URL_ERROR)
             .push(TAG_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "name": name,
-        }))
+        }));
+        req
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag)
     pub fn get<S>(name: S) -> Request<Get, Tag>
@@ -87,7 +89,7 @@ impl Request<Get, Tag> {
     pub fn add_resources<S>(mut self, resources: Vec<(S, S)>) -> Request<Create, ()>
         where S: AsRef<str> + Serialize + Display
     {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(RESOURCES_SEGMENT);
@@ -102,11 +104,11 @@ impl Request<Get, Tag> {
                  })
             .collect::<Vec<_>>();
 
-        self.body = json!({
+        self.set_body(json!({
             "resources": resources,
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
     /// Accepts tuples matching `(id, type)`. Currently the only `type` is `"droplet"`.
     ///
@@ -114,7 +116,7 @@ impl Request<Get, Tag> {
     pub fn remove_resources<S>(mut self, resources: Vec<(S, S)>) -> Request<Delete, ()>
         where S: AsRef<str> + Serialize + Display
     {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(RESOURCES_SEGMENT);
@@ -129,11 +131,11 @@ impl Request<Get, Tag> {
                  })
             .collect::<Vec<_>>();
 
-        self.body = json!({
+        self.set_body(json!({
             "resources": resources,
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
 }
 

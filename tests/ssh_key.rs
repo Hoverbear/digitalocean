@@ -25,8 +25,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<SshKey>> = SshKey::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -39,8 +39,8 @@ fn create_produces_correct_request() {
     let req: Request<Create, SshKey> = SshKey::create(name, public_key);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "name": name,
         "public_key": public_key,
@@ -57,8 +57,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, SshKey> = SshKey::get(key_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -72,8 +72,8 @@ fn update_produces_correct_request() {
     let req: Request<Update, SshKey> = SshKey::update(key_id).name(name);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "name": name,
     }));
 }
@@ -88,6 +88,6 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = SshKey::delete(key_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

@@ -26,8 +26,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Volume>> = Volume::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 
     // With region
     let region = "tor1";
@@ -36,8 +36,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Volume>> = Volume::list().region(region);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 
@@ -51,8 +51,8 @@ fn create_produces_correct_request() {
     let req: Request<Create, Volume> = Volume::create(name, size).region(region.clone());
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "name": name,
         "size_gigabytes": size,
@@ -71,8 +71,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, Volume> = Volume::get(volume_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -87,8 +87,8 @@ fn get_by_name_produces_correct_request() {
     let req: Request<Get, Volume> = Volume::get_by_name(name, region);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -101,8 +101,8 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = Volume::delete(volume_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -117,8 +117,8 @@ fn delete_by_name_produces_correct_request() {
     let req: Request<Delete, ()> = Volume::delete_by_name(name, region);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -131,8 +131,8 @@ fn snapshots_produces_correct_request() {
     let req: Request<List, Vec<Snapshot>> = Volume::get(volume_id).snapshots();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -146,8 +146,8 @@ fn snapshot_produces_correct_request() {
     let req: Request<Create, Snapshot> = Volume::get(volume_id).snapshot(snapshot_name);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "name": snapshot_name
     }));
 }

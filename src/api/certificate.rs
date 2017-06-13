@@ -47,11 +47,15 @@ impl Certificate {
             .expect(STATIC_URL_ERROR)
             .push(CERTIFICATES_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        
+        req.set_body(json!({
             "name": name,
             "private_key": private_key,
             "leaf_certificate": leaf_certificate,
-        }))
+        }));
+
+        req
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-certificates)
@@ -99,7 +103,7 @@ impl Request<Create, Certificate> {
     pub fn certificate_chain<S>(mut self, val: S) -> Self
         where S: AsRef<str> + Serialize + Display
     {
-        self.body["certificate_chain"] = json!(val);
+        self.body_mut()["certificate_chain"] = json!(val);
         self
     }
 }

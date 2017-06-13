@@ -15,7 +15,7 @@ A crate for accessing and interacting with the DigitalOcean API.
 default = ["reqwest"]
 
 [dependencies]
-getset = "0.0.4"
+getset = "0.0.5"
 error-chain = "0.10.0"
 lazy_static = "0.2.5"
 log = "0.3.7"

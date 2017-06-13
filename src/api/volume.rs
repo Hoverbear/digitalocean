@@ -71,10 +71,12 @@ impl Volume {
             .expect(STATIC_URL_ERROR)
             .push(VOLUME_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "name": name,
             "size_gigabytes": size_gigabytes,
-        }))
+        }));
+        req
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume)
     pub fn get<S>(id: S) -> Request<Get, Volume>
@@ -137,7 +139,7 @@ impl Request<List, Vec<Volume>> {
     pub fn region<S>(mut self, region: S) -> Self
         where S: AsRef<str> + Serialize + Display
     {
-        self.url
+        self.url_mut()
             .query_pairs_mut()
             .append_pair("region", region.as_ref());
 
@@ -148,27 +150,27 @@ impl Request<List, Vec<Volume>> {
 impl Request<Get, Volume> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume)
     pub fn snapshots(mut self) -> Request<List, Vec<Snapshot>> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOTS_SEGMENT);
 
-        self.method().value()
+        self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume)
     pub fn snapshot<S>(mut self, name: S) -> Request<Create, Snapshot>
         where S: AsRef<str> + Serialize + Display
     {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOTS_SEGMENT);
 
-        self.body = json!({
+        self.set_body(json!({
             "name": name
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
 }
 
@@ -179,7 +181,7 @@ impl Request<Create, Volume> {
     pub fn description<S>(mut self, val: S) -> Self
         where S: AsRef<str> + Serialize + Display
     {
-        self.body["description"] = json!(val);
+        self.body_mut()["description"] = json!(val);
         self
     }
     /// The region where the Block Storage volume will be created. When setting
@@ -193,7 +195,7 @@ impl Request<Create, Volume> {
     pub fn region<S>(mut self, val: S) -> Self
         where S: AsRef<str> + Serialize + Display
     {
-        self.body["region"] = json!(val);
+        self.body_mut()["region"] = json!(val);
         self
     }
 
@@ -206,7 +208,7 @@ impl Request<Create, Volume> {
     pub fn snapshot_id<S>(mut self, val: S) -> Self
         where S: AsRef<str> + Serialize + Display
     {
-        self.body["snapshot_id"] = json!(val);
+        self.body_mut()["snapshot_id"] = json!(val);
         self
     }
 }

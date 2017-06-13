@@ -223,11 +223,13 @@ impl LoadBalancer {
             .expect(STATIC_URL_ERROR)
             .push(LOAD_BALANCERS_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "name": name,
             "region": region,
             "forwarding_rules": [],
-        }))
+        }));
+        req
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-load-balancer)
     pub fn get<S>(id: S) -> Request<Get, LoadBalancer>
@@ -289,7 +291,7 @@ impl Request<Create, LoadBalancer> {
     pub fn algorithm<S>(mut self, val: S) -> Request<Create, LoadBalancer>
         where S: Display + Serialize
     {
-        self.body["algorithm"] = json!(val);
+        self.body_mut()["algorithm"] = json!(val);
         self
     }
     /// An array of objects specifying the forwarding rules for a Load
@@ -300,12 +302,12 @@ impl Request<Create, LoadBalancer> {
     pub fn forwarding_rule<T>(mut self, val: T) -> Request<Create, LoadBalancer>
         where T: Into<ForwardingRule>
     {
-        if !self.body["forwarding_rules"].is_array() {
-            self.body["forwarding_rules"] = json!([]);
+        if !self.body_mut()["forwarding_rules"].is_array() {
+            self.body_mut()["forwarding_rules"] = json!([]);
         }
 
         {
-            let rules = self.body["forwarding_rules"]
+            let rules = self.body_mut()["forwarding_rules"]
                 .as_array_mut()
                 .expect("forwarding_rules should always be an array.");
 
@@ -327,24 +329,24 @@ impl Request<Create, LoadBalancer> {
                            -> Request<Create, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["health_check"] = json!({
+        self.body_mut()["health_check"] = json!({
             "protocol": protocol,
             "port": port,
         });
         if let Some(path) = path {
-            self.body["health_check"]["path"] = json!(path);
+            self.body_mut()["health_check"]["path"] = json!(path);
         }
         if let Some(check_interval_seconds) = check_interval_seconds {
-            self.body["health_check"]["check_interval_seconds"] = json!(check_interval_seconds);
+            self.body_mut()["health_check"]["check_interval_seconds"] = json!(check_interval_seconds);
         }
         if let Some(response_timeout_seconds) = response_timeout_seconds {
-            self.body["health_check"]["response_timeout_seconds"] = json!(response_timeout_seconds);
+            self.body_mut()["health_check"]["response_timeout_seconds"] = json!(response_timeout_seconds);
         }
         if let Some(unhealthy_threshold) = unhealthy_threshold {
-            self.body["health_check"]["unhealthy_threshold"] = json!(unhealthy_threshold);
+            self.body_mut()["health_check"]["unhealthy_threshold"] = json!(unhealthy_threshold);
         }
         if let Some(healthy_threshold) = healthy_threshold {
-            self.body["health_check"]["healthy_threshold"] = json!(healthy_threshold);
+            self.body_mut()["health_check"]["healthy_threshold"] = json!(healthy_threshold);
         }
         self
     }
@@ -360,14 +362,14 @@ impl Request<Create, LoadBalancer> {
                               -> Request<Create, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["sticky_sessions"] = json!({
+        self.body_mut()["sticky_sessions"] = json!({
             "type": kind,
         });
         if let Some(cookie_name) = cookie_name {
-            self.body["sticky_sessions"]["cookie_name"] = json!(cookie_name);
+            self.body_mut()["sticky_sessions"]["cookie_name"] = json!(cookie_name);
         }
         if let Some(cookie_ttl_seconds) = cookie_ttl_seconds {
-            self.body["sticky_sessions"]["cookie_ttl_seconds"] = json!(cookie_ttl_seconds);
+            self.body_mut()["sticky_sessions"]["cookie_ttl_seconds"] = json!(cookie_ttl_seconds);
         }
         self
     }
@@ -376,7 +378,7 @@ impl Request<Create, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn redirect_http_to_https(mut self, setting: bool) -> Request<Create, LoadBalancer> {
-        self.body["redirect_http_to_https"] = json!(setting);
+        self.body_mut()["redirect_http_to_https"] = json!(setting);
         self
     }
     /// The IDs of the Droplets to be assigned to the Load Balancer.
@@ -385,7 +387,7 @@ impl Request<Create, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn droplets(mut self, ids: Vec<usize>) -> Request<Create, LoadBalancer> {
-        self.body["droplet_ids"] = json!(ids);
+        self.body_mut()["droplet_ids"] = json!(ids);
         self
     }
     /// The name of a Droplet tag corresponding to Droplets to be assigned to
@@ -397,7 +399,7 @@ impl Request<Create, LoadBalancer> {
     pub fn tag<S>(mut self, tag: S) -> Request<Create, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["tag"] = json!(tag);
+        self.body_mut()["tag"] = json!(tag);
         self
     }
 }
@@ -410,7 +412,7 @@ impl Request<Update, LoadBalancer> {
     pub fn name<S>(mut self, val: S) -> Request<Update, LoadBalancer>
         where S: Display + Serialize
     {
-        self.body["name"] = json!(val);
+        self.body_mut()["name"] = json!(val);
         self
     }
     /// The region where the Load Balancer instance will be located.
@@ -419,7 +421,7 @@ impl Request<Update, LoadBalancer> {
     pub fn region<S>(mut self, val: S) -> Request<Update, LoadBalancer>
         where S: Display + Serialize
     {
-        self.body["region"] = json!(val);
+        self.body_mut()["region"] = json!(val);
         self
     }
     /// The load balancing algorithm used to determine which backend Droplet
@@ -430,7 +432,7 @@ impl Request<Update, LoadBalancer> {
     pub fn algorithm<S>(mut self, val: S) -> Request<Update, LoadBalancer>
         where S: Display + Serialize
     {
-        self.body["algorithm"] = json!(val);
+        self.body_mut()["algorithm"] = json!(val);
         self
     }
     /// An array of objects specifying the forwarding rules for a Load
@@ -441,12 +443,12 @@ impl Request<Update, LoadBalancer> {
     pub fn forwarding_rule<T>(mut self, val: T) -> Request<Update, LoadBalancer>
         where T: Into<ForwardingRule>
     {
-        if !self.body["forwarding_rules"].is_array() {
-            self.body["forwarding_rules"] = json!([]);
+        if !self.body_mut()["forwarding_rules"].is_array() {
+            self.body_mut()["forwarding_rules"] = json!([]);
         }
 
         {
-            let rules = self.body["forwarding_rules"]
+            let rules = self.body_mut()["forwarding_rules"]
                 .as_array_mut()
                 .expect("forwarding_rules should always be an array.");
 
@@ -468,24 +470,24 @@ impl Request<Update, LoadBalancer> {
                            -> Request<Update, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["health_check"] = json!({
+        self.body_mut()["health_check"] = json!({
             "protocol": protocol,
             "port": port,
         });
         if let Some(path) = path {
-            self.body["health_check"]["path"] = json!(path);
+            self.body_mut()["health_check"]["path"] = json!(path);
         }
         if let Some(check_interval_seconds) = check_interval_seconds {
-            self.body["health_check"]["check_interval_seconds"] = json!(check_interval_seconds);
+            self.body_mut()["health_check"]["check_interval_seconds"] = json!(check_interval_seconds);
         }
         if let Some(response_timeout_seconds) = response_timeout_seconds {
-            self.body["health_check"]["response_timeout_seconds"] = json!(response_timeout_seconds);
+            self.body_mut()["health_check"]["response_timeout_seconds"] = json!(response_timeout_seconds);
         }
         if let Some(unhealthy_threshold) = unhealthy_threshold {
-            self.body["health_check"]["unhealthy_threshold"] = json!(unhealthy_threshold);
+            self.body_mut()["health_check"]["unhealthy_threshold"] = json!(unhealthy_threshold);
         }
         if let Some(healthy_threshold) = healthy_threshold {
-            self.body["health_check"]["healthy_threshold"] = json!(healthy_threshold);
+            self.body_mut()["health_check"]["healthy_threshold"] = json!(healthy_threshold);
         }
         self
     }
@@ -501,14 +503,14 @@ impl Request<Update, LoadBalancer> {
                               -> Request<Update, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["sticky_sessions"] = json!({
+        self.body_mut()["sticky_sessions"] = json!({
             "type": kind,
         });
         if let Some(cookie_name) = cookie_name {
-            self.body["sticky_sessions"]["cookie_name"] = json!(cookie_name);
+            self.body_mut()["sticky_sessions"]["cookie_name"] = json!(cookie_name);
         }
         if let Some(cookie_ttl_seconds) = cookie_ttl_seconds {
-            self.body["sticky_sessions"]["cookie_ttl_seconds"] = json!(cookie_ttl_seconds);
+            self.body_mut()["sticky_sessions"]["cookie_ttl_seconds"] = json!(cookie_ttl_seconds);
         }
         self
     }
@@ -517,7 +519,7 @@ impl Request<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn redirect_http_to_https(mut self, setting: bool) -> Request<Update, LoadBalancer> {
-        self.body["redirect_http_to_https"] = json!(setting);
+        self.body_mut()["redirect_http_to_https"] = json!(setting);
         self
     }
     /// The IDs of the Droplets to be assigned to the Load Balancer.
@@ -526,7 +528,7 @@ impl Request<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn droplets(mut self, ids: Vec<usize>) -> Request<Update, LoadBalancer> {
-        self.body["droplet_ids"] = json!(ids);
+        self.body_mut()["droplet_ids"] = json!(ids);
         self
     }
     /// The name of a Droplet tag corresponding to Droplets to be assigned to
@@ -538,7 +540,7 @@ impl Request<Update, LoadBalancer> {
     pub fn tag<S>(mut self, tag: S) -> Request<Update, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["tag"] = json!(tag);
+        self.body_mut()["tag"] = json!(tag);
         self
     }
 }
@@ -548,31 +550,31 @@ impl Request<Get, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#add-droplets-to-a-load-balancer)
     pub fn add_droplets(mut self, ids: Vec<usize>) -> Request<Create, ()> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
-        self.body = json!({
+        self.set_body(json!({
             "droplet_ids": ids,
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
     /// Remove droplets (by id) from the load balancer.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-droplets-from-a-load-balancer)
     pub fn remove_droplets(mut self, ids: Vec<usize>) -> Request<Delete, ()> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
-        self.body = json!({
+        self.set_body(json!({
             "droplet_ids": ids,
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
     /// Add a forwarding rule to the Load Balancer.
     ///
@@ -580,17 +582,17 @@ impl Request<Get, LoadBalancer> {
     pub fn add_forwarding_rules<T>(mut self, items: Vec<T>) -> Request<Create, ()>
         where T: Into<ForwardingRule>
     {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(FORWARDING_RULES_SEGMENT);
 
-        if !self.body["forwarding_rules"].is_array() {
-            self.body["forwarding_rules"] = json!([]);
+        if !self.body_mut()["forwarding_rules"].is_array() {
+            self.body_mut()["forwarding_rules"] = json!([]);
         }
 
         {
-            let mut rules = self.body["forwarding_rules"]
+            let mut rules = self.body_mut()["forwarding_rules"]
                 .as_array_mut()
                 .expect("forwarding_rules should always be an array.");
 
@@ -600,7 +602,7 @@ impl Request<Get, LoadBalancer> {
             }
         }
 
-        self.method().value()
+        self.transmute()
     }
     /// Remove a forwarding rule to the Load Balancer.
     ///
@@ -608,17 +610,17 @@ impl Request<Get, LoadBalancer> {
     pub fn remove_forwarding_rules<T>(mut self, items: Vec<T>) -> Request<Delete, ()>
         where T: Into<ForwardingRule>
     {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(FORWARDING_RULES_SEGMENT);
 
-        if !self.body["forwarding_rules"].is_array() {
-            self.body["forwarding_rules"] = json!([]);
+        if !self.body_mut()["forwarding_rules"].is_array() {
+            self.body_mut()["forwarding_rules"] = json!([]);
         }
 
         {
-            let mut rules = self.body["forwarding_rules"]
+            let mut rules = self.body_mut()["forwarding_rules"]
                 .as_array_mut()
                 .expect("forwarding_rules should always be an array.");
 
@@ -628,7 +630,7 @@ impl Request<Get, LoadBalancer> {
             }
         }
 
-        self.method().value()
+        self.transmute()
     }
 }
 

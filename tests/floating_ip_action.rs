@@ -29,8 +29,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Action>> = FloatingIp::get(floating_ip).actions();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -46,8 +46,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, Action> = FloatingIp::get(floating_ip).action(action_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -62,8 +62,8 @@ fn assign_produces_correct_request() {
     let req: Request<Create, Action> = FloatingIp::get(floating_ip).assign(droplet_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "type": "assign",
         "droplet_id": droplet_id
@@ -81,8 +81,8 @@ fn unassign_produces_correct_request() {
     let req: Request<Create, Action> = FloatingIp::get(floating_ip).unassign();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "type": "unassign",
     }));
 }

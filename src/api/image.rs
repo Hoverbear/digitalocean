@@ -165,7 +165,7 @@ impl Request<Update, Image> {
     pub fn name<S>(mut self, val: S) -> Request<Update, Image>
         where S: Display + Serialize
     {
-        self.body["name"] = json!(val);
+        self.body_mut()["name"] = json!(val);
         self
     }
 }

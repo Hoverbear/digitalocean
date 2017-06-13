@@ -24,6 +24,6 @@ fn get_produces_correct_request() {
     let req: Request<Get, Account> = Account::get();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

@@ -54,9 +54,11 @@ impl FloatingIp {
             .expect(STATIC_URL_ERROR)
             .push(FLOATING_IP_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "droplet_id": id,
-        }))
+        }));
+        req
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-reserved-to-a-region)
@@ -68,9 +70,11 @@ impl FloatingIp {
             .expect(STATIC_URL_ERROR)
             .push(FLOATING_IP_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "region": id,
-        }))
+        }));
+        req
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip)

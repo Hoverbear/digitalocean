@@ -52,10 +52,12 @@ impl SshKey {
             .push(ACCOUNT_SEGMENT)
             .push(KEYS_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "name": name,
             "public_key": public_key,
-        }))
+        }));
+        req
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-keys)
@@ -119,7 +121,7 @@ impl Request<Update, SshKey> {
     pub fn name<S>(mut self, val: S) -> Self
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["name"] = json!(val);
+        self.body_mut()["name"] = json!(val);
         self
     }
 }

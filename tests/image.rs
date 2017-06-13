@@ -25,8 +25,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Image>> = Image::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -39,8 +39,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, Image> = Image::get(image_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -54,8 +54,8 @@ fn update_produces_correct_request() {
     let req: Request<Update, Image> = Image::update(image_id).name(name);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "name": name,
     }));
@@ -71,6 +71,6 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = Image::delete(image_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

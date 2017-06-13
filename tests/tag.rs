@@ -25,8 +25,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Tag> = Tag::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -39,8 +39,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, Tag> = Tag::get(tag);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -53,8 +53,8 @@ fn create_produces_correct_request() {
     let req: Request<Create, Tag> = Tag::create(tag);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "name": tag,
     }));
@@ -70,8 +70,8 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = Tag::delete(tag);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -85,8 +85,8 @@ fn add_resources_produces_correct_request() {
     let req: Request<Create, ()> = Tag::get(tag).add_resources(resources.clone());
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "resources": [
             {
                 "resource_id": resources[0].0,
@@ -111,8 +111,8 @@ fn remove_resources_produces_correct_request() {
     let req: Request<Delete, ()> = Tag::get(tag).remove_resources(resources.clone());
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "resources": [
             {
                 "resource_id": resources[0].0,

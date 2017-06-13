@@ -26,8 +26,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<DomainRecord>> = Domain::get(domain).records();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -44,8 +44,8 @@ fn create_produces_correct_request() {
         .ttl(ttl);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "type": kind,
         "name": name,
@@ -66,8 +66,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, DomainRecord> = Domain::get(domain).records().get(record_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -88,8 +88,8 @@ fn update_produces_correct_request() {
         .ttl(ttl);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "type": kind,
         "name": name,
         "ttl": ttl,
@@ -108,6 +108,6 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = Domain::get(domain).records().delete(record_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

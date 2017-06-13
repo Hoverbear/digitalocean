@@ -25,8 +25,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<LoadBalancer>> = LoadBalancer::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 
@@ -41,8 +41,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, LoadBalancer> = LoadBalancer::get(load_balancer_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -60,8 +60,8 @@ fn create_produces_correct_request() {
         .forwarding_rule(rule_2);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "name": name,
         "region": region,
@@ -106,8 +106,8 @@ fn update_produces_correct_request() {
             .forwarding_rule((e_protocol.clone(), e_port, t_protocol.clone(), t_port));
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "name": name,
         "region": region,
         "tag": tag,
@@ -135,8 +135,8 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = LoadBalancer::delete(load_balancer_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -152,8 +152,8 @@ fn add_droplets_produces_correct_request() {
         .add_droplets(droplet_ids.clone());
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "droplet_ids": droplet_ids,
     }));
 }
@@ -171,8 +171,8 @@ fn remove_droplets_produces_correct_request() {
         .remove_droplets(droplet_ids.clone());
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "droplet_ids": droplet_ids,
     }));
 }
@@ -190,8 +190,8 @@ fn add_forwarding_rule_produces_correct_request() {
             .add_forwarding_rules(vec![(e_protocol, e_port, t_protocol, t_port, None, true)]);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "forwarding_rules": [
             {
                 "entry_protocol": e_protocol,
@@ -218,8 +218,8 @@ fn remove_forwarding_rule_produces_correct_request() {
             .remove_forwarding_rules(vec![(e_protocol, e_port, t_protocol, t_port, None, false)]);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "forwarding_rules": [
             {
                 "entry_protocol": e_protocol,

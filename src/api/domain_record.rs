@@ -56,12 +56,12 @@ pub struct DomainRecord {
 impl Request<Get, Domain> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domain-records)
     pub fn records(mut self) -> Request<List, Vec<DomainRecord>> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(DOMAIN_RECORDS_SEGMENT);
 
-        self.method().value()
+        self.transmute()
     }
 }
 
@@ -70,45 +70,45 @@ impl Request<List, Vec<DomainRecord>> {
     pub fn create<S>(mut self, kind: S, name: S, data: S) -> Request<Create, DomainRecord>
         where S: AsRef<str> + Display + Serialize
     {
-        self.url.path_segments_mut().expect(STATIC_URL_ERROR);
+        self.url_mut().path_segments_mut().expect(STATIC_URL_ERROR);
 
-        self.body = json!({
+        self.set_body(json!({
             "type": kind,
             "name": name,
             "data": data,
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain-record)
     pub fn get(mut self, id: usize) -> Request<Get, DomainRecord> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.method().value()
+        self.transmute()
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-domain-record)
     pub fn update(mut self, id: usize) -> Request<Update, DomainRecord> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.method().value()
+        self.transmute()
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain-record)
     pub fn delete(mut self, id: usize) -> Request<Delete, ()> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(&id.to_string());
 
-        self.method().value()
+        self.transmute()
     }
 }
 
@@ -117,14 +117,14 @@ impl Request<Create, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn priority(mut self, val: Option<usize>) -> Self {
-        self.body["priority"] = json!(val);
+        self.body_mut()["priority"] = json!(val);
         self
     }
     /// The port for SRV records.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn port(mut self, val: Option<usize>) -> Self {
-        self.body["port"] = json!(val);
+        self.body_mut()["port"] = json!(val);
         self
     }
     /// This value is the time to live for the record, in seconds. This defines
@@ -133,14 +133,14 @@ impl Request<Create, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn ttl(mut self, val: usize) -> Self {
-        self.body["ttl"] = json!(val);
+        self.body_mut()["ttl"] = json!(val);
         self
     }
     /// The weight for SRV records.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn weight(mut self, val: Option<usize>) -> Self {
-        self.body["weight"] = json!(val);
+        self.body_mut()["weight"] = json!(val);
         self
     }
 }
@@ -152,7 +152,7 @@ impl Request<Update, DomainRecord> {
     pub fn kind<S>(mut self, val: S) -> Self
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["type"] = json!(val);
+        self.body_mut()["type"] = json!(val);
         self
     }
     /// The host name, alias, or service being defined by the record.
@@ -161,7 +161,7 @@ impl Request<Update, DomainRecord> {
     pub fn name<S>(mut self, val: S) -> Self
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["name"] = json!(val);
+        self.body_mut()["name"] = json!(val);
         self
     }
     /// Variable data depending on record type. See the Domain Records section
@@ -171,21 +171,21 @@ impl Request<Update, DomainRecord> {
     pub fn data<S>(mut self, val: S) -> Self
         where S: AsRef<str> + Display + Serialize
     {
-        self.body["data"] = json!(val);
+        self.body_mut()["data"] = json!(val);
         self
     }
     /// The priority for SRV and MX records.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn priority(mut self, val: Option<usize>) -> Self {
-        self.body["priority"] = json!(val);
+        self.body_mut()["priority"] = json!(val);
         self
     }
     /// The port for SRV records.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn port(mut self, val: Option<usize>) -> Self {
-        self.body["port"] = json!(val);
+        self.body_mut()["port"] = json!(val);
         self
     }
     /// This value is the time to live for the record, in seconds. This defines
@@ -194,14 +194,14 @@ impl Request<Update, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn ttl(mut self, val: usize) -> Self {
-        self.body["ttl"] = json!(val);
+        self.body_mut()["ttl"] = json!(val);
         self
     }
     /// The weight for SRV records.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn weight(mut self, val: Option<usize>) -> Self {
-        self.body["weight"] = json!(val);
+        self.body_mut()["weight"] = json!(val);
         self
     }
 }

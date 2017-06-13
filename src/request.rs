@@ -15,14 +15,18 @@ use DigitalOcean;
 ///
 /// In general consumers of the crate should not need to use this type directly.
 /// Instead, build up requests from what is found in [`api::*`](../api/index.html).
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, MutGetters, Getters, Setters)]
 pub struct Request<A, R>
     where A: Method
 {
+    #[get_mut = "pub"] #[set = "pub"] #[get = "pub"]
     #[serde(with = "url_serde")]
-    pub url: Url,
-    pub body: Value,
-    pub method: A,
+    url: Url,
+    /// The JSON body of the request. 
+    #[get_mut = "pub"] #[set = "pub"] #[get = "pub"]
+    body: Value,
+    #[get = "pub"]
+    method: A,
     value: PhantomData<R>,
 }
 
@@ -39,25 +43,11 @@ impl<A, V> Request<A, V>
             value: PhantomData,
         }
     }
-    /// Set the JSON body of the request.
-    pub fn body(mut self, body: Value) -> Self {
-        self.body = body;
-        self
-    }
-    /// Set the URL of the call.
-    pub fn url(mut self, url: Url) -> Self {
-        self.url = url;
-        self
-    }
-    /// Transmute the request into a different method.
-    pub fn method<B>(self) -> Request<B, V>
-        where B: Method
-    {
-        Request::new(self.url).body(self.body)
-    }
-    /// Transmute the request to expect a different return type.
-    pub fn value<B>(self) -> Request<A, B> {
-        Request::new(self.url).body(self.body)
+    pub(crate) fn transmute<C, D>(self) -> Request<C, D>
+    where C: Method {
+        let mut req = Request::new(self.url);
+        req.set_body(self.body);
+        req
     }
 }
 

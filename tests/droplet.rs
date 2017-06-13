@@ -30,8 +30,8 @@ fn create_produces_correct_request() {
         .monitoring(monitoring);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "name": name,
         "region": region,
@@ -58,8 +58,8 @@ fn create_many_produces_correct_request() {
             .monitoring(monitoring);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "names": names,
         "region": region,
         "size": size,
@@ -80,8 +80,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, Droplet> = Droplet::get(droplet_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -93,8 +93,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Droplet>> = Droplet::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -107,8 +107,8 @@ fn list_by_tag_produces_correct_request() {
     let req: Request<List, Vec<Droplet>> = Droplet::list_by_tag("bear");
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -121,8 +121,8 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = Droplet::delete(droplet_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -135,8 +135,8 @@ fn delete_by_tag_produces_correct_request() {
     let req: Request<Delete, ()> = Droplet::delete_by_tag(tag_name);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -148,8 +148,8 @@ fn neighbors_produces_correct_request() {
     let req: Request<Get, Vec<Vec<Droplet>>> = Droplet::neighbors();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -162,8 +162,8 @@ fn snapshots_produces_correct_request() {
     let req: Request<List, Vec<Snapshot>> = Droplet::get(droplet_id).snapshots();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -176,8 +176,8 @@ fn backups_produces_correct_request() {
     let req: Request<List, Vec<Snapshot>> = Droplet::get(droplet_id).backups();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -190,6 +190,6 @@ fn get_neighbors_produces_correct_request() {
     let req: Request<List, Vec<Droplet>> = Droplet::get(droplet_id).neighbors();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

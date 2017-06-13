@@ -27,8 +27,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<Domain>> = Domain::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -42,8 +42,8 @@ fn create_produces_correct_request() {
     let req: Request<Create, Domain> = Domain::create(domain, ip_address);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "name": domain,
         "ip_address": ip_address,
@@ -60,8 +60,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, Domain> = Domain::get(domain);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -74,6 +74,6 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = Domain::delete(domain);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

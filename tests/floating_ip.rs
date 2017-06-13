@@ -27,8 +27,8 @@ fn list_produces_correct_request() {
     let req: Request<List, Vec<FloatingIp>> = FloatingIp::list();
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -41,8 +41,8 @@ fn for_droplet_produces_correct_request() {
     let req: Request<Create, FloatingIp> = FloatingIp::for_droplet(droplet_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body,
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(),
                json!({
         "droplet_id": droplet_id,
     }));
@@ -58,8 +58,8 @@ fn for_region_produces_correct_request() {
     let req: Request<Create, FloatingIp> = FloatingIp::for_region(region_id);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, json!({
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), json!({
         "region": region_id,
     }));
 }
@@ -74,8 +74,8 @@ fn get_produces_correct_request() {
     let req: Request<Get, FloatingIp> = FloatingIp::get(floating_ip);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }
 
 #[test]
@@ -88,6 +88,6 @@ fn delete_produces_correct_request() {
     let req: Request<Delete, ()> = FloatingIp::delete(floating_ip);
     info!("{:#?}", req);
 
-    assert_eq!(req.url.as_str(), correct_url);
-    assert_eq!(req.body, Value::Null);
+    assert_eq!(req.url().as_str(), correct_url);
+    assert_eq!(*req.body(), Value::Null);
 }

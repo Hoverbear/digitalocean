@@ -18,11 +18,13 @@ impl Volume {
             .expect(STATIC_URL_ERROR)
             .push(VOLUMES_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "type": "attach",
             "volume_name": volume_name,
             "droplet_id": droplet,
-        }))
+        }));
+        req
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet-by-name)
     pub fn detach<S>(volume_name: S, droplet: usize) -> Request<Create, Action>
@@ -33,74 +35,76 @@ impl Volume {
             .expect(STATIC_URL_ERROR)
             .push(VOLUMES_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "type": "detach",
             "volume_name": volume_name,
             "droplet_id": droplet,
-        }))
+        }));
+        req
     }
 }
 
 impl Request<Get, Volume> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet)
     pub fn attach(mut self, droplet: usize) -> Request<Create, Action> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(VOLUME_ACTIONS_SEGMENT);
 
-        self.body = json!({
+        self.set_body(json!({
             "type": "attach",
             "droplet_id": droplet,
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet)
     pub fn detach(mut self, droplet: usize) -> Request<Create, Action> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(VOLUME_ACTIONS_SEGMENT);
 
-        self.body = json!({
+        self.set_body(json!({
             "type": "detach",
             "droplet_id": droplet,
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#resize-a-volume)
     pub fn resize(mut self, size: usize) -> Request<Create, Action> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(VOLUME_ACTIONS_SEGMENT);
 
-        self.body = json!({
+        self.set_body(json!({
             "type": "resize",
             "size_gigabytes": size,
-        });
+        }));
 
-        self.method().value()
+        self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-volume)
     pub fn actions(mut self) -> Request<List, Vec<Action>> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(VOLUME_ACTIONS_SEGMENT);
 
-        self.method().value()
+        self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-volume-action)
     pub fn action(mut self, id: usize) -> Request<Get, Action> {
-        self.url
+        self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
             .push(VOLUME_ACTIONS_SEGMENT)
             .push(&id.to_string());
 
-        self.method().value()
+        self.transmute()
     }
 }

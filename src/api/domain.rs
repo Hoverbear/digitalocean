@@ -45,10 +45,12 @@ impl Domain {
             .expect(STATIC_URL_ERROR)
             .push(DOMAINS_SEGMENT);
 
-        Request::new(url).body(json!({
+        let mut req = Request::new(url);
+        req.set_body(json!({
             "name": name,
             "ip_address": ip_address,
-        }))
+        }));
+        req
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domains)
