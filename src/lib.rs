@@ -50,9 +50,7 @@ In order to realize any action [`.execute()`](request/trait.Executable.html#tyme
 must be called with a [DigitalOcean](struct.DigitalOcean.html#method.new) client. It is also 
 possible to call [`do_client.execute(some_request)`](struct.DigitalOcean.html#method.execute).
 
-In order to use the entire API it is recommended to reference [`Request<_,_>`](request/struct.Request.html) 
-frequently. Once [`rust-lang/rust#42027`](https://github.com/rust-lang/rust/pull/42027) 
-lands it will be possible to clean up the documentation for ease of use.
+In order to use the entire API it is recommended to reference the various `Request` types.
 
 ## Design
 

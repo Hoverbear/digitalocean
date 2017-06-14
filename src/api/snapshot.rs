@@ -5,9 +5,9 @@ use url::Url;
 use chrono::{DateTime, UTC};
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::SnapshotRequest;
 
 const SNAPSHOT_SEGMENT: &'static str = "snapshots";
-pub type SnapshotRequest<M,V> = Request<M,V>;
 
 /// Snapshots are saved instances of a Droplet or a volume, which is reflected
 /// in the `resource_type` attribute. In order to avoid problems with

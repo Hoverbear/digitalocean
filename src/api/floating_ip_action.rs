@@ -1,11 +1,11 @@
 use request::Request;
 use method::{Create, Get, List};
-use super::floating_ip::{FloatingIp, FloatingIpRequest};
+use super::floating_ip::FloatingIp;
 use STATIC_URL_ERROR;
 use super::Action;
+use request::{FloatingIpActionRequest, FloatingIpRequest};
 
 const FLOATING_IP_ACTIONS_SEGMENT: &'static str = "actions";
-pub type FloatingIpActionRequest<M,V> = Request<M,V>;
 
 impl FloatingIpRequest<Get, FloatingIp> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-floating-ip)

@@ -2,9 +2,9 @@ use request::Request;
 use method::Get;
 use {ROOT_URL, STATIC_URL_ERROR};
 use super::{HasValue, HasResponse};
+use request::AccountRequest;
 
 const ACCOUNT_SEGMENT: &'static str = "account";
-pub type AccountRequest<M, V> = Request<M, V>;
 
 /// The user account.
 ///

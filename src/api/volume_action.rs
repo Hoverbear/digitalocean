@@ -4,11 +4,11 @@ use request::Request;
 use method::{List, Get, Create};
 use {ROOT_URL, STATIC_URL_ERROR};
 use super::action::Action;
-use super::volume::{Volume, VolumeRequest};
+use super::volume::Volume;
+use request::{VolumeRequest, VolumeActionRequest};
 
 const VOLUMES_SEGMENT: &'static str = "volumes";
 const VOLUME_ACTIONS_SEGMENT: &'static str = "actions";
-pub type VolumeActionRequest<M, V> = Request<M, V>;
 
 impl Volume {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet-by-name)

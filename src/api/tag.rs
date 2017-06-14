@@ -7,10 +7,10 @@ use url::Url;
 use serde_json::Value;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::TagRequest;
 
 const TAG_SEGMENT: &'static str = "tags";
 const RESOURCES_SEGMENT: &'static str = "resources";
-pub type TagRequest<M, V> = Request<M, V>;
 
 /// A Tag is a label that can be applied to a resource (currently only
 /// Droplets) in order to better organize or facilitate the lookups and actions

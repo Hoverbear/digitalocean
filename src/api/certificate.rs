@@ -7,9 +7,9 @@ use chrono::{DateTime, UTC};
 use url::Url;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::CertificateRequest;
 
 const CERTIFICATES_SEGMENT: &'static str = "certificates";
-pub type CertificateRequest<M,V> = Request<M, V>;
 
 /// SSL certificates may be uploaded to DigitalOcean where they will be placed
 /// in a fully encrypted and isolated storage system. They may then be used to

@@ -7,9 +7,9 @@ use url::Url;
 use chrono::{DateTime, UTC};
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::ImageRequest;
 
 const IMAGES_SEGMENT: &'static str = "images";
-pub type ImageRequest<M, V> = Request<M,V>;
 
 /// Images in DigitalOcean may refer to one of a few different kinds of objects.
 ///

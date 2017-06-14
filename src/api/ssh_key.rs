@@ -6,10 +6,10 @@ use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::SshKeyRequest;
 
 const ACCOUNT_SEGMENT: &'static str = "account";
 const KEYS_SEGMENT: &'static str = "keys";
-pub type SshKeyRequest<M, V> = Request<M, V>;
 
 /// DigitalOcean allows you to add SSH public keys to the interface so that you
 /// can embed your public key into a Droplet at the time of creation. Only the

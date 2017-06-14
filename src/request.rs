@@ -11,6 +11,26 @@ use api::{HasPagination, HasResponse};
 use method::{Method, List, Get, Create, Delete, Update};
 use DigitalOcean;
 
+pub type AccountRequest<M, V> = Request<M, V>;
+pub type ActionRequest<M,V> = Request<M, V>;
+pub type CertificateRequest<M,V> = Request<M, V>;
+pub type DomainRecordRequest<M, V> = Request<M,V>;
+pub type DomainRequest<M,V> = Request<M, V>;
+pub type DropletActionRequest<M,V> = Request<M,V>;
+pub type DropletRequest<M,V> = Request<M,V>;
+pub type FloatingIpActionRequest<M,V> = Request<M,V>;
+pub type FloatingIpRequest<M,V> = Request<M,V>;
+pub type ImageActionRequest<M,V> = Request<M,V>;
+pub type ImageRequest<M, V> = Request<M,V>;
+pub type LoadBalancerRequest<M,V> = Request<M,V>;
+pub type RegionRequest<M,V> = Request<M,V>;
+pub type SizeRequest<M,V> = Request<M,V>;
+pub type SnapshotRequest<M,V> = Request<M,V>;
+pub type SshKeyRequest<M, V> = Request<M, V>;
+pub type TagRequest<M, V> = Request<M, V>;
+pub type VolumeActionRequest<M, V> = Request<M, V>;
+pub type VolumeRequest<M, V> = Request<M, V>;
+
 /// A consuming builder which can be used to build up API calls.
 ///
 /// In general consumers of the crate should not need to use this type directly.

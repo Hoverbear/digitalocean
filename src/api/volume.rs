@@ -5,14 +5,14 @@ use method::{List, Create, Get, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};
-use super::snapshot::{Snapshot, SnapshotRequest};
+use super::snapshot::Snapshot;
 use super::region::Region;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::{VolumeRequest, SnapshotRequest};
 
 const VOLUME_SEGMENT: &'static str = "volumes";
 const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
-pub type VolumeRequest<M, V> = Request<M, V>;
 
 /// Block Storage volumes provide expanded storage capacity for your Droplets
 /// and can be moved between Droplets within a specific region. Volumes

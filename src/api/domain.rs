@@ -7,9 +7,9 @@ use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::DomainRequest;
 
 const DOMAINS_SEGMENT: &'static str = "domains";
-pub type DomainRequest<M,V> = Request<M, V>;
 
 /// Domain resources are domain names that you have purchased from a domain
 /// name registrar that you are managing through the DigitalOcean DNS interface.

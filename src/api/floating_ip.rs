@@ -8,9 +8,9 @@ use url::Url;
 use std::net::IpAddr;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::FloatingIpRequest;
 
 const FLOATING_IP_SEGMENT: &'static str = "floating_ips";
-pub type FloatingIpRequest<M,V> = Request<M,V>;
 
 /// Floating IP objects represent a publicly-accessible static IP addresses
 /// that can be mapped to one of your Droplets. They can be used to create

@@ -4,12 +4,12 @@ use request::Request;
 use method::{Get, List, Create, Delete, Update};
 use STATIC_URL_ERROR;
 use url::Url;
-use super::domain::{Domain, DomainRequest};
+use super::domain::Domain;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::{DomainRequest, DomainRecordRequest};
 
 const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
-pub type DomainRecordRequest<M, V> = Request<M,V>;
 
 /// Domain record resources are used to set or retrieve information about the
 /// individual DNS records configured for a domain. This allows you to build

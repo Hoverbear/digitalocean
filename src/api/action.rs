@@ -6,9 +6,9 @@ use chrono::{DateTime, UTC};
 use super::Region;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::ActionRequest;
 
 const ACTIONS_SEGMENT: &'static str = "actions";
-pub type ActionRequest<M,V> = Request<M, V>;
 
 /// Actions are records of events that have occurred on the resources in your
 /// account. These can be things like rebooting a Droplet, or transferring an

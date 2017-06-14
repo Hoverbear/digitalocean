@@ -5,9 +5,9 @@ use method::{List, Get, Create};
 use STATIC_URL_ERROR;
 use super::droplet::Droplet;
 use super::action::Action;
+use request::DropletActionRequest;
 
 const DROPLET_ACTIONS_SEGMENT: &'static str = "actions";
-pub type DropletActionRequest<M,V> = Request<M,V>;
 
 impl Request<Get, Droplet> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-actions-for-a-droplet)

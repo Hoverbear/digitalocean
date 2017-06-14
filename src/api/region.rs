@@ -4,9 +4,9 @@ use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::RegionRequest;
 
 const REGIONS_SEGMENT: &'static str = "regions";
-pub type RegionRequest<M,V> = Request<M,V>;
 
 /// A region in DigitalOcean represents a datacenter where Droplets can be
 /// deployed and images can be transferred.

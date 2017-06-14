@@ -4,9 +4,9 @@ use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
+use request::SizeRequest;
 
 const SIZES_SEGMENT: &'static str = "sizes";
-pub type SizeRequest<M,V> = Request<M,V>;
 
 /// The sizes objects represent different packages of hardware resources that
 /// can be used for Droplets. When a Droplet is created, a size must be

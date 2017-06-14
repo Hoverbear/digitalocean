@@ -3,11 +3,11 @@ use std::fmt::Display;
 use request::Request;
 use method::{List, Get, Create};
 use STATIC_URL_ERROR;
-use super::image::{Image, ImageRequest};
+use super::image::Image;
 use super::action::Action;
+use request::{ImageActionRequest, ImageRequest};
 
 const IMAGE_ACTIONS_SEGMENT: &'static str = "actions";
-pub type ImageActionRequest<M,V> = Request<M,V>;
 
 impl ImageRequest<Get, Image> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-an-image)

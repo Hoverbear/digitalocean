@@ -10,11 +10,11 @@ use super::Region;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 use self::load_balancer_fields::{ForwardingRule, HealthCheck, StickySessions};
+use request::LoadBalancerRequest;
 
 const LOAD_BALANCERS_SEGMENT: &'static str = "load_balancers";
 const DROPLETS_SEGMENT: &'static str = "droplets";
 const FORWARDING_RULES_SEGMENT: &'static str = "forwarding_rules";
-pub type LoadBalancerRequest<M,V> = Request<M,V>;
 
 /// Load Balancers provide a way to distribute traffic across multiple
 /// Droplets.

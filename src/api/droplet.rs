@@ -6,10 +6,11 @@ use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};
 use super::{Size, Region, Image};
-use super::snapshot::{Snapshot, SnapshotRequest};
+use super::snapshot::Snapshot;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 use self::droplet_fields::{Kernel, Networks, NextBackupWindow};
+use request::{DropletRequest, SnapshotRequest};
 
 const DROPLETS_SEGMENT: &'static str = "droplets";
 const REPORTS_SEGMENT: &'static str = "reports";
@@ -17,7 +18,6 @@ const DROPLET_NEIGHBORS_SEGMENT: &'static str = "droplet_neighbors";
 const NEIGHBORS_SEGMENT: &'static str = "neighbors";
 const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
 const BACKUPS_SEGMENT: &'static str = "backups";
-pub type DropletRequest<M,V> = Request<M,V>;
 
 /// A Droplet is a DigitalOcean virtual machine. By sending requests to the
 /// Droplet endpoint, you can list, create, or delete Droplets.
