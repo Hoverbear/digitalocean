@@ -58,7 +58,7 @@ The crate is founded on a few design considerations:
 * Keep things simple and generic.
 * Map closely to the DigitalOcean API.
 * `Request`s are agnostic over `Client`s.
-* It should be impossible to make an invalid API request.
+* It should be difficult to make an invalid API request.
 * Use static dispatch as much as possible.
 * Only the bare minimum amount of information should be carried around.
 * Allow for easy construction of separate clients (`hyper`, etc.)
