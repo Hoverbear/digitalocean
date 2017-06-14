@@ -16,9 +16,8 @@ const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
 /// and manage DNS zone files by adding and modifying individual records for a
 /// domain.
 ///
-/// Requests with this output this type are accessed via [`Domain::get(..).records()`](../request/struct.Request.html#method.records).
-/// Make sure to check the builders for [`Create`](../request/struct.Request.html#method.priority)
-/// and [`Update`](../request/struct.Request.html#method.kind).
+/// Requests with this output this type are accessed via [`Domain::get(..).records()`](../request/type.DomainRequest.html#method.records).
+/// Make sure to check the functions in [`DomainRecordRequest`](../request/type.DomainRecordRequest.html)
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
