@@ -68,7 +68,11 @@ impl DomainRequest<Get, Domain> {
 
 impl DomainRecordRequest<List, Vec<DomainRecord>> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record)
-    pub fn create<S>(mut self, kind: S, name: S, data: S) -> DomainRecordRequest<Create, DomainRecord>
+    pub fn create<S>(mut self,
+                     kind: S,
+                     name: S,
+                     data: S)
+                     -> DomainRecordRequest<Create, DomainRecord>
         where S: AsRef<str> + Display + Serialize
     {
         self.url_mut().path_segments_mut().expect(STATIC_URL_ERROR);

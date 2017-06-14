@@ -378,7 +378,9 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
     /// on port 80 will be redirected to HTTPS on port 443. Default value is false.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn redirect_http_to_https(mut self, setting: bool) -> LoadBalancerRequest<Create, LoadBalancer> {
+    pub fn redirect_http_to_https(mut self,
+                                  setting: bool)
+                                  -> LoadBalancerRequest<Create, LoadBalancer> {
         self.body_mut()["redirect_http_to_https"] = json!(setting);
         self
     }
@@ -519,7 +521,9 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     /// on port 80 will be redirected to HTTPS on port 443. Default value is false.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn redirect_http_to_https(mut self, setting: bool) -> LoadBalancerRequest<Update, LoadBalancer> {
+    pub fn redirect_http_to_https(mut self,
+                                  setting: bool)
+                                  -> LoadBalancerRequest<Update, LoadBalancer> {
         self.body_mut()["redirect_http_to_https"] = json!(setting);
         self
     }

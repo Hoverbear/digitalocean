@@ -40,7 +40,10 @@ pub struct Certificate {
 
 impl Certificate {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-certificate)
-    pub fn create<S>(name: S, private_key: S, leaf_certificate: S) -> CertificateRequest<Create, Certificate>
+    pub fn create<S>(name: S,
+                     private_key: S,
+                     leaf_certificate: S)
+                     -> CertificateRequest<Create, Certificate>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
