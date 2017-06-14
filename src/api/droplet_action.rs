@@ -5,13 +5,13 @@ use method::{List, Get, Create};
 use STATIC_URL_ERROR;
 use super::droplet::Droplet;
 use super::action::Action;
-use request::DropletActionRequest;
+use request::{DropletRequest, DropletActionRequest};
 
 const DROPLET_ACTIONS_SEGMENT: &'static str = "actions";
 
-impl Request<Get, Droplet> {
+impl DropletRequest<Get, Droplet> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-actions-for-a-droplet)
-    pub fn actions(mut self) -> Request<List, Vec<Action>> {
+    pub fn actions(mut self) -> DropletActionRequest<List, Vec<Action>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -20,7 +20,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#enable-backups)
-    pub fn enable_backups(mut self) -> Request<Create, Action> {
+    pub fn enable_backups(mut self) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -33,7 +33,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#disable-backups)
-    pub fn disable_backups(mut self) -> Request<Create, Action> {
+    pub fn disable_backups(mut self) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -46,7 +46,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet)
-    pub fn reboot(mut self) -> Request<Create, Action> {
+    pub fn reboot(mut self) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -59,7 +59,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#power-cycle-a-droplet)
-    pub fn power_cycle(mut self) -> Request<Create, Action> {
+    pub fn power_cycle(mut self) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -72,7 +72,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#shutdown-a-droplet)
-    pub fn shutdown(mut self) -> Request<Create, Action> {
+    pub fn shutdown(mut self) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -85,7 +85,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#power-off-a-droplet)
-    pub fn power(mut self, val: bool) -> Request<Create, Action> {
+    pub fn power(mut self, val: bool) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -98,7 +98,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#restore-a-droplet)
-    pub fn restore<D>(mut self, image: D) -> Request<Create, Action>
+    pub fn restore<D>(mut self, image: D) -> DropletActionRequest<Create, Action>
         where D: Display
     {
         self.url_mut()
@@ -114,7 +114,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#password-reset-a-droplet)
-    pub fn password_reset(mut self) -> Request<Create, Action> {
+    pub fn password_reset(mut self) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -127,7 +127,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#resize-a-droplet)
-    pub fn resize<S>(mut self, size: S, disk: bool) -> Request<Create, Action>
+    pub fn resize<S>(mut self, size: S, disk: bool) -> DropletActionRequest<Create, Action>
         where S: AsRef<str> + Serialize + Display
     {
         self.url_mut()
@@ -144,7 +144,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#resize-a-droplet)
-    pub fn rebuild<S>(mut self, image: S) -> Request<Create, Action>
+    pub fn rebuild<S>(mut self, image: S) -> DropletActionRequest<Create, Action>
         where S: AsRef<str> + Serialize + Display
     {
         self.url_mut()
@@ -160,7 +160,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#rename-a-droplet)
-    pub fn rename<S>(mut self, name: S) -> Request<Create, Action>
+    pub fn rename<S>(mut self, name: S) -> DropletActionRequest<Create, Action>
         where S: AsRef<str> + Serialize + Display
     {
         self.url_mut()
@@ -176,7 +176,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#change-the-kernel)
-    pub fn kernel(mut self, kernel: usize) -> Request<Create, Action> {
+    pub fn kernel(mut self, kernel: usize) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -190,7 +190,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#enable-ipv6)
-    pub fn enable_ipv6(mut self) -> Request<Create, Action> {
+    pub fn enable_ipv6(mut self) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -203,7 +203,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#enable-private-networking)
-    pub fn enable_private_networking(mut self) -> Request<Create, Action> {
+    pub fn enable_private_networking(mut self) -> DropletActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -216,7 +216,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#snapshot-a-droplet)
-    pub fn snapshot<S>(mut self, name: S) -> Request<Create, Action>
+    pub fn snapshot<S>(mut self, name: S) -> DropletActionRequest<Create, Action>
         where S: AsRef<str> + Serialize + Display
     {
         self.url_mut()
@@ -232,7 +232,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-droplet-action)
-    pub fn action(mut self, id: usize) -> Request<Get, Action> {
+    pub fn action(mut self, id: usize) -> DropletActionRequest<Get, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)

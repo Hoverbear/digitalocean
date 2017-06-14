@@ -11,24 +11,43 @@ use api::{HasPagination, HasResponse};
 use method::{Method, List, Get, Create, Delete, Update};
 use DigitalOcean;
 
+/// A type alias with [`Request<_, Account>`](struct.Request.html) specific functions.
 pub type AccountRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Action>`](struct.Request.html) specific functions.
 pub type ActionRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Certificate>`](struct.Request.html) specific functions.
 pub type CertificateRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, DomainRecord>`](struct.Request.html) specific functions.
 pub type DomainRecordRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Domain>`](struct.Request.html) specific functions.
 pub type DomainRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, DropletAction>`](struct.Request.html) specific functions.
 pub type DropletActionRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Droplet>`](struct.Request.html) specific functions.
 pub type DropletRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, FloatingIpAction>`](struct.Request.html) specific functions.
 pub type FloatingIpActionRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, FloatingIp>`](struct.Request.html) specific functions.
 pub type FloatingIpRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, ImageAction>`](struct.Request.html) specific functions.
 pub type ImageActionRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Image>`](struct.Request.html) specific functions.
 pub type ImageRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, LoadBalancer>`](struct.Request.html) specific functions.
 pub type LoadBalancerRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Region>`](struct.Request.html) specific functions.
 pub type RegionRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Size>`](struct.Request.html) specific functions.
 pub type SizeRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Snapshot>`](struct.Request.html) specific functions.
 pub type SnapshotRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, SshKey>`](struct.Request.html) specific functions.
 pub type SshKeyRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Tag>`](struct.Request.html) specific functions.
 pub type TagRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, VolumeAction>`](struct.Request.html) specific functions.
 pub type VolumeActionRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, Volume>`](struct.Request.html) specific functions.
 pub type VolumeRequest<M, V> = Request<M, V>;
 
 /// A consuming builder which can be used to build up API calls.
