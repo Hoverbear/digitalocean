@@ -1,5 +1,7 @@
 # DigitalOcean
 
+[![Build Status](https://travis-ci.org/Hoverbear/digitalocean.svg?branch=master)](https://travis-ci.org/Hoverbear/digitalocean)
+
 A crate for interacting with the Digital Ocean API.
 
 While browsing this documentation please feel encouraged to reference the
