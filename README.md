@@ -22,14 +22,11 @@ Droplet::list()
 
 ## Usage Fundamentals
 
-All values ([`Domain`](api/struct.Domain.html), [`SshKey`](api/struct.SshKey.html), etc) can 
-be found in the [`api`](api/index.html) module.
+All values (`Domain`, `SshKey`, etc) can be found in the `api` module.
 
-Calling an action will return a [`Request<_,_>`](request/struct.Request.html) type. For example 
-[`Droplet::create()`](api/struct.Droplet.html#method.create) will create a
-[`Request<Create, Droplet>`](request/struct.Request.html#method.ssh_keys). This type may then
-have specific futher functions to futher build up the request or transform it into some other
-request.
+Calling an action will return a `Request<_,_>` type. For example `Droplet::create()` will create a
+`Request<Create, Droplet>`. This type may then have specific futher functions to futher build up
+the request or transform it into some other request.
 
 ```rust,no_run
 use digitalocean::DigitalOcean;
@@ -47,9 +44,8 @@ let req = Domain::get("foo.com").records();
 let req = Domain::get("foo.com").records().create("CNAME", "test", "127.0.0.1");
 ```
 
-In order to realize any action [`.execute()`](request/trait.Executable.html#tymethod.execute)
-must be called with a [DigitalOcean](struct.DigitalOcean.html#method.new) client. It is also 
-possible to call [`do_client.execute(some_request)`](struct.DigitalOcean.html#method.execute).
+In order to realize any action [`.execute()` must be called with a `DigitalOcean`
+ client. It is also possible to call `do_client.execute(some_request)`.
 
 In order to use the entire API it is recommended to reference the various `Request` types.
 
