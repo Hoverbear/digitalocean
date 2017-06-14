@@ -26,7 +26,7 @@ be found in the [`api`](api/index.html) module.
 
 Calling an action will return a [`Request<_,_>`](request/struct.Request.html) type. For example 
 [`Droplet::create()`](api/struct.Droplet.html#method.create) will create a
-[`Request<Create, Droplet>`](request/struct.Request.html#method.ssh_keys). This type may then
+[`Request<Create, Droplet>`](request/struct.Request.html#method.ssh_keys). These types may then
 have specific futher functions to futher build up the request or transform it into some other
 request.
 

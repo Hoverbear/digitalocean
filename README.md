@@ -27,7 +27,7 @@ Droplet::list()
 All values (`Domain`, `SshKey`, etc) can be found in the `api` module.
 
 Calling an action will return a `Request<_,_>` type. For example `Droplet::create()` will create a
-`Request<Create, Droplet>`. This type may then have specific futher functions to futher build up
+`Request<Create, Droplet>`. These types may then have specific futher functions to futher build up
 the request or transform it into some other request.
 
 ```rust,no_run
@@ -46,7 +46,7 @@ let req = Domain::get("foo.com").records();
 let req = Domain::get("foo.com").records().create("CNAME", "test", "127.0.0.1");
 ```
 
-In order to realize any action [`.execute()` must be called with a `DigitalOcean`
+In order to realize any action `.execute()` must be called with a `DigitalOcean`
  client. It is also possible to call `do_client.execute(some_request)`.
 
 In order to use the entire API it is recommended to reference the various `Request` types.
