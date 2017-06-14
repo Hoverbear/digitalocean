@@ -7,6 +7,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const SNAPSHOT_SEGMENT: &'static str = "snapshots";
+pub type SnapshotRequest<M,V> = Request<M,V>;
 
 /// Snapshots are saved instances of a Droplet or a volume, which is reflected
 /// in the `resource_type` attribute. In order to avoid problems with
@@ -48,7 +49,7 @@ pub struct Snapshot {
 
 impl Snapshot {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-snapshots)
-    pub fn list() -> Request<List, Vec<Snapshot>> {
+    pub fn list() -> SnapshotRequest<List, Vec<Snapshot>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -58,7 +59,7 @@ impl Snapshot {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-droplet-snapshots)
-    pub fn droplets() -> Request<List, Vec<Snapshot>> {
+    pub fn droplets() -> SnapshotRequest<List, Vec<Snapshot>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -71,7 +72,7 @@ impl Snapshot {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-volume-snapshots)
-    pub fn volumes() -> Request<List, Vec<Snapshot>> {
+    pub fn volumes() -> SnapshotRequest<List, Vec<Snapshot>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -83,7 +84,7 @@ impl Snapshot {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-snapshot-by-id)
-    pub fn get(id: usize) -> Request<Get, Snapshot> {
+    pub fn get(id: usize) -> SnapshotRequest<Get, Snapshot> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -94,7 +95,7 @@ impl Snapshot {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-snapshot)
-    pub fn delete(id: usize) -> Request<Delete, ()> {
+    pub fn delete(id: usize) -> SnapshotRequest<Delete, ()> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)

@@ -5,7 +5,8 @@ use method::{List, Get, Create, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};
-use super::{Size, Region, Image, Snapshot};
+use super::{Size, Region, Image};
+use super::snapshot::{Snapshot, SnapshotRequest};
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 use self::droplet_fields::{Kernel, Networks, NextBackupWindow};
@@ -16,6 +17,7 @@ const DROPLET_NEIGHBORS_SEGMENT: &'static str = "droplet_neighbors";
 const NEIGHBORS_SEGMENT: &'static str = "neighbors";
 const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
 const BACKUPS_SEGMENT: &'static str = "backups";
+pub type DropletRequest<M,V> = Request<M,V>;
 
 /// A Droplet is a DigitalOcean virtual machine. By sending requests to the
 /// Droplet endpoint, you can list, create, or delete Droplets.
@@ -154,7 +156,7 @@ pub mod droplet_fields {
 
 impl Droplet {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
-    pub fn create<S, D>(name: S, region: S, size: S, image: D) -> Request<Create, Droplet>
+    pub fn create<S, D>(name: S, region: S, size: S, image: D) -> DropletRequest<Create, Droplet>
         where S: AsRef<str> + Serialize + Display,
               D: Serialize + Display
     {
@@ -178,7 +180,7 @@ impl Droplet {
                                  region: S,
                                  size: S,
                                  image: D)
-                                 -> Request<Create, Vec<Droplet>>
+                                 -> DropletRequest<Create, Vec<Droplet>>
         where S: AsRef<str> + Serialize + Display,
               D: Serialize + Display
     {
@@ -198,7 +200,7 @@ impl Droplet {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-droplet-by-id)
-    pub fn get(id: usize) -> Request<Get, Droplet> {
+    pub fn get(id: usize) -> DropletRequest<Get, Droplet> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -209,7 +211,7 @@ impl Droplet {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-droplets)
-    pub fn list() -> Request<List, Vec<Droplet>> {
+    pub fn list() -> DropletRequest<List, Vec<Droplet>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -219,7 +221,7 @@ impl Droplet {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#listing-droplets-by-tag)
-    pub fn list_by_tag<S>(name: S) -> Request<List, Vec<Droplet>>
+    pub fn list_by_tag<S>(name: S) -> DropletRequest<List, Vec<Droplet>>
         where S: AsRef<str> + Serialize
     {
         let mut url = ROOT_URL.clone();
@@ -233,7 +235,7 @@ impl Droplet {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-droplet)
-    pub fn delete(id: usize) -> Request<Delete, ()> {
+    pub fn delete(id: usize) -> DropletRequest<Delete, ()> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -244,7 +246,7 @@ impl Droplet {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#deleting-droplets-by-tag)
-    pub fn delete_by_tag<S>(name: S) -> Request<Delete, ()>
+    pub fn delete_by_tag<S>(name: S) -> DropletRequest<Delete, ()>
         where S: AsRef<str> + Serialize
     {
         let mut url = ROOT_URL.clone();
@@ -258,7 +260,7 @@ impl Droplet {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-droplet-neighbors)
-    pub fn neighbors() -> Request<Get, Vec<Vec<Droplet>>> {
+    pub fn neighbors() -> DropletRequest<Get, Vec<Vec<Droplet>>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -269,7 +271,7 @@ impl Droplet {
     }
 }
 
-impl Request<Create, Droplet> {
+impl DropletRequest<Create, Droplet> {
     /// An array containing the IDs or fingerprints of the SSH keys that you
     /// wish to embed in the Droplet's root account upon creation.
     ///
@@ -342,7 +344,7 @@ impl Request<Create, Droplet> {
 }
 
 
-impl Request<Create, Vec<Droplet>> {
+impl DropletRequest<Create, Vec<Droplet>> {
     /// An array containing the IDs or fingerprints of the SSH keys that you
     /// wish to embed in the Droplet's root account upon creation.
     ///
@@ -414,9 +416,9 @@ impl Request<Create, Vec<Droplet>> {
     }
 }
 
-impl Request<Get, Droplet> {
+impl DropletRequest<Get, Droplet> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-droplet)
-    pub fn snapshots(mut self) -> Request<List, Vec<Snapshot>> {
+    pub fn snapshots(mut self) -> SnapshotRequest<List, Vec<Snapshot>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -425,7 +427,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-backups-for-a-droplet)
-    pub fn backups(mut self) -> Request<List, Vec<Snapshot>> {
+    pub fn backups(mut self) -> SnapshotRequest<List, Vec<Snapshot>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -434,7 +436,7 @@ impl Request<Get, Droplet> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-neighbors-for-a-droplet)
-    pub fn neighbors(mut self) -> Request<List, Vec<Droplet>> {
+    pub fn neighbors(mut self) -> DropletRequest<List, Vec<Droplet>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)

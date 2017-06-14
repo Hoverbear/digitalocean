@@ -6,6 +6,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const REGIONS_SEGMENT: &'static str = "regions";
+pub type RegionRequest<M,V> = Request<M,V>;
 
 /// A region in DigitalOcean represents a datacenter where Droplets can be
 /// deployed and images can be transferred.
@@ -41,7 +42,7 @@ pub struct Region {
 
 impl Region {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain)
-    pub fn list() -> Request<List, Vec<Region>> {
+    pub fn list() -> RegionRequest<List, Vec<Region>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)

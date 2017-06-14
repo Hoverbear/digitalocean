@@ -6,6 +6,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const SIZES_SEGMENT: &'static str = "sizes";
+pub type SizeRequest<M,V> = Request<M,V>;
 
 /// The sizes objects represent different packages of hardware resources that
 /// can be used for Droplets. When a Droplet is created, a size must be
@@ -59,7 +60,7 @@ pub struct Size {
 
 impl Size {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-images)
-    pub fn list() -> Request<List, Vec<Size>> {
+    pub fn list() -> SizeRequest<List, Vec<Size>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)

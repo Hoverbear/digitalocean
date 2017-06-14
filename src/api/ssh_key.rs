@@ -9,6 +9,7 @@ use super::{HasValue, HasPagination, HasResponse};
 
 const ACCOUNT_SEGMENT: &'static str = "account";
 const KEYS_SEGMENT: &'static str = "keys";
+pub type SshKeyRequest<M, V> = Request<M, V>;
 
 /// DigitalOcean allows you to add SSH public keys to the interface so that you
 /// can embed your public key into a Droplet at the time of creation. Only the
@@ -43,7 +44,7 @@ pub struct SshKey {
 
 impl SshKey {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-key)
-    pub fn create<N>(name: N, public_key: N) -> Request<Create, SshKey>
+    pub fn create<N>(name: N, public_key: N) -> SshKeyRequest<Create, SshKey>
         where N: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -61,7 +62,7 @@ impl SshKey {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-keys)
-    pub fn list() -> Request<List, Vec<SshKey>> {
+    pub fn list() -> SshKeyRequest<List, Vec<SshKey>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -72,7 +73,7 @@ impl SshKey {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key)
-    pub fn get<S>(id: S) -> Request<Get, SshKey>
+    pub fn get<S>(id: S) -> SshKeyRequest<Get, SshKey>
         where S: Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -86,7 +87,7 @@ impl SshKey {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key)
-    pub fn update<S>(id: S) -> Request<Update, SshKey>
+    pub fn update<S>(id: S) -> SshKeyRequest<Update, SshKey>
         where S: Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -100,7 +101,7 @@ impl SshKey {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain)
-    pub fn delete<S>(id: S) -> Request<Delete, ()>
+    pub fn delete<S>(id: S) -> SshKeyRequest<Delete, ()>
         where S: Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -114,7 +115,7 @@ impl SshKey {
     }
 }
 
-impl Request<Update, SshKey> {
+impl SshKeyRequest<Update, SshKey> {
     /// The name to give the new SSH key in your account.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)

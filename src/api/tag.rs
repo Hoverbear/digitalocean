@@ -10,6 +10,7 @@ use super::{HasValue, HasPagination, HasResponse};
 
 const TAG_SEGMENT: &'static str = "tags";
 const RESOURCES_SEGMENT: &'static str = "resources";
+pub type TagRequest<M, V> = Request<M, V>;
 
 /// A Tag is a label that can be applied to a resource (currently only
 /// Droplets) in order to better organize or facilitate the lookups and actions
@@ -33,7 +34,7 @@ pub struct Tag {
 
 impl Tag {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-tag)
-    pub fn create<S>(name: S) -> Request<Create, Tag>
+    pub fn create<S>(name: S) -> TagRequest<Create, Tag>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -48,7 +49,7 @@ impl Tag {
         req
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag)
-    pub fn get<S>(name: S) -> Request<Get, Tag>
+    pub fn get<S>(name: S) -> TagRequest<Get, Tag>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -60,7 +61,7 @@ impl Tag {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag)
-    pub fn list() -> Request<List, Tag> {
+    pub fn list() -> TagRequest<List, Tag> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -69,7 +70,7 @@ impl Tag {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-tag)
-    pub fn delete<S>(name: S) -> Request<Delete, ()>
+    pub fn delete<S>(name: S) -> TagRequest<Delete, ()>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -82,11 +83,11 @@ impl Tag {
     }
 }
 
-impl Request<Get, Tag> {
+impl TagRequest<Get, Tag> {
     /// Accepts tuples matching `(id, type)`. Currently the only `type` is `"droplet"`.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#tag-a-resource)
-    pub fn add_resources<S>(mut self, resources: Vec<(S, S)>) -> Request<Create, ()>
+    pub fn add_resources<S>(mut self, resources: Vec<(S, S)>) -> TagRequest<Create, ()>
         where S: AsRef<str> + Serialize + Display
     {
         self.url_mut()
@@ -113,7 +114,7 @@ impl Request<Get, Tag> {
     /// Accepts tuples matching `(id, type)`. Currently the only `type` is `"droplet"`.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#untag-a-resource)
-    pub fn remove_resources<S>(mut self, resources: Vec<(S, S)>) -> Request<Delete, ()>
+    pub fn remove_resources<S>(mut self, resources: Vec<(S, S)>) -> TagRequest<Delete, ()>
         where S: AsRef<str> + Serialize + Display
     {
         self.url_mut()

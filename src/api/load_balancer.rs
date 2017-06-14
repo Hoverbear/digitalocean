@@ -14,6 +14,7 @@ use self::load_balancer_fields::{ForwardingRule, HealthCheck, StickySessions};
 const LOAD_BALANCERS_SEGMENT: &'static str = "load_balancers";
 const DROPLETS_SEGMENT: &'static str = "droplets";
 const FORWARDING_RULES_SEGMENT: &'static str = "forwarding_rules";
+pub type LoadBalancerRequest<M,V> = Request<M,V>;
 
 /// Load Balancers provide a way to distribute traffic across multiple
 /// Droplets.
@@ -215,7 +216,7 @@ impl LoadBalancer {
     /// **Note:** It may contain one of the droplets_ids or tag attributes as they are mutually exclusive.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn create<S>(name: S, region: S) -> Request<Create, LoadBalancer>
+    pub fn create<S>(name: S, region: S) -> LoadBalancerRequest<Create, LoadBalancer>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -232,7 +233,7 @@ impl LoadBalancer {
         req
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-load-balancer)
-    pub fn get<S>(id: S) -> Request<Get, LoadBalancer>
+    pub fn get<S>(id: S) -> LoadBalancerRequest<Get, LoadBalancer>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -244,7 +245,7 @@ impl LoadBalancer {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-load-balancers)
-    pub fn list() -> Request<List, Vec<LoadBalancer>> {
+    pub fn list() -> LoadBalancerRequest<List, Vec<LoadBalancer>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -257,7 +258,7 @@ impl LoadBalancer {
     /// **Note:** It may contain one of the droplets_ids or tag attributes as they are mutually exclusive.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn update<S>(id: S) -> Request<Update, LoadBalancer>
+    pub fn update<S>(id: S) -> LoadBalancerRequest<Update, LoadBalancer>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -269,7 +270,7 @@ impl LoadBalancer {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-load-balancer)
-    pub fn delete<S>(id: S) -> Request<Delete, ()>
+    pub fn delete<S>(id: S) -> LoadBalancerRequest<Delete, ()>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -282,13 +283,13 @@ impl LoadBalancer {
     }
 }
 
-impl Request<Create, LoadBalancer> {
+impl LoadBalancerRequest<Create, LoadBalancer> {
     /// The load balancing algorithm used to determine which backend Droplet
     /// will be selected by a client. It must be either "round_robin" or
     /// "least_connections". The default value is "round_robin".
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn algorithm<S>(mut self, val: S) -> Request<Create, LoadBalancer>
+    pub fn algorithm<S>(mut self, val: S) -> LoadBalancerRequest<Create, LoadBalancer>
         where S: Display + Serialize
     {
         self.body_mut()["algorithm"] = json!(val);
@@ -299,7 +300,7 @@ impl Request<Create, LoadBalancer> {
     /// Load Balancer instance.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn forwarding_rule<T>(mut self, val: T) -> Request<Create, LoadBalancer>
+    pub fn forwarding_rule<T>(mut self, val: T) -> LoadBalancerRequest<Create, LoadBalancer>
         where T: Into<ForwardingRule>
     {
         if !self.body_mut()["forwarding_rules"].is_array() {
@@ -326,7 +327,7 @@ impl Request<Create, LoadBalancer> {
                            response_timeout_seconds: Option<usize>,
                            unhealthy_threshold: Option<usize>,
                            healthy_threshold: Option<usize>)
-                           -> Request<Create, LoadBalancer>
+                           -> LoadBalancerRequest<Create, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
         self.body_mut()["health_check"] = json!({
@@ -359,7 +360,7 @@ impl Request<Create, LoadBalancer> {
                               kind: S,
                               cookie_name: Option<S>,
                               cookie_ttl_seconds: Option<usize>)
-                              -> Request<Create, LoadBalancer>
+                              -> LoadBalancerRequest<Create, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
         self.body_mut()["sticky_sessions"] = json!({
@@ -377,7 +378,7 @@ impl Request<Create, LoadBalancer> {
     /// on port 80 will be redirected to HTTPS on port 443. Default value is false.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn redirect_http_to_https(mut self, setting: bool) -> Request<Create, LoadBalancer> {
+    pub fn redirect_http_to_https(mut self, setting: bool) -> LoadBalancerRequest<Create, LoadBalancer> {
         self.body_mut()["redirect_http_to_https"] = json!(setting);
         self
     }
@@ -386,7 +387,7 @@ impl Request<Create, LoadBalancer> {
     /// **Note:** Not intended to be used alongside the `tag` function.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn droplets(mut self, ids: Vec<usize>) -> Request<Create, LoadBalancer> {
+    pub fn droplets(mut self, ids: Vec<usize>) -> LoadBalancerRequest<Create, LoadBalancer> {
         self.body_mut()["droplet_ids"] = json!(ids);
         self
     }
@@ -396,7 +397,7 @@ impl Request<Create, LoadBalancer> {
     /// **Note:** Not intended to be used alongside the `droplets` function.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn tag<S>(mut self, tag: S) -> Request<Create, LoadBalancer>
+    pub fn tag<S>(mut self, tag: S) -> LoadBalancerRequest<Create, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
         self.body_mut()["tag"] = json!(tag);
@@ -405,11 +406,11 @@ impl Request<Create, LoadBalancer> {
 }
 
 
-impl Request<Update, LoadBalancer> {
+impl LoadBalancerRequest<Update, LoadBalancer> {
     /// A human-readable name for a Load Balancer instance.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn name<S>(mut self, val: S) -> Request<Update, LoadBalancer>
+    pub fn name<S>(mut self, val: S) -> LoadBalancerRequest<Update, LoadBalancer>
         where S: Display + Serialize
     {
         self.body_mut()["name"] = json!(val);
@@ -418,7 +419,7 @@ impl Request<Update, LoadBalancer> {
     /// The region where the Load Balancer instance will be located.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn region<S>(mut self, val: S) -> Request<Update, LoadBalancer>
+    pub fn region<S>(mut self, val: S) -> LoadBalancerRequest<Update, LoadBalancer>
         where S: Display + Serialize
     {
         self.body_mut()["region"] = json!(val);
@@ -429,7 +430,7 @@ impl Request<Update, LoadBalancer> {
     /// "least_connections". The default value is "round_robin".
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn algorithm<S>(mut self, val: S) -> Request<Update, LoadBalancer>
+    pub fn algorithm<S>(mut self, val: S) -> LoadBalancerRequest<Update, LoadBalancer>
         where S: Display + Serialize
     {
         self.body_mut()["algorithm"] = json!(val);
@@ -440,7 +441,7 @@ impl Request<Update, LoadBalancer> {
     /// Load Balancer instance.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn forwarding_rule<T>(mut self, val: T) -> Request<Update, LoadBalancer>
+    pub fn forwarding_rule<T>(mut self, val: T) -> LoadBalancerRequest<Update, LoadBalancer>
         where T: Into<ForwardingRule>
     {
         if !self.body_mut()["forwarding_rules"].is_array() {
@@ -467,7 +468,7 @@ impl Request<Update, LoadBalancer> {
                            response_timeout_seconds: Option<usize>,
                            unhealthy_threshold: Option<usize>,
                            healthy_threshold: Option<usize>)
-                           -> Request<Update, LoadBalancer>
+                           -> LoadBalancerRequest<Update, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
         self.body_mut()["health_check"] = json!({
@@ -500,7 +501,7 @@ impl Request<Update, LoadBalancer> {
                               kind: S,
                               cookie_name: Option<S>,
                               cookie_ttl_seconds: Option<usize>)
-                              -> Request<Update, LoadBalancer>
+                              -> LoadBalancerRequest<Update, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
         self.body_mut()["sticky_sessions"] = json!({
@@ -518,7 +519,7 @@ impl Request<Update, LoadBalancer> {
     /// on port 80 will be redirected to HTTPS on port 443. Default value is false.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn redirect_http_to_https(mut self, setting: bool) -> Request<Update, LoadBalancer> {
+    pub fn redirect_http_to_https(mut self, setting: bool) -> LoadBalancerRequest<Update, LoadBalancer> {
         self.body_mut()["redirect_http_to_https"] = json!(setting);
         self
     }
@@ -527,7 +528,7 @@ impl Request<Update, LoadBalancer> {
     /// **Note:** Not intended to be used alongside the `tag` function.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn droplets(mut self, ids: Vec<usize>) -> Request<Update, LoadBalancer> {
+    pub fn droplets(mut self, ids: Vec<usize>) -> LoadBalancerRequest<Update, LoadBalancer> {
         self.body_mut()["droplet_ids"] = json!(ids);
         self
     }
@@ -537,7 +538,7 @@ impl Request<Update, LoadBalancer> {
     /// **Note:** Not intended to be used alongside the `droplets` function.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn tag<S>(mut self, tag: S) -> Request<Update, LoadBalancer>
+    pub fn tag<S>(mut self, tag: S) -> LoadBalancerRequest<Update, LoadBalancer>
         where S: AsRef<str> + Display + Serialize
     {
         self.body_mut()["tag"] = json!(tag);
@@ -545,11 +546,11 @@ impl Request<Update, LoadBalancer> {
     }
 }
 
-impl Request<Get, LoadBalancer> {
+impl LoadBalancerRequest<Get, LoadBalancer> {
     /// Add droplets (by id) to the load balancer.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#add-droplets-to-a-load-balancer)
-    pub fn add_droplets(mut self, ids: Vec<usize>) -> Request<Create, ()> {
+    pub fn add_droplets(mut self, ids: Vec<usize>) -> LoadBalancerRequest<Create, ()> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -564,7 +565,7 @@ impl Request<Get, LoadBalancer> {
     /// Remove droplets (by id) from the load balancer.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-droplets-from-a-load-balancer)
-    pub fn remove_droplets(mut self, ids: Vec<usize>) -> Request<Delete, ()> {
+    pub fn remove_droplets(mut self, ids: Vec<usize>) -> LoadBalancerRequest<Delete, ()> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -579,7 +580,7 @@ impl Request<Get, LoadBalancer> {
     /// Add a forwarding rule to the Load Balancer.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#add-forwarding-rules-to-a-load-balancer)
-    pub fn add_forwarding_rules<T>(mut self, items: Vec<T>) -> Request<Create, ()>
+    pub fn add_forwarding_rules<T>(mut self, items: Vec<T>) -> LoadBalancerRequest<Create, ()>
         where T: Into<ForwardingRule>
     {
         self.url_mut()
@@ -607,7 +608,7 @@ impl Request<Get, LoadBalancer> {
     /// Remove a forwarding rule to the Load Balancer.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-forwarding-rules-from-a-load-balancer)
-    pub fn remove_forwarding_rules<T>(mut self, items: Vec<T>) -> Request<Delete, ()>
+    pub fn remove_forwarding_rules<T>(mut self, items: Vec<T>) -> LoadBalancerRequest<Delete, ()>
         where T: Into<ForwardingRule>
     {
         self.url_mut()

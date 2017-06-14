@@ -10,6 +10,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const FLOATING_IP_SEGMENT: &'static str = "floating_ips";
+pub type FloatingIpRequest<M,V> = Request<M,V>;
 
 /// Floating IP objects represent a publicly-accessible static IP addresses
 /// that can be mapped to one of your Droplets. They can be used to create
@@ -38,7 +39,7 @@ pub struct FloatingIp {
 
 impl FloatingIp {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-floating-ips)
-    pub fn list() -> Request<List, Vec<FloatingIp>> {
+    pub fn list() -> FloatingIpRequest<List, Vec<FloatingIp>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -48,7 +49,7 @@ impl FloatingIp {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-assigned-to-a-droplet)
-    pub fn for_droplet(id: usize) -> Request<Create, FloatingIp> {
+    pub fn for_droplet(id: usize) -> FloatingIpRequest<Create, FloatingIp> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -62,7 +63,7 @@ impl FloatingIp {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-reserved-to-a-region)
-    pub fn for_region<S>(id: S) -> Request<Create, FloatingIp>
+    pub fn for_region<S>(id: S) -> FloatingIpRequest<Create, FloatingIp>
         where S: AsRef<str> + Display + Serialize
     {
         let mut url = ROOT_URL.clone();
@@ -78,7 +79,7 @@ impl FloatingIp {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip)
-    pub fn get<I>(id: I) -> Request<Get, FloatingIp>
+    pub fn get<I>(id: I) -> FloatingIpRequest<Get, FloatingIp>
         where I: Into<IpAddr>
     {
         let mut url = ROOT_URL.clone();
@@ -91,7 +92,7 @@ impl FloatingIp {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip)
-    pub fn delete<I>(id: I) -> Request<Delete, ()>
+    pub fn delete<I>(id: I) -> FloatingIpRequest<Delete, ()>
         where I: Into<IpAddr>
     {
         let mut url = ROOT_URL.clone();

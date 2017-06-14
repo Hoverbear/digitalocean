@@ -9,6 +9,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const CERTIFICATES_SEGMENT: &'static str = "certificates";
+pub type CertificateRequest<M,V> = Request<M, V>;
 
 /// SSL certificates may be uploaded to DigitalOcean where they will be placed
 /// in a fully encrypted and isolated storage system. They may then be used to
@@ -39,7 +40,7 @@ pub struct Certificate {
 
 impl Certificate {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-certificate)
-    pub fn create<S>(name: S, private_key: S, leaf_certificate: S) -> Request<Create, Certificate>
+    pub fn create<S>(name: S, private_key: S, leaf_certificate: S) -> CertificateRequest<Create, Certificate>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -59,7 +60,7 @@ impl Certificate {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-certificates)
-    pub fn list() -> Request<List, Vec<Certificate>> {
+    pub fn list() -> CertificateRequest<List, Vec<Certificate>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -69,7 +70,7 @@ impl Certificate {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-certificate)
-    pub fn get<N>(id: N) -> Request<Get, Certificate>
+    pub fn get<N>(id: N) -> CertificateRequest<Get, Certificate>
         where N: AsRef<str> + Display
     {
         let mut url = ROOT_URL.clone();
@@ -82,7 +83,7 @@ impl Certificate {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-certificate)
-    pub fn delete<N>(id: N) -> Request<Delete, ()>
+    pub fn delete<N>(id: N) -> CertificateRequest<Delete, ()>
         where N: AsRef<str> + Display
     {
         let mut url = ROOT_URL.clone();
@@ -95,7 +96,7 @@ impl Certificate {
     }
 }
 
-impl Request<Create, Certificate> {
+impl CertificateRequest<Create, Certificate> {
     /// The full PEM-formatted trust chain between the certificate authority's
     /// certificate and your domain's SSL certificate.
     ///

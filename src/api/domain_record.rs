@@ -4,11 +4,12 @@ use request::Request;
 use method::{Get, List, Create, Delete, Update};
 use STATIC_URL_ERROR;
 use url::Url;
-use super::domain::Domain;
+use super::domain::{Domain, DomainRequest};
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
+pub type DomainRecordRequest<M, V> = Request<M,V>;
 
 /// Domain record resources are used to set or retrieve information about the
 /// individual DNS records configured for a domain. This allows you to build
@@ -53,9 +54,9 @@ pub struct DomainRecord {
     weight: Option<usize>,
 }
 
-impl Request<Get, Domain> {
+impl DomainRequest<Get, Domain> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domain-records)
-    pub fn records(mut self) -> Request<List, Vec<DomainRecord>> {
+    pub fn records(mut self) -> DomainRecordRequest<List, Vec<DomainRecord>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -65,9 +66,9 @@ impl Request<Get, Domain> {
     }
 }
 
-impl Request<List, Vec<DomainRecord>> {
+impl DomainRecordRequest<List, Vec<DomainRecord>> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record)
-    pub fn create<S>(mut self, kind: S, name: S, data: S) -> Request<Create, DomainRecord>
+    pub fn create<S>(mut self, kind: S, name: S, data: S) -> DomainRecordRequest<Create, DomainRecord>
         where S: AsRef<str> + Display + Serialize
     {
         self.url_mut().path_segments_mut().expect(STATIC_URL_ERROR);
@@ -82,7 +83,7 @@ impl Request<List, Vec<DomainRecord>> {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain-record)
-    pub fn get(mut self, id: usize) -> Request<Get, DomainRecord> {
+    pub fn get(mut self, id: usize) -> DomainRecordRequest<Get, DomainRecord> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -92,7 +93,7 @@ impl Request<List, Vec<DomainRecord>> {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-domain-record)
-    pub fn update(mut self, id: usize) -> Request<Update, DomainRecord> {
+    pub fn update(mut self, id: usize) -> DomainRecordRequest<Update, DomainRecord> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -102,7 +103,7 @@ impl Request<List, Vec<DomainRecord>> {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain-record)
-    pub fn delete(mut self, id: usize) -> Request<Delete, ()> {
+    pub fn delete(mut self, id: usize) -> DomainRecordRequest<Delete, ()> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -112,7 +113,7 @@ impl Request<List, Vec<DomainRecord>> {
     }
 }
 
-impl Request<Create, DomainRecord> {
+impl DomainRecordRequest<Create, DomainRecord> {
     /// The priority for SRV and MX records.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
@@ -145,7 +146,7 @@ impl Request<Create, DomainRecord> {
     }
 }
 
-impl Request<Update, DomainRecord> {
+impl DomainRecordRequest<Update, DomainRecord> {
     /// The record type (A, MX, CNAME, etc).
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)

@@ -9,6 +9,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const IMAGES_SEGMENT: &'static str = "images";
+pub type ImageRequest<M, V> = Request<M,V>;
 
 /// Images in DigitalOcean may refer to one of a few different kinds of objects.
 ///
@@ -67,7 +68,7 @@ pub struct Image {
 
 impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-images)
-    pub fn list() -> Request<List, Vec<Image>> {
+    pub fn list() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -77,7 +78,7 @@ impl Image {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-distribution-images)
-    pub fn distributions() -> Request<List, Vec<Image>> {
+    pub fn distributions() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -89,7 +90,7 @@ impl Image {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-application-images)
-    pub fn applications() -> Request<List, Vec<Image>> {
+    pub fn applications() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -101,7 +102,7 @@ impl Image {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-a-user-s-images)
-    pub fn user() -> Request<List, Vec<Image>> {
+    pub fn user() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -115,7 +116,7 @@ impl Image {
     /// `id` is either an `id` (numeric) or a `slug` (string).
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id)
-    pub fn get<S>(id: S) -> Request<Get, Image>
+    pub fn get<S>(id: S) -> ImageRequest<Get, Image>
         where S: Display
     {
         let mut url = ROOT_URL.clone();
@@ -130,7 +131,7 @@ impl Image {
     /// `id` is either an `id` (numeric) or a `slug` (string).
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-an-image)
-    pub fn update<S>(id: S) -> Request<Update, Image>
+    pub fn update<S>(id: S) -> ImageRequest<Update, Image>
         where S: Display
     {
         let mut url = ROOT_URL.clone();
@@ -145,7 +146,7 @@ impl Image {
     /// `id` is either an `id` (numeric) or a `slug` (string).
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-an-image)
-    pub fn delete<S>(id: S) -> Request<Delete, ()>
+    pub fn delete<S>(id: S) -> ImageRequest<Delete, ()>
         where S: Display
     {
         let mut url = ROOT_URL.clone();
@@ -158,11 +159,11 @@ impl Image {
     }
 }
 
-impl Request<Update, Image> {
+impl ImageRequest<Update, Image> {
     /// The new name that you would like to use for the image.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#images)
-    pub fn name<S>(mut self, val: S) -> Request<Update, Image>
+    pub fn name<S>(mut self, val: S) -> ImageRequest<Update, Image>
         where S: Display + Serialize
     {
         self.body_mut()["name"] = json!(val);

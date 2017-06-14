@@ -4,6 +4,7 @@ use {ROOT_URL, STATIC_URL_ERROR};
 use super::{HasValue, HasResponse};
 
 const ACCOUNT_SEGMENT: &'static str = "account";
+pub type AccountRequest<M, V> = Request<M, V>;
 
 /// The user account.
 ///
@@ -36,7 +37,7 @@ pub struct Account {
 
 impl Account {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#get-user-information)
-    pub fn get() -> Request<Get, Account> {
+    pub fn get() -> AccountRequest<Get, Account> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)

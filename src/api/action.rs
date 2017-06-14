@@ -8,6 +8,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const ACTIONS_SEGMENT: &'static str = "actions";
+pub type ActionRequest<M,V> = Request<M, V>;
 
 /// Actions are records of events that have occurred on the resources in your
 /// account. These can be things like rebooting a Droplet, or transferring an
@@ -59,7 +60,7 @@ pub struct Action {
 
 impl Action {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-action)
-    pub fn get(id: usize) -> Request<Get, Action> {
+    pub fn get(id: usize) -> ActionRequest<Get, Action> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -69,7 +70,7 @@ impl Action {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions)
-    pub fn list() -> Request<List, Vec<Action>> {
+    pub fn list() -> ActionRequest<List, Vec<Action>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)

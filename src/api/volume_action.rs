@@ -3,14 +3,16 @@ use std::fmt::Display;
 use request::Request;
 use method::{List, Get, Create};
 use {ROOT_URL, STATIC_URL_ERROR};
-use super::{Action, Volume};
+use super::action::Action;
+use super::volume::{Volume, VolumeRequest};
 
 const VOLUMES_SEGMENT: &'static str = "volumes";
 const VOLUME_ACTIONS_SEGMENT: &'static str = "actions";
+pub type VolumeActionRequest<M, V> = Request<M, V>;
 
 impl Volume {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet-by-name)
-    pub fn attach<S>(volume_name: S, droplet: usize) -> Request<Create, Action>
+    pub fn attach<S>(volume_name: S, droplet: usize) -> VolumeActionRequest<Create, Action>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -27,7 +29,7 @@ impl Volume {
         req
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet-by-name)
-    pub fn detach<S>(volume_name: S, droplet: usize) -> Request<Create, Action>
+    pub fn detach<S>(volume_name: S, droplet: usize) -> VolumeActionRequest<Create, Action>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -45,9 +47,9 @@ impl Volume {
     }
 }
 
-impl Request<Get, Volume> {
+impl VolumeRequest<Get, Volume> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet)
-    pub fn attach(mut self, droplet: usize) -> Request<Create, Action> {
+    pub fn attach(mut self, droplet: usize) -> VolumeActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -61,7 +63,7 @@ impl Request<Get, Volume> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet)
-    pub fn detach(mut self, droplet: usize) -> Request<Create, Action> {
+    pub fn detach(mut self, droplet: usize) -> VolumeActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -75,7 +77,7 @@ impl Request<Get, Volume> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#resize-a-volume)
-    pub fn resize(mut self, size: usize) -> Request<Create, Action> {
+    pub fn resize(mut self, size: usize) -> VolumeActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -89,7 +91,7 @@ impl Request<Get, Volume> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-volume)
-    pub fn actions(mut self) -> Request<List, Vec<Action>> {
+    pub fn actions(mut self) -> VolumeActionRequest<List, Vec<Action>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -98,7 +100,7 @@ impl Request<Get, Volume> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-volume-action)
-    pub fn action(mut self, id: usize) -> Request<Get, Action> {
+    pub fn action(mut self, id: usize) -> VolumeActionRequest<Get, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)

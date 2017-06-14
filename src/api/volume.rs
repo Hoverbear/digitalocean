@@ -5,12 +5,14 @@ use method::{List, Create, Get, Delete};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};
-use super::{Snapshot, Region};
+use super::snapshot::{Snapshot, SnapshotRequest};
+use super::region::Region;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const VOLUME_SEGMENT: &'static str = "volumes";
 const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
+pub type VolumeRequest<M, V> = Request<M, V>;
 
 /// Block Storage volumes provide expanded storage capacity for your Droplets
 /// and can be moved between Droplets within a specific region. Volumes
@@ -54,7 +56,7 @@ pub struct Volume {
 
 impl Volume {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-block-storage-volumes)
-    pub fn list() -> Request<List, Vec<Volume>> {
+    pub fn list() -> VolumeRequest<List, Vec<Volume>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -63,7 +65,7 @@ impl Volume {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume)
-    pub fn create<S>(name: S, size_gigabytes: usize) -> Request<Create, Volume>
+    pub fn create<S>(name: S, size_gigabytes: usize) -> VolumeRequest<Create, Volume>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -79,7 +81,7 @@ impl Volume {
         req
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume)
-    pub fn get<S>(id: S) -> Request<Get, Volume>
+    pub fn get<S>(id: S) -> VolumeRequest<Get, Volume>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -91,7 +93,7 @@ impl Volume {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume-by-name)
-    pub fn get_by_name<S>(name: S, region: S) -> Request<Get, Volume>
+    pub fn get_by_name<S>(name: S, region: S) -> VolumeRequest<Get, Volume>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -106,7 +108,7 @@ impl Volume {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-block-storage-volume)
-    pub fn delete<S>(id: S) -> Request<Delete, ()>
+    pub fn delete<S>(id: S) -> VolumeRequest<Delete, ()>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -118,7 +120,7 @@ impl Volume {
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](hhttps://developers.digitalocean.com/documentation/v2/#delete-a-block-storage-volume-by-name)
-    pub fn delete_by_name<S>(name: S, region: S) -> Request<Delete, ()>
+    pub fn delete_by_name<S>(name: S, region: S) -> VolumeRequest<Delete, ()>
         where S: AsRef<str> + Serialize + Display
     {
         let mut url = ROOT_URL.clone();
@@ -134,7 +136,7 @@ impl Volume {
     }
 }
 
-impl Request<List, Vec<Volume>> {
+impl VolumeRequest<List, Vec<Volume>> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-block-storage-volumes)
     pub fn region<S>(mut self, region: S) -> Self
         where S: AsRef<str> + Serialize + Display
@@ -147,9 +149,9 @@ impl Request<List, Vec<Volume>> {
     }
 }
 
-impl Request<Get, Volume> {
+impl VolumeRequest<Get, Volume> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume)
-    pub fn snapshots(mut self) -> Request<List, Vec<Snapshot>> {
+    pub fn snapshots(mut self) -> SnapshotRequest<List, Vec<Snapshot>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -158,7 +160,7 @@ impl Request<Get, Volume> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume)
-    pub fn snapshot<S>(mut self, name: S) -> Request<Create, Snapshot>
+    pub fn snapshot<S>(mut self, name: S) -> SnapshotRequest<Create, Snapshot>
         where S: AsRef<str> + Serialize + Display
     {
         self.url_mut()
@@ -174,7 +176,7 @@ impl Request<Get, Volume> {
     }
 }
 
-impl Request<Create, Volume> {
+impl VolumeRequest<Create, Volume> {
     /// An optional free-form text field to describe a Block Storage volume.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)

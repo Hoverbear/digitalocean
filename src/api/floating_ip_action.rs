@@ -1,14 +1,15 @@
 use request::Request;
 use method::{Create, Get, List};
-use super::FloatingIp;
+use super::floating_ip::{FloatingIp, FloatingIpRequest};
 use STATIC_URL_ERROR;
 use super::Action;
 
 const FLOATING_IP_ACTIONS_SEGMENT: &'static str = "actions";
+pub type FloatingIpActionRequest<M,V> = Request<M,V>;
 
-impl Request<Get, FloatingIp> {
+impl FloatingIpRequest<Get, FloatingIp> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-floating-ip)
-    pub fn actions(mut self) -> Request<List, Vec<Action>> {
+    pub fn actions(mut self) -> FloatingIpActionRequest<List, Vec<Action>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -18,7 +19,7 @@ impl Request<Get, FloatingIp> {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip-action)
-    pub fn action(mut self, id: usize) -> Request<Get, Action> {
+    pub fn action(mut self, id: usize) -> FloatingIpActionRequest<Get, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -29,7 +30,7 @@ impl Request<Get, FloatingIp> {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#unassign-a-floating-ip)
-    pub fn unassign(mut self) -> Request<Create, Action> {
+    pub fn unassign(mut self) -> FloatingIpActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -44,7 +45,7 @@ impl Request<Get, FloatingIp> {
 
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#assign-a-floating-ip-to-a-droplet)
-    pub fn assign(mut self, id: usize) -> Request<Create, Action> {
+    pub fn assign(mut self, id: usize) -> FloatingIpActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)

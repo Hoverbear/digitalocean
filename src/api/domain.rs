@@ -9,6 +9,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 
 const DOMAINS_SEGMENT: &'static str = "domains";
+pub type DomainRequest<M,V> = Request<M, V>;
 
 /// Domain resources are domain names that you have purchased from a domain
 /// name registrar that you are managing through the DigitalOcean DNS interface.
@@ -36,7 +37,7 @@ pub struct Domain {
 
 impl Domain {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain)
-    pub fn create<N, I>(name: N, ip_address: I) -> Request<Create, Domain>
+    pub fn create<N, I>(name: N, ip_address: I) -> DomainRequest<Create, Domain>
         where N: AsRef<str> + Serialize + Display,
               I: Into<IpAddr> + Serialize + Display
     {
@@ -54,7 +55,7 @@ impl Domain {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domains)
-    pub fn list() -> Request<List, Vec<Domain>> {
+    pub fn list() -> DomainRequest<List, Vec<Domain>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -64,7 +65,7 @@ impl Domain {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain)
-    pub fn get<N>(name: N) -> Request<Get, Domain>
+    pub fn get<N>(name: N) -> DomainRequest<Get, Domain>
         where N: AsRef<str> + Display
     {
         let mut url = ROOT_URL.clone();
@@ -77,7 +78,7 @@ impl Domain {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain)
-    pub fn delete<N>(name: N) -> Request<Delete, ()>
+    pub fn delete<N>(name: N) -> DomainRequest<Delete, ()>
         where N: AsRef<str> + Display
     {
         let mut url = ROOT_URL.clone();

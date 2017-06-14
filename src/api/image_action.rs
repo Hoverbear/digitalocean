@@ -3,13 +3,15 @@ use std::fmt::Display;
 use request::Request;
 use method::{List, Get, Create};
 use STATIC_URL_ERROR;
-use super::{Image, Action};
+use super::image::{Image, ImageRequest};
+use super::action::Action;
 
 const IMAGE_ACTIONS_SEGMENT: &'static str = "actions";
+pub type ImageActionRequest<M,V> = Request<M,V>;
 
-impl Request<Get, Image> {
+impl ImageRequest<Get, Image> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-an-image)
-    pub fn actions(mut self) -> Request<List, Vec<Action>> {
+    pub fn actions(mut self) -> ImageActionRequest<List, Vec<Action>> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -18,7 +20,7 @@ impl Request<Get, Image> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#transfer-an-image)
-    pub fn transfer<S>(mut self, region: S) -> Request<Create, Action>
+    pub fn transfer<S>(mut self, region: S) -> ImageActionRequest<Create, Action>
         where S: AsRef<str> + Display + Serialize
     {
         self.url_mut()
@@ -35,7 +37,7 @@ impl Request<Get, Image> {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#convert-an-image-to-a-snapshot)
-    pub fn convert(mut self) -> Request<Create, Action> {
+    pub fn convert(mut self) -> ImageActionRequest<Create, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
@@ -48,7 +50,7 @@ impl Request<Get, Image> {
         self.transmute()
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-action)
-    pub fn action(mut self, id: usize) -> Request<Get, Action> {
+    pub fn action(mut self, id: usize) -> ImageActionRequest<Get, Action> {
         self.url_mut()
             .path_segments_mut()
             .expect(STATIC_URL_ERROR)
