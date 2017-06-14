@@ -1,6 +1,5 @@
 use std::fmt::Display;
 use serde::Serialize;
-use request::Request;
 use method::{Get, List, Create, Delete, Update};
 use STATIC_URL_ERROR;
 use url::Url;

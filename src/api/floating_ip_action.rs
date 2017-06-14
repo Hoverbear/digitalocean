@@ -1,4 +1,3 @@
-use request::Request;
 use method::{Create, Get, List};
 use super::floating_ip::FloatingIp;
 use STATIC_URL_ERROR;

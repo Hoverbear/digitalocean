@@ -1,6 +1,5 @@
 use serde::Serialize;
 use std::fmt::Display;
-use request::Request;
 use method::{List, Get, Create};
 use STATIC_URL_ERROR;
 use super::image::Image;
