@@ -3,7 +3,6 @@ use method::{List, Get};
 use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
 use chrono::{DateTime, UTC};
-use super::Region;
 use super::{ApiLinks, ApiMeta};
 use super::{HasValue, HasPagination, HasResponse};
 use request::ActionRequest;
@@ -49,10 +48,10 @@ pub struct Action {
     /// The type of resource that the action is associated with.
     #[get = "pub"]
     resource_type: String,
-    /// (deprecated) A slug representing the region where the action occurred.
-    #[get = "pub"]
-    #[deprecated(since = "0.0.1", note = "DigitalOcean has deprecated this.")]
-    region: Option<Region>,
+    // /// (deprecated) A slug representing the region where the action occurred.
+    // #[get = "pub"]
+    // #[deprecated(since = "0.0.1", note = "DigitalOcean has deprecated this.")]
+    // region: Option<Region>,
     /// A slug representing the region where the action occurred.
     #[get = "pub"]
     region_slug: Option<String>,
