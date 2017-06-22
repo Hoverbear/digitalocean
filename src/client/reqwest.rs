@@ -1,17 +1,18 @@
 pub use reqwest::Client;
 
-use reqwest::header::{Authorization, Bearer};
-use reqwest::StatusCode;
-use reqwest::{RequestBuilder, Response};
 use DigitalOcean;
-use error::*;
-use request::Request;
-use method::{Get, Update, Delete, Create, List};
 use api::{HasPagination, HasResponse, HasValue, MAX_PER_PAGE};
+use error::*;
+use method::{Create, Delete, Get, List, Update};
+use request::Request;
+use reqwest::{RequestBuilder, Response};
+use reqwest::StatusCode;
+use reqwest::header::{Authorization, Bearer};
 
 impl DigitalOcean {
     pub(crate) fn get<V>(&self, request: Request<Get, V>) -> Result<V>
-        where V: HasResponse
+    where
+        V: HasResponse,
     {
         info!("GET {:?}", request.url());
         let req = self.client.get(request.url().clone());
@@ -32,8 +33,9 @@ impl DigitalOcean {
     }
 
     pub(crate) fn list<V>(&self, request: Request<List, Vec<V>>) -> Result<Vec<V>>
-        where Vec<V>: HasResponse,
-              <Vec<V> as HasResponse>::Response: HasPagination
+    where
+        Vec<V>: HasResponse,
+        <Vec<V> as HasResponse>::Response: HasPagination,
     {
         info!("LIST {:?}", request.url());
         // This may be a paginated response. We need to buffer.
@@ -42,15 +44,17 @@ impl DigitalOcean {
 
         match request.method().0 {
             Some(limit) if limit < MAX_PER_PAGE => {
-                current_url
-                    .query_pairs_mut()
-                    .append_pair("per_page", &limit.to_string());
-            }
+                current_url.query_pairs_mut().append_pair(
+                    "per_page",
+                    &limit.to_string(),
+                );
+            },
             _ => {
-                current_url
-                    .query_pairs_mut()
-                    .append_pair("per_page", &MAX_PER_PAGE.to_string());
-            }
+                current_url.query_pairs_mut().append_pair(
+                    "per_page",
+                    &MAX_PER_PAGE.to_string(),
+                );
+            },
         };
 
         loop {
@@ -83,9 +87,10 @@ impl DigitalOcean {
                 if buffer_size >= limit {
                     break;
                 } else if remaining < MAX_PER_PAGE {
-                    current_url
-                        .query_pairs_mut()
-                        .append_pair("per_page", &remaining.to_string());
+                    current_url.query_pairs_mut().append_pair(
+                        "per_page",
+                        &remaining.to_string(),
+                    );
                 }
             }
             info!("Fetching next page...")
@@ -112,7 +117,8 @@ impl DigitalOcean {
     }
 
     pub(crate) fn post<V>(&self, request: Request<Create, V>) -> Result<V>
-        where V: HasResponse
+    where
+        V: HasResponse,
     {
         info!("POST {:?}", request.url());
         let req = self.client.post(request.url().clone());
@@ -127,7 +133,7 @@ impl DigitalOcean {
             // Errors
             StatusCode::UnprocessableEntity => {
                 Err(ErrorKind::UnprocessableEntity(response.json()?))?
-            }
+            },
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 
@@ -136,7 +142,8 @@ impl DigitalOcean {
     }
 
     pub(crate) fn put<V>(&self, request: Request<Update, V>) -> Result<V>
-        where V: HasResponse
+    where
+        V: HasResponse,
     {
         info!("PUT {:?}", request.url());
         let req = self.client.put(request.url().clone());
@@ -151,7 +158,7 @@ impl DigitalOcean {
             // Errors
             StatusCode::UnprocessableEntity => {
                 Err(ErrorKind::UnprocessableEntity(response.json()?))?
-            }
+            },
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 

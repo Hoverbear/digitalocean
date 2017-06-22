@@ -1,7 +1,7 @@
 use reqwest;
-use url;
 use serde_json;
 use serde_json::Value;
+use url;
 
 error_chain! {
     foreign_links {

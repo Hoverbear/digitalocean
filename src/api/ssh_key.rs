@@ -1,12 +1,13 @@
+
+use super::{ApiLinks, ApiMeta};
+use super::{HasPagination, HasResponse, HasValue};
+use {ROOT_URL, STATIC_URL_ERROR};
+use method::{Create, Delete, Get, List, Update};
+use request::Request;
+use request::SshKeyRequest;
 use serde::Serialize;
 use std::fmt::Display;
-use request::Request;
-use method::{List, Get, Create, Update, Delete};
-use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
-use request::SshKeyRequest;
 
 const ACCOUNT_SEGMENT: &'static str = "account";
 const KEYS_SEGMENT: &'static str = "keys";
@@ -45,7 +46,8 @@ pub struct SshKey {
 impl SshKey {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-key)
     pub fn create<N>(name: N, public_key: N) -> SshKeyRequest<Create, SshKey>
-        where N: AsRef<str> + Serialize + Display
+    where
+        N: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -74,7 +76,8 @@ impl SshKey {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key)
     pub fn get<S>(id: S) -> SshKeyRequest<Get, SshKey>
-        where S: Serialize + Display
+    where
+        S: Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -88,7 +91,8 @@ impl SshKey {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key)
     pub fn update<S>(id: S) -> SshKeyRequest<Update, SshKey>
-        where S: Serialize + Display
+    where
+        S: Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -102,7 +106,8 @@ impl SshKey {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain)
     pub fn delete<S>(id: S) -> SshKeyRequest<Delete, ()>
-        where S: Serialize + Display
+    where
+        S: Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -120,7 +125,8 @@ impl SshKeyRequest<Update, SshKey> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn name<S>(mut self, val: S) -> Self
-        where S: AsRef<str> + Display + Serialize
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["name"] = json!(val);
         self

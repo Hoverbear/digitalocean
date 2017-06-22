@@ -1,7 +1,8 @@
-use method::{Create, Get, List};
+
+use super::Action;
 use super::floating_ip::FloatingIp;
 use STATIC_URL_ERROR;
-use super::Action;
+use method::{Create, Get, List};
 use request::{FloatingIpActionRequest, FloatingIpRequest};
 
 const FLOATING_IP_ACTIONS_SEGMENT: &'static str = "actions";

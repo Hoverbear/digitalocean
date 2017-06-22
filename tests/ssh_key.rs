@@ -11,8 +11,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::SshKey;
+use digitalocean::method::{Create, Delete, Get, List, Update};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, List, Create, Update, Delete};
 
 use utils::before;
 

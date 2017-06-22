@@ -11,8 +11,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::Image;
+use digitalocean::method::{Delete, Get, List, Update};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, Update, Delete, List};
 
 use utils::before;
 

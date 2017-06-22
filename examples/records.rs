@@ -4,10 +4,10 @@ extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
-use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Domain;
 use digitalocean::request::Executable;
+use std::env;
 
 // cargo run --example records -- $DOMAIN $DOMAIN2...
 fn main() {

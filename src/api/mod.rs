@@ -20,25 +20,25 @@ mod volume_action;
 mod volume;
 mod tag;
 
-use url::Url;
 use serde::de::DeserializeOwned;
+use url::Url;
 use url_serde;
 
 pub use self::account::Account;
 pub use self::action::Action;
 pub use self::certificate::Certificate;
-pub use self::domain_record::DomainRecord;
 pub use self::domain::Domain;
-pub use self::load_balancer::{LoadBalancer, load_balancer_fields};
+pub use self::domain_record::DomainRecord;
 pub use self::droplet::{Droplet, droplet_fields};
 pub use self::floating_ip::FloatingIp;
 pub use self::image::Image;
+pub use self::load_balancer::{LoadBalancer, load_balancer_fields};
 pub use self::region::Region;
 pub use self::size::Size;
 pub use self::snapshot::Snapshot;
 pub use self::ssh_key::SshKey;
-pub use self::volume::Volume;
 pub use self::tag::Tag;
+pub use self::volume::Volume;
 
 // Defined in https://developers.digitalocean.com/documentation/v2/#links
 pub const MAX_PER_PAGE: usize = 200;
@@ -56,7 +56,7 @@ impl ApiLinks {
                     Some(ref v) => Some(v.clone()),
                     None => None,
                 }
-            }
+            },
             None => None,
         }
     }

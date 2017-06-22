@@ -13,8 +13,8 @@ use std::net::IpAddr;
 use std::str::FromStr;
 
 use digitalocean::api::{Action, FloatingIp};
+use digitalocean::method::{Create, Get, List};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, Create, List};
 
 use utils::before;
 
@@ -23,8 +23,10 @@ fn list_produces_correct_request() {
     before();
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions",
-                              floating_ip);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/floating_ips/{}/actions",
+        floating_ip
+    );
 
     let req: Request<List, Vec<Action>> = FloatingIp::get(floating_ip).actions();
     info!("{:#?}", req);
@@ -39,9 +41,11 @@ fn get_produces_correct_request() {
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
     let action_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions/{}",
-                              floating_ip,
-                              action_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/floating_ips/{}/actions/{}",
+        floating_ip,
+        action_id
+    );
 
     let req: Request<Get, Action> = FloatingIp::get(floating_ip).action(action_id);
     info!("{:#?}", req);
@@ -55,8 +59,10 @@ fn assign_produces_correct_request() {
     before();
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions",
-                              floating_ip);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/floating_ips/{}/actions",
+        floating_ip
+    );
     let droplet_id = 123;
 
     let req: Request<Create, Action> = FloatingIp::get(floating_ip).assign(droplet_id);

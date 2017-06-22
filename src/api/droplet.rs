@@ -1,16 +1,17 @@
+
+use self::droplet_fields::{Kernel, Networks, NextBackupWindow};
+use super::{ApiLinks, ApiMeta};
+use super::{HasPagination, HasResponse, HasValue};
+use super::{Image, Region, Size};
+use super::snapshot::Snapshot;
+use {ROOT_URL, STATIC_URL_ERROR};
+use chrono::{DateTime, UTC};
+use method::{Create, Delete, Get, List};
+use request::{DropletRequest, SnapshotRequest};
+use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
-use request::Request;
-use method::{List, Get, Create, Delete};
-use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use chrono::{DateTime, UTC};
-use super::{Size, Region, Image};
-use super::snapshot::Snapshot;
-use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
-use self::droplet_fields::{Kernel, Networks, NextBackupWindow};
-use request::{DropletRequest, SnapshotRequest};
 
 const DROPLETS_SEGMENT: &'static str = "droplets";
 const REPORTS_SEGMENT: &'static str = "reports";
@@ -157,13 +158,14 @@ pub mod droplet_fields {
 impl Droplet {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn create<S, D>(name: S, region: S, size: S, image: D) -> DropletRequest<Create, Droplet>
-        where S: AsRef<str> + Serialize + Display,
-              D: Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
+        D: Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(DROPLETS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            DROPLETS_SEGMENT,
+        );
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -176,18 +178,20 @@ impl Droplet {
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets)
-    pub fn create_multiple<S, D>(names: Vec<S>,
-                                 region: S,
-                                 size: S,
-                                 image: D)
-                                 -> DropletRequest<Create, Vec<Droplet>>
-        where S: AsRef<str> + Serialize + Display,
-              D: Serialize + Display
+    pub fn create_multiple<S, D>(
+        names: Vec<S>,
+        region: S,
+        size: S,
+        image: D,
+    ) -> DropletRequest<Create, Vec<Droplet>>
+    where
+        S: AsRef<str> + Serialize + Display,
+        D: Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(DROPLETS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            DROPLETS_SEGMENT,
+        );
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -213,21 +217,22 @@ impl Droplet {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-droplets)
     pub fn list() -> DropletRequest<List, Vec<Droplet>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(DROPLETS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            DROPLETS_SEGMENT,
+        );
 
         Request::new(url)
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#listing-droplets-by-tag)
     pub fn list_by_tag<S>(name: S) -> DropletRequest<List, Vec<Droplet>>
-        where S: AsRef<str> + Serialize
+    where
+        S: AsRef<str> + Serialize,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(DROPLETS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            DROPLETS_SEGMENT,
+        );
 
         url.query_pairs_mut().append_pair("tag_name", name.as_ref());
 
@@ -247,12 +252,13 @@ impl Droplet {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#deleting-droplets-by-tag)
     pub fn delete_by_tag<S>(name: S) -> DropletRequest<Delete, ()>
-        where S: AsRef<str> + Serialize
+    where
+        S: AsRef<str> + Serialize,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(DROPLETS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            DROPLETS_SEGMENT,
+        );
 
         url.query_pairs_mut().append_pair("tag_name", name.as_ref());
 
@@ -277,7 +283,8 @@ impl DropletRequest<Create, Droplet> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn ssh_keys<D>(mut self, val: Vec<D>) -> Self
-        where D: Display + Serialize
+    where
+        D: Display + Serialize,
     {
         self.body_mut()["ssh_keys"] = json!(val);
         self
@@ -350,7 +357,8 @@ impl DropletRequest<Create, Vec<Droplet>> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
     pub fn ssh_keys<D>(mut self, val: Vec<D>) -> Self
-        where D: Display + Serialize
+    where
+        D: Display + Serialize,
     {
         self.body_mut()["ssh_keys"] = json!(val);
         self

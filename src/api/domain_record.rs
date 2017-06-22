@@ -1,12 +1,13 @@
-use std::fmt::Display;
-use serde::Serialize;
-use method::{Get, List, Create, Delete, Update};
-use STATIC_URL_ERROR;
-use url::Url;
-use super::domain::Domain;
+
 use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
-use request::{DomainRequest, DomainRecordRequest};
+use super::{HasPagination, HasResponse, HasValue};
+use super::domain::Domain;
+use STATIC_URL_ERROR;
+use method::{Create, Delete, Get, List, Update};
+use request::{DomainRecordRequest, DomainRequest};
+use serde::Serialize;
+use std::fmt::Display;
+use url::Url;
 
 const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
 
@@ -66,12 +67,14 @@ impl DomainRequest<Get, Domain> {
 
 impl DomainRecordRequest<List, Vec<DomainRecord>> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record)
-    pub fn create<S>(mut self,
-                     kind: S,
-                     name: S,
-                     data: S)
-                     -> DomainRecordRequest<Create, DomainRecord>
-        where S: AsRef<str> + Display + Serialize
+    pub fn create<S>(
+        mut self,
+        kind: S,
+        name: S,
+        data: S,
+    ) -> DomainRecordRequest<Create, DomainRecord>
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.url_mut().path_segments_mut().expect(STATIC_URL_ERROR);
 
@@ -153,7 +156,8 @@ impl DomainRecordRequest<Update, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn kind<S>(mut self, val: S) -> Self
-        where S: AsRef<str> + Display + Serialize
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["type"] = json!(val);
         self
@@ -162,7 +166,8 @@ impl DomainRecordRequest<Update, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn name<S>(mut self, val: S) -> Self
-        where S: AsRef<str> + Display + Serialize
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["name"] = json!(val);
         self
@@ -172,7 +177,8 @@ impl DomainRecordRequest<Update, DomainRecord> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
     pub fn data<S>(mut self, val: S) -> Self
-        where S: AsRef<str> + Display + Serialize
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["data"] = json!(val);
         self

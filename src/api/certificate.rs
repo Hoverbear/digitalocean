@@ -1,13 +1,14 @@
-use serde::Serialize;
-use std::fmt::Display;
-use request::Request;
-use method::{List, Get, Create, Delete};
+
+use super::{ApiLinks, ApiMeta};
+use super::{HasPagination, HasResponse, HasValue};
 use {ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, UTC};
-use url::Url;
-use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
+use method::{Create, Delete, Get, List};
 use request::CertificateRequest;
+use request::Request;
+use serde::Serialize;
+use std::fmt::Display;
+use url::Url;
 
 const CERTIFICATES_SEGMENT: &'static str = "certificates";
 
@@ -40,16 +41,18 @@ pub struct Certificate {
 
 impl Certificate {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-certificate)
-    pub fn create<S>(name: S,
-                     private_key: S,
-                     leaf_certificate: S)
-                     -> CertificateRequest<Create, Certificate>
-        where S: AsRef<str> + Serialize + Display
+    pub fn create<S>(
+        name: S,
+        private_key: S,
+        leaf_certificate: S,
+    ) -> CertificateRequest<Create, Certificate>
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(CERTIFICATES_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            CERTIFICATES_SEGMENT,
+        );
 
         let mut req = Request::new(url);
 
@@ -65,16 +68,17 @@ impl Certificate {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-certificates)
     pub fn list() -> CertificateRequest<List, Vec<Certificate>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(CERTIFICATES_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            CERTIFICATES_SEGMENT,
+        );
 
         Request::new(url)
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-certificate)
     pub fn get<N>(id: N) -> CertificateRequest<Get, Certificate>
-        where N: AsRef<str> + Display
+    where
+        N: AsRef<str> + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -87,7 +91,8 @@ impl Certificate {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-certificate)
     pub fn delete<N>(id: N) -> CertificateRequest<Delete, ()>
-        where N: AsRef<str> + Display
+    where
+        N: AsRef<str> + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -105,7 +110,8 @@ impl CertificateRequest<Create, Certificate> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-certificate)
     pub fn certificate_chain<S>(mut self, val: S) -> Self
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.body_mut()["certificate_chain"] = json!(val);
         self

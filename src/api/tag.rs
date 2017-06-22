@@ -1,13 +1,14 @@
-use serde::Serialize;
-use std::fmt::Display;
-use request::Request;
-use method::{Get, Create, List, Delete};
-use {ROOT_URL, STATIC_URL_ERROR};
-use url::Url;
-use serde_json::Value;
+
 use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
+use super::{HasPagination, HasResponse, HasValue};
+use {ROOT_URL, STATIC_URL_ERROR};
+use method::{Create, Delete, Get, List};
+use request::Request;
 use request::TagRequest;
+use serde::Serialize;
+use serde_json::Value;
+use std::fmt::Display;
+use url::Url;
 
 const TAG_SEGMENT: &'static str = "tags";
 const RESOURCES_SEGMENT: &'static str = "resources";
@@ -35,12 +36,13 @@ pub struct Tag {
 impl Tag {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-tag)
     pub fn create<S>(name: S) -> TagRequest<Create, Tag>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(TAG_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            TAG_SEGMENT,
+        );
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -50,7 +52,8 @@ impl Tag {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag)
     pub fn get<S>(name: S) -> TagRequest<Get, Tag>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -63,15 +66,16 @@ impl Tag {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag)
     pub fn list() -> TagRequest<List, Tag> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(TAG_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            TAG_SEGMENT,
+        );
 
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-tag)
     pub fn delete<S>(name: S) -> TagRequest<Delete, ()>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -88,7 +92,8 @@ impl TagRequest<Get, Tag> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#tag-a-resource)
     pub fn add_resources<S>(mut self, resources: Vec<(S, S)>) -> TagRequest<Create, ()>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.url_mut()
             .path_segments_mut()
@@ -115,7 +120,8 @@ impl TagRequest<Get, Tag> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#untag-a-resource)
     pub fn remove_resources<S>(mut self, resources: Vec<(S, S)>) -> TagRequest<Delete, ()>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.url_mut()
             .path_segments_mut()

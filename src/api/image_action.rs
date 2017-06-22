@@ -1,10 +1,11 @@
+
+use super::action::Action;
+use super::image::Image;
+use STATIC_URL_ERROR;
+use method::{Create, Get, List};
+use request::{ImageActionRequest, ImageRequest};
 use serde::Serialize;
 use std::fmt::Display;
-use method::{List, Get, Create};
-use STATIC_URL_ERROR;
-use super::image::Image;
-use super::action::Action;
-use request::{ImageActionRequest, ImageRequest};
 
 const IMAGE_ACTIONS_SEGMENT: &'static str = "actions";
 
@@ -20,7 +21,8 @@ impl ImageRequest<Get, Image> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#transfer-an-image)
     pub fn transfer<S>(mut self, region: S) -> ImageActionRequest<Create, Action>
-        where S: AsRef<str> + Display + Serialize
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.url_mut()
             .path_segments_mut()

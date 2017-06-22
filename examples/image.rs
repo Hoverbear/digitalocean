@@ -4,10 +4,10 @@ extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
-use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Image;
 use digitalocean::request::Executable;
+use std::env;
 
 // cargo run --example image
 // cargo run --example image -- $IMAGE

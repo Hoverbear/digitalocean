@@ -11,8 +11,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::{Action, Droplet};
+use digitalocean::method::{Create, Get, List};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, Create, List};
 
 use utils::before;
 
@@ -21,8 +21,10 @@ fn list_produces_correct_request() {
     before();
 
     let droplet_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions",
-                              droplet_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/droplets/{}/actions",
+        droplet_id
+    );
 
     let req: Request<List, Vec<Action>> = Droplet::get(droplet_id).actions();
     info!("{:#?}", req);
@@ -36,8 +38,10 @@ fn enable_backups_produces_correct_request() {
     before();
 
     let droplet_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/actions",
-                              droplet_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/droplets/{}/actions",
+        droplet_id
+    );
 
     let req: Request<Create, Action> = Droplet::get(droplet_id).enable_backups();
     info!("{:#?}", req);

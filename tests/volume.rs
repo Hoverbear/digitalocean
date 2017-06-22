@@ -10,9 +10,9 @@ mod utils;
 
 use serde_json::Value;
 
-use digitalocean::api::{Volume, Snapshot};
+use digitalocean::api::{Snapshot, Volume};
+use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, List, Create, Delete};
 
 use utils::before;
 

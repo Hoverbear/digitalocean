@@ -1,13 +1,14 @@
+
+use super::{ApiLinks, ApiMeta};
+use super::{HasPagination, HasResponse, HasValue};
+use {ROOT_URL, STATIC_URL_ERROR};
+use method::{Create, Delete, Get, List};
+use request::DomainRequest;
+use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
-use request::Request;
-use method::{List, Get, Create, Delete};
-use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
-use request::DomainRequest;
 
 const DOMAINS_SEGMENT: &'static str = "domains";
 
@@ -38,13 +39,14 @@ pub struct Domain {
 impl Domain {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain)
     pub fn create<N, I>(name: N, ip_address: I) -> DomainRequest<Create, Domain>
-        where N: AsRef<str> + Serialize + Display,
-              I: Into<IpAddr> + Serialize + Display
+    where
+        N: AsRef<str> + Serialize + Display,
+        I: Into<IpAddr> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(DOMAINS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            DOMAINS_SEGMENT,
+        );
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -57,16 +59,17 @@ impl Domain {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domains)
     pub fn list() -> DomainRequest<List, Vec<Domain>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(DOMAINS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            DOMAINS_SEGMENT,
+        );
 
         Request::new(url)
     }
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain)
     pub fn get<N>(name: N) -> DomainRequest<Get, Domain>
-        where N: AsRef<str> + Display
+    where
+        N: AsRef<str> + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -79,7 +82,8 @@ impl Domain {
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-domain)
     pub fn delete<N>(name: N) -> DomainRequest<Delete, ()>
-        where N: AsRef<str> + Display
+    where
+        N: AsRef<str> + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()

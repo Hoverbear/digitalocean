@@ -1,8 +1,9 @@
-use request::Request;
-use method::Get;
+
+use super::{HasResponse, HasValue};
 use {ROOT_URL, STATIC_URL_ERROR};
-use super::{HasValue, HasResponse};
+use method::Get;
 use request::AccountRequest;
+use request::Request;
 
 const ACCOUNT_SEGMENT: &'static str = "account";
 
@@ -39,9 +40,9 @@ impl Account {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#get-user-information)
     pub fn get() -> AccountRequest<Get, Account> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(ACCOUNT_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            ACCOUNT_SEGMENT,
+        );
 
         Request::new(url)
     }

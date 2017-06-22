@@ -11,8 +11,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::Tag;
+use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, Create, Delete, List};
 
 use utils::before;
 

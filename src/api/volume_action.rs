@@ -1,11 +1,12 @@
-use serde::Serialize;
-use std::fmt::Display;
-use request::Request;
-use method::{List, Get, Create};
-use {ROOT_URL, STATIC_URL_ERROR};
+
 use super::action::Action;
 use super::volume::Volume;
-use request::{VolumeRequest, VolumeActionRequest};
+use {ROOT_URL, STATIC_URL_ERROR};
+use method::{Create, Get, List};
+use request::{VolumeActionRequest, VolumeRequest};
+use request::Request;
+use serde::Serialize;
+use std::fmt::Display;
 
 const VOLUMES_SEGMENT: &'static str = "volumes";
 const VOLUME_ACTIONS_SEGMENT: &'static str = "actions";
@@ -13,12 +14,13 @@ const VOLUME_ACTIONS_SEGMENT: &'static str = "actions";
 impl Volume {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet-by-name)
     pub fn attach<S>(volume_name: S, droplet: usize) -> VolumeActionRequest<Create, Action>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(VOLUMES_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            VOLUMES_SEGMENT,
+        );
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -30,12 +32,13 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet-by-name)
     pub fn detach<S>(volume_name: S, droplet: usize) -> VolumeActionRequest<Create, Action>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(VOLUMES_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            VOLUMES_SEGMENT,
+        );
 
         let mut req = Request::new(url);
         req.set_body(json!({

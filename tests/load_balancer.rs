@@ -11,8 +11,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::LoadBalancer;
+use digitalocean::method::{Create, Delete, Get, List, Update};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, List, Update, Create, Delete};
 
 use utils::before;
 
@@ -35,8 +35,10 @@ fn get_produces_correct_request() {
     before();
 
     let load_balancer_id = "123";
-    let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}",
-                              load_balancer_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/load_balancers/{}",
+        load_balancer_id
+    );
 
     let req: Request<Get, LoadBalancer> = LoadBalancer::get(load_balancer_id);
     info!("{:#?}", req);
@@ -147,8 +149,8 @@ fn add_droplets_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/droplets", load_balancer_id);
     let droplet_ids = vec![123, 456, 789];
 
-    let req: Request<Create, ()> = LoadBalancer::get(load_balancer_id)
-        .add_droplets(droplet_ids.clone());
+    let req: Request<Create, ()> =
+        LoadBalancer::get(load_balancer_id).add_droplets(droplet_ids.clone());
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
@@ -165,8 +167,8 @@ fn remove_droplets_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/droplets", load_balancer_id);
     let droplet_ids = vec![123, 456, 789];
 
-    let req: Request<Delete, ()> = LoadBalancer::get(load_balancer_id)
-        .remove_droplets(droplet_ids.clone());
+    let req: Request<Delete, ()> =
+        LoadBalancer::get(load_balancer_id).remove_droplets(droplet_ids.clone());
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
@@ -183,9 +185,9 @@ fn add_forwarding_rule_produces_correct_request() {
     let correct_url = format!("https://api.digitalocean.com/v2/load_balancers/{}/forwarding_rules", load_balancer_id);
     let (e_protocol, e_port, t_protocol, t_port) = ("tcp", 22, "tcp", 22);
 
-    let req: Request<Create, ()> =
-        LoadBalancer::get(load_balancer_id)
-            .add_forwarding_rules(vec![(e_protocol, e_port, t_protocol, t_port, None, true)]);
+    let req: Request<Create, ()> = LoadBalancer::get(load_balancer_id).add_forwarding_rules(
+        vec![(e_protocol, e_port, t_protocol, t_port, None, true)],
+    );
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);

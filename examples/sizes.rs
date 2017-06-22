@@ -4,8 +4,8 @@ extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
-use std::env;
 use digitalocean::prelude::*;
+use std::env;
 
 // cargo run --example sizes
 fn main() {

@@ -1,16 +1,17 @@
+
+use self::load_balancer_fields::{ForwardingRule, HealthCheck, StickySessions};
+use super::{ApiLinks, ApiMeta};
+use super::{HasPagination, HasResponse, HasValue};
+use super::Region;
+use {ROOT_URL, STATIC_URL_ERROR};
+use chrono::{DateTime, UTC};
+use method::{Create, Delete, Get, List, Update};
+use request::LoadBalancerRequest;
+use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
-use request::Request;
-use method::{List, Get, Create, Update, Delete};
-use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use chrono::{DateTime, UTC};
-use super::Region;
-use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
-use self::load_balancer_fields::{ForwardingRule, HealthCheck, StickySessions};
-use request::LoadBalancerRequest;
 
 const LOAD_BALANCERS_SEGMENT: &'static str = "load_balancers";
 const DROPLETS_SEGMENT: &'static str = "droplets";
@@ -103,12 +104,14 @@ pub mod load_balancer_fields {
         pub tls_passthrough: bool,
     }
     impl ForwardingRule {
-        pub fn new<S>(entry_protocol: S,
-                      entry_port: usize,
-                      target_protocol: S,
-                      target_port: usize)
-                      -> Self
-            where S: AsRef<str>
+        pub fn new<S>(
+            entry_protocol: S,
+            entry_port: usize,
+            target_protocol: S,
+            target_port: usize,
+        ) -> Self
+        where
+            S: AsRef<str>,
         {
             ForwardingRule {
                 entry_protocol: entry_protocol.as_ref().to_string(),
@@ -120,7 +123,8 @@ pub mod load_balancer_fields {
             }
         }
         pub fn certificate_id<S>(mut self, certificate_id: Option<S>) -> Self
-            where S: AsRef<str>
+        where
+            S: AsRef<str>,
         {
             self.certificate_id = certificate_id.map(|v| v.as_ref().to_string());
             self
@@ -131,21 +135,24 @@ pub mod load_balancer_fields {
         }
     }
     impl<S> From<(S, usize, S, usize)> for ForwardingRule
-        where S: AsRef<str>
+    where
+        S: AsRef<str>,
     {
         fn from(val: (S, usize, S, usize)) -> Self {
             ForwardingRule::new(val.0, val.1, val.2, val.3)
         }
     }
     impl<S> From<(S, usize, S, usize, Option<S>)> for ForwardingRule
-        where S: AsRef<str>
+    where
+        S: AsRef<str>,
     {
         fn from(val: (S, usize, S, usize, Option<S>)) -> Self {
             ForwardingRule::new(val.0, val.1, val.2, val.3).certificate_id(val.4)
         }
     }
     impl<S> From<(S, usize, S, usize, Option<S>, bool)> for ForwardingRule
-        where S: AsRef<str>
+    where
+        S: AsRef<str>,
     {
         fn from(val: (S, usize, S, usize, Option<S>, bool)) -> Self {
             ForwardingRule::new(val.0, val.1, val.2, val.3)
@@ -217,12 +224,13 @@ impl LoadBalancer {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn create<S>(name: S, region: S) -> LoadBalancerRequest<Create, LoadBalancer>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(LOAD_BALANCERS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            LOAD_BALANCERS_SEGMENT,
+        );
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -234,7 +242,8 @@ impl LoadBalancer {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-load-balancer)
     pub fn get<S>(id: S) -> LoadBalancerRequest<Get, LoadBalancer>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -247,9 +256,9 @@ impl LoadBalancer {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-load-balancers)
     pub fn list() -> LoadBalancerRequest<List, Vec<LoadBalancer>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(LOAD_BALANCERS_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            LOAD_BALANCERS_SEGMENT,
+        );
 
         Request::new(url)
     }
@@ -259,7 +268,8 @@ impl LoadBalancer {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn update<S>(id: S) -> LoadBalancerRequest<Update, LoadBalancer>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -271,7 +281,8 @@ impl LoadBalancer {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-load-balancer)
     pub fn delete<S>(id: S) -> LoadBalancerRequest<Delete, ()>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -290,7 +301,8 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn algorithm<S>(mut self, val: S) -> LoadBalancerRequest<Create, LoadBalancer>
-        where S: Display + Serialize
+    where
+        S: Display + Serialize,
     {
         self.body_mut()["algorithm"] = json!(val);
         self
@@ -301,16 +313,20 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn forwarding_rule<T>(mut self, val: T) -> LoadBalancerRequest<Create, LoadBalancer>
-        where T: Into<ForwardingRule>
+    where
+        T: Into<ForwardingRule>,
     {
         if !self.body_mut()["forwarding_rules"].is_array() {
             self.body_mut()["forwarding_rules"] = json!([]);
         }
 
         {
-            let rules = self.body_mut()["forwarding_rules"]
-                .as_array_mut()
-                .expect("forwarding_rules should always be an array.");
+            let rules = self.body_mut()["forwarding_rules"].as_array_mut().expect(
+                "forwarding_rules \
+                 should always \
+                 be an array.\
+                 ",
+            );
 
             rules.push(json!(val.into()));
         }
@@ -319,16 +335,18 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
     /// The (optional) health check settings.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn health_check<S>(mut self,
-                           protocol: S,
-                           port: usize,
-                           path: Option<S>,
-                           check_interval_seconds: Option<usize>,
-                           response_timeout_seconds: Option<usize>,
-                           unhealthy_threshold: Option<usize>,
-                           healthy_threshold: Option<usize>)
-                           -> LoadBalancerRequest<Create, LoadBalancer>
-        where S: AsRef<str> + Display + Serialize
+    pub fn health_check<S>(
+        mut self,
+        protocol: S,
+        port: usize,
+        path: Option<S>,
+        check_interval_seconds: Option<usize>,
+        response_timeout_seconds: Option<usize>,
+        unhealthy_threshold: Option<usize>,
+        healthy_threshold: Option<usize>,
+    ) -> LoadBalancerRequest<Create, LoadBalancer>
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["health_check"] = json!({
             "protocol": protocol,
@@ -356,12 +374,14 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
     /// `cookie_ttl_seconds` should be set as well.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn sticky_sessions<S>(mut self,
-                              kind: S,
-                              cookie_name: Option<S>,
-                              cookie_ttl_seconds: Option<usize>)
-                              -> LoadBalancerRequest<Create, LoadBalancer>
-        where S: AsRef<str> + Display + Serialize
+    pub fn sticky_sessions<S>(
+        mut self,
+        kind: S,
+        cookie_name: Option<S>,
+        cookie_ttl_seconds: Option<usize>,
+    ) -> LoadBalancerRequest<Create, LoadBalancer>
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["sticky_sessions"] = json!({
             "type": kind,
@@ -378,9 +398,10 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
     /// on port 80 will be redirected to HTTPS on port 443. Default value is false.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
-    pub fn redirect_http_to_https(mut self,
-                                  setting: bool)
-                                  -> LoadBalancerRequest<Create, LoadBalancer> {
+    pub fn redirect_http_to_https(
+        mut self,
+        setting: bool,
+    ) -> LoadBalancerRequest<Create, LoadBalancer> {
         self.body_mut()["redirect_http_to_https"] = json!(setting);
         self
     }
@@ -400,7 +421,8 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
     pub fn tag<S>(mut self, tag: S) -> LoadBalancerRequest<Create, LoadBalancer>
-        where S: AsRef<str> + Display + Serialize
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["tag"] = json!(tag);
         self
@@ -413,7 +435,8 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn name<S>(mut self, val: S) -> LoadBalancerRequest<Update, LoadBalancer>
-        where S: Display + Serialize
+    where
+        S: Display + Serialize,
     {
         self.body_mut()["name"] = json!(val);
         self
@@ -422,7 +445,8 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn region<S>(mut self, val: S) -> LoadBalancerRequest<Update, LoadBalancer>
-        where S: Display + Serialize
+    where
+        S: Display + Serialize,
     {
         self.body_mut()["region"] = json!(val);
         self
@@ -433,7 +457,8 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn algorithm<S>(mut self, val: S) -> LoadBalancerRequest<Update, LoadBalancer>
-        where S: Display + Serialize
+    where
+        S: Display + Serialize,
     {
         self.body_mut()["algorithm"] = json!(val);
         self
@@ -444,16 +469,20 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn forwarding_rule<T>(mut self, val: T) -> LoadBalancerRequest<Update, LoadBalancer>
-        where T: Into<ForwardingRule>
+    where
+        T: Into<ForwardingRule>,
     {
         if !self.body_mut()["forwarding_rules"].is_array() {
             self.body_mut()["forwarding_rules"] = json!([]);
         }
 
         {
-            let rules = self.body_mut()["forwarding_rules"]
-                .as_array_mut()
-                .expect("forwarding_rules should always be an array.");
+            let rules = self.body_mut()["forwarding_rules"].as_array_mut().expect(
+                "forwarding_rules \
+                 should always \
+                 be an array.\
+                 ",
+            );
 
             rules.push(json!(val.into()));
         }
@@ -462,16 +491,18 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     /// The (optional) health check settings.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn health_check<S>(mut self,
-                           protocol: S,
-                           port: usize,
-                           path: Option<S>,
-                           check_interval_seconds: Option<usize>,
-                           response_timeout_seconds: Option<usize>,
-                           unhealthy_threshold: Option<usize>,
-                           healthy_threshold: Option<usize>)
-                           -> LoadBalancerRequest<Update, LoadBalancer>
-        where S: AsRef<str> + Display + Serialize
+    pub fn health_check<S>(
+        mut self,
+        protocol: S,
+        port: usize,
+        path: Option<S>,
+        check_interval_seconds: Option<usize>,
+        response_timeout_seconds: Option<usize>,
+        unhealthy_threshold: Option<usize>,
+        healthy_threshold: Option<usize>,
+    ) -> LoadBalancerRequest<Update, LoadBalancer>
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["health_check"] = json!({
             "protocol": protocol,
@@ -499,12 +530,14 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     /// `cookie_ttl_seconds` should be set as well.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn sticky_sessions<S>(mut self,
-                              kind: S,
-                              cookie_name: Option<S>,
-                              cookie_ttl_seconds: Option<usize>)
-                              -> LoadBalancerRequest<Update, LoadBalancer>
-        where S: AsRef<str> + Display + Serialize
+    pub fn sticky_sessions<S>(
+        mut self,
+        kind: S,
+        cookie_name: Option<S>,
+        cookie_ttl_seconds: Option<usize>,
+    ) -> LoadBalancerRequest<Update, LoadBalancer>
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["sticky_sessions"] = json!({
             "type": kind,
@@ -521,9 +554,10 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     /// on port 80 will be redirected to HTTPS on port 443. Default value is false.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
-    pub fn redirect_http_to_https(mut self,
-                                  setting: bool)
-                                  -> LoadBalancerRequest<Update, LoadBalancer> {
+    pub fn redirect_http_to_https(
+        mut self,
+        setting: bool,
+    ) -> LoadBalancerRequest<Update, LoadBalancer> {
         self.body_mut()["redirect_http_to_https"] = json!(setting);
         self
     }
@@ -543,7 +577,8 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
     pub fn tag<S>(mut self, tag: S) -> LoadBalancerRequest<Update, LoadBalancer>
-        where S: AsRef<str> + Display + Serialize
+    where
+        S: AsRef<str> + Display + Serialize,
     {
         self.body_mut()["tag"] = json!(tag);
         self
@@ -585,7 +620,8 @@ impl LoadBalancerRequest<Get, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#add-forwarding-rules-to-a-load-balancer)
     pub fn add_forwarding_rules<T>(mut self, items: Vec<T>) -> LoadBalancerRequest<Create, ()>
-        where T: Into<ForwardingRule>
+    where
+        T: Into<ForwardingRule>,
     {
         self.url_mut()
             .path_segments_mut()
@@ -597,9 +633,12 @@ impl LoadBalancerRequest<Get, LoadBalancer> {
         }
 
         {
-            let mut rules = self.body_mut()["forwarding_rules"]
-                .as_array_mut()
-                .expect("forwarding_rules should always be an array.");
+            let mut rules = self.body_mut()["forwarding_rules"].as_array_mut().expect(
+                "forwarding_rules \
+                 should always \
+                 be an array.\
+                 ",
+            );
 
             for item in items {
                 let rule: ForwardingRule = item.into();
@@ -613,7 +652,8 @@ impl LoadBalancerRequest<Get, LoadBalancer> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#remove-forwarding-rules-from-a-load-balancer)
     pub fn remove_forwarding_rules<T>(mut self, items: Vec<T>) -> LoadBalancerRequest<Delete, ()>
-        where T: Into<ForwardingRule>
+    where
+        T: Into<ForwardingRule>,
     {
         self.url_mut()
             .path_segments_mut()
@@ -625,9 +665,12 @@ impl LoadBalancerRequest<Get, LoadBalancer> {
         }
 
         {
-            let mut rules = self.body_mut()["forwarding_rules"]
-                .as_array_mut()
-                .expect("forwarding_rules should always be an array.");
+            let mut rules = self.body_mut()["forwarding_rules"].as_array_mut().expect(
+                "forwarding_rules \
+                 should always \
+                 be an array.\
+                 ",
+            );
 
             for item in items {
                 let rule: ForwardingRule = item.into();

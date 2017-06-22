@@ -10,8 +10,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::Size;
-use digitalocean::request::Request;
 use digitalocean::method::List;
+use digitalocean::request::Request;
 
 use utils::before;
 

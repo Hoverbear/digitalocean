@@ -10,9 +10,9 @@ mod utils;
 
 use serde_json::Value;
 
-use digitalocean::api::{Volume, Action};
+use digitalocean::api::{Action, Volume};
+use digitalocean::method::{Create, Get, List};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, List, Create};
 
 use utils::before;
 
@@ -21,8 +21,10 @@ fn attach_produces_correct_request() {
     before();
 
     let volume_id = "123";
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/actions",
-                              volume_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/volumes/{}/actions",
+        volume_id
+    );
     let droplet_id = 456;
 
     let req: Request<Create, Action> = Volume::get(volume_id).attach(droplet_id);

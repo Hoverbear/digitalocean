@@ -11,8 +11,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::Certificate;
+use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, List, Create, Delete};
 
 use utils::before;
 
@@ -34,8 +34,12 @@ fn create_produces_correct_request() {
     before();
 
     let correct_url = "https://api.digitalocean.com/v2/certificates";
-    let (name, pkey, leaf, chain) =
-        (String::from("test"), String::from("pkey"), String::from("leaf"), String::from("chain"));
+    let (name, pkey, leaf, chain) = (
+        String::from("test"),
+        String::from("pkey"),
+        String::from("leaf"),
+        String::from("chain"),
+    );
 
 
     let req: Request<Create, Certificate> =

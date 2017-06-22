@@ -4,8 +4,8 @@ extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
-use std::env;
 use digitalocean::prelude::*;
+use std::env;
 
 enum Choice {
     List(Option<usize>),
@@ -22,8 +22,9 @@ fn main() {
 
     let mut args = env::args().skip(1);
     let choice = args.next().expect("No action specified.");
-    let param = args.next()
-        .map(|v| v.parse::<usize>().expect("Param was not integer"));
+    let param = args.next().map(|v| {
+        v.parse::<usize>().expect("Param was not integer")
+    });
 
     let choice = match choice.as_ref() {
         "--list" => Choice::List(param),
@@ -35,11 +36,11 @@ fn main() {
         Choice::Get(id) => {
             let val = Action::get(id).execute(&client).unwrap();
             println!("{:#?}", val);
-        }
+        },
         Choice::List(limit) => {
             let val = Action::list().limit(limit).execute(&client).unwrap();
             println!("{:#?}", val);
             println!("Total actions: {:#?}", val.len());
-        }
+        },
     }
 }

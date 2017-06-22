@@ -1,4 +1,5 @@
 //! Marker types for requests.
+
 use std::fmt::Debug;
 
 pub type Limit = usize;

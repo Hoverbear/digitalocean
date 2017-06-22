@@ -1,10 +1,11 @@
+
+use super::action::Action;
+use super::droplet::Droplet;
+use STATIC_URL_ERROR;
+use method::{Create, Get, List};
+use request::{DropletActionRequest, DropletRequest};
 use serde::Serialize;
 use std::fmt::Display;
-use method::{List, Get, Create};
-use STATIC_URL_ERROR;
-use super::droplet::Droplet;
-use super::action::Action;
-use request::{DropletRequest, DropletActionRequest};
 
 const DROPLET_ACTIONS_SEGMENT: &'static str = "actions";
 
@@ -98,7 +99,8 @@ impl DropletRequest<Get, Droplet> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#restore-a-droplet)
     pub fn restore<D>(mut self, image: D) -> DropletActionRequest<Create, Action>
-        where D: Display
+    where
+        D: Display,
     {
         self.url_mut()
             .path_segments_mut()
@@ -127,7 +129,8 @@ impl DropletRequest<Get, Droplet> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#resize-a-droplet)
     pub fn resize<S>(mut self, size: S, disk: bool) -> DropletActionRequest<Create, Action>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.url_mut()
             .path_segments_mut()
@@ -144,7 +147,8 @@ impl DropletRequest<Get, Droplet> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#resize-a-droplet)
     pub fn rebuild<S>(mut self, image: S) -> DropletActionRequest<Create, Action>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.url_mut()
             .path_segments_mut()
@@ -160,7 +164,8 @@ impl DropletRequest<Get, Droplet> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#rename-a-droplet)
     pub fn rename<S>(mut self, name: S) -> DropletActionRequest<Create, Action>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.url_mut()
             .path_segments_mut()
@@ -216,7 +221,8 @@ impl DropletRequest<Get, Droplet> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#snapshot-a-droplet)
     pub fn snapshot<S>(mut self, name: S) -> DropletActionRequest<Create, Action>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.url_mut()
             .path_segments_mut()

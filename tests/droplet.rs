@@ -11,8 +11,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::{Droplet, Snapshot};
+use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, List, Create, Delete};
 
 use utils::before;
 

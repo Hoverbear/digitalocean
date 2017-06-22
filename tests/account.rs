@@ -10,8 +10,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::Account;
-use digitalocean::request::Request;
 use digitalocean::method::Get;
+use digitalocean::request::Request;
 
 use utils::before;
 

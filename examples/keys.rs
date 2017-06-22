@@ -4,9 +4,9 @@ extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
-use std::env;
 use digitalocean::DigitalOcean;
 use digitalocean::api::SshKey;
+use std::env;
 
 // cargo run --example keys
 fn main() {

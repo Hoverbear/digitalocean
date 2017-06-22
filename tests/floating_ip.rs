@@ -13,8 +13,8 @@ use std::net::IpAddr;
 use std::str::FromStr;
 
 use digitalocean::api::FloatingIp;
-use digitalocean::request::Request;
 use digitalocean::method::{Create, Delete, Get, List};
+use digitalocean::request::Request;
 
 use utils::before;
 

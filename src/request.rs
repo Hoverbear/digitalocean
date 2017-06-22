@@ -2,14 +2,14 @@
 //!
 //!
 
+use DigitalOcean;
+use api::{HasPagination, HasResponse};
 use error::*;
-use url_serde;
-use url::Url;
+use method::{Create, Delete, Get, List, Method, Update};
 use serde_json::Value;
 use std::marker::PhantomData;
-use api::{HasPagination, HasResponse};
-use method::{Method, List, Get, Create, Delete, Update};
-use DigitalOcean;
+use url::Url;
+use url_serde;
 
 /// A type alias with [`Request<_, Account>`](struct.Request.html) specific functions.
 pub type AccountRequest<M, V> = Request<M, V>;
@@ -56,7 +56,8 @@ pub type VolumeRequest<M, V> = Request<M, V>;
 /// Instead, build up requests from what is found in [`api::*`](../api/index.html).
 #[derive(Debug, Clone, Serialize, Deserialize, MutGetters, Getters, Setters)]
 pub struct Request<A, R>
-    where A: Method
+where
+    A: Method,
 {
     #[get_mut = "pub"]
     #[set = "pub"]
@@ -74,7 +75,8 @@ pub struct Request<A, R>
 }
 
 impl<A, V> Request<A, V>
-    where A: Method
+where
+    A: Method,
 {
     /// Create a request pointing at the given url. `V` is the value ultimately
     /// returned when the call is executed.
@@ -87,7 +89,8 @@ impl<A, V> Request<A, V>
         }
     }
     pub(crate) fn transmute<C, D>(self) -> Request<C, D>
-        where C: Method
+    where
+        C: Method,
     {
         let mut req = Request::new(self.url);
         req.set_body(self.body);
@@ -105,15 +108,17 @@ impl<V> Request<List, V> {
 
 /// Describes an API call which can be executed.
 pub trait Executable<T>: Sized
-    where T: HasResponse
+where
+    T: HasResponse,
 {
     /// Execute the corresponding call.
     fn execute(self, instance: &DigitalOcean) -> Result<T>;
 }
 
 impl<V> Executable<Vec<V>> for Request<List, Vec<V>>
-    where Vec<V>: HasResponse,
-          <Vec<V> as HasResponse>::Response: HasPagination
+where
+    Vec<V>: HasResponse,
+    <Vec<V> as HasResponse>::Response: HasPagination,
 {
     fn execute(self, instance: &DigitalOcean) -> Result<Vec<V>> {
         let response: Vec<V> = instance.list(self)?;
@@ -122,7 +127,8 @@ impl<V> Executable<Vec<V>> for Request<List, Vec<V>>
 }
 
 impl<V> Executable<V> for Request<Create, V>
-    where V: HasResponse
+where
+    V: HasResponse,
 {
     fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.post(self)?;
@@ -131,7 +137,8 @@ impl<V> Executable<V> for Request<Create, V>
 }
 
 impl<V> Executable<V> for Request<Update, V>
-    where V: HasResponse
+where
+    V: HasResponse,
 {
     fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.put(self)?;
@@ -140,7 +147,8 @@ impl<V> Executable<V> for Request<Update, V>
 }
 
 impl<V> Executable<V> for Request<Get, V>
-    where V: HasResponse
+where
+    V: HasResponse,
 {
     fn execute(self, instance: &DigitalOcean) -> Result<V> {
         let response = instance.get(self)?;

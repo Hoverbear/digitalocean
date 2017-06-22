@@ -1,15 +1,16 @@
-use std::fmt::Display;
-use serde::Serialize;
-use request::Request;
-use method::{List, Create, Get, Delete};
-use {ROOT_URL, STATIC_URL_ERROR};
-use url::Url;
-use chrono::{DateTime, UTC};
-use super::snapshot::Snapshot;
-use super::region::Region;
+
 use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
-use request::{VolumeRequest, SnapshotRequest};
+use super::{HasPagination, HasResponse, HasValue};
+use super::region::Region;
+use super::snapshot::Snapshot;
+use {ROOT_URL, STATIC_URL_ERROR};
+use chrono::{DateTime, UTC};
+use method::{Create, Delete, Get, List};
+use request::{SnapshotRequest, VolumeRequest};
+use request::Request;
+use serde::Serialize;
+use std::fmt::Display;
+use url::Url;
 
 const VOLUME_SEGMENT: &'static str = "volumes";
 const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
@@ -58,20 +59,21 @@ impl Volume {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-block-storage-volumes)
     pub fn list() -> VolumeRequest<List, Vec<Volume>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(VOLUME_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            VOLUME_SEGMENT,
+        );
 
         Request::new(url)
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume)
     pub fn create<S>(name: S, size_gigabytes: usize) -> VolumeRequest<Create, Volume>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(VOLUME_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            VOLUME_SEGMENT,
+        );
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -82,7 +84,8 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume)
     pub fn get<S>(id: S) -> VolumeRequest<Get, Volume>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -94,12 +97,13 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume-by-name)
     pub fn get_by_name<S>(name: S, region: S) -> VolumeRequest<Get, Volume>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(VOLUME_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            VOLUME_SEGMENT,
+        );
 
         url.query_pairs_mut()
             .append_pair("name", name.as_ref())
@@ -109,7 +113,8 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-a-block-storage-volume)
     pub fn delete<S>(id: S) -> VolumeRequest<Delete, ()>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -121,12 +126,13 @@ impl Volume {
     }
     /// [Digital Ocean Documentation.](hhttps://developers.digitalocean.com/documentation/v2/#delete-a-block-storage-volume-by-name)
     pub fn delete_by_name<S>(name: S, region: S) -> VolumeRequest<Delete, ()>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(VOLUME_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            VOLUME_SEGMENT,
+        );
 
         url.query_pairs_mut()
             .append_pair("name", name.as_ref())
@@ -139,11 +145,13 @@ impl Volume {
 impl VolumeRequest<List, Vec<Volume>> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-block-storage-volumes)
     pub fn region<S>(mut self, region: S) -> Self
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
-        self.url_mut()
-            .query_pairs_mut()
-            .append_pair("region", region.as_ref());
+        self.url_mut().query_pairs_mut().append_pair(
+            "region",
+            region.as_ref(),
+        );
 
         self
     }
@@ -161,7 +169,8 @@ impl VolumeRequest<Get, Volume> {
     }
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume)
     pub fn snapshot<S>(mut self, name: S) -> SnapshotRequest<Create, Snapshot>
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.url_mut()
             .path_segments_mut()
@@ -181,7 +190,8 @@ impl VolumeRequest<Create, Volume> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
     pub fn description<S>(mut self, val: S) -> Self
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.body_mut()["description"] = json!(val);
         self
@@ -195,7 +205,8 @@ impl VolumeRequest<Create, Volume> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
     pub fn region<S>(mut self, val: S) -> Self
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.body_mut()["region"] = json!(val);
         self
@@ -208,7 +219,8 @@ impl VolumeRequest<Create, Volume> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#block-storage)
     pub fn snapshot_id<S>(mut self, val: S) -> Self
-        where S: AsRef<str> + Serialize + Display
+    where
+        S: AsRef<str> + Serialize + Display,
     {
         self.body_mut()["snapshot_id"] = json!(val);
         self

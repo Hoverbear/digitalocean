@@ -10,8 +10,8 @@ mod utils;
 use serde_json::Value;
 
 use digitalocean::api::Snapshot;
+use digitalocean::method::{Delete, Get, List};
 use digitalocean::request::Request;
-use digitalocean::method::{Get, List, Delete};
 
 use utils::before;
 

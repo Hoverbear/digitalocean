@@ -1,13 +1,14 @@
+
+use super::{ApiLinks, ApiMeta};
+use super::{HasPagination, HasResponse, HasValue};
+use {ROOT_URL, STATIC_URL_ERROR};
+use chrono::{DateTime, UTC};
+use method::{Delete, Get, List, Update};
+use request::ImageRequest;
+use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
-use request::Request;
-use method::{List, Get, Update, Delete};
-use {ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use chrono::{DateTime, UTC};
-use super::{ApiLinks, ApiMeta};
-use super::{HasValue, HasPagination, HasResponse};
-use request::ImageRequest;
 
 const IMAGES_SEGMENT: &'static str = "images";
 
@@ -70,9 +71,9 @@ impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-images)
     pub fn list() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(IMAGES_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            IMAGES_SEGMENT,
+        );
 
         Request::new(url)
     }
@@ -80,9 +81,9 @@ impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-distribution-images)
     pub fn distributions() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(IMAGES_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            IMAGES_SEGMENT,
+        );
 
         url.query_pairs_mut().append_pair("type", "distribution");
 
@@ -92,9 +93,9 @@ impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-application-images)
     pub fn applications() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(IMAGES_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            IMAGES_SEGMENT,
+        );
 
         url.query_pairs_mut().append_pair("type", "application");
 
@@ -104,9 +105,9 @@ impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-a-user-s-images)
     pub fn user() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut()
-            .expect(STATIC_URL_ERROR)
-            .push(IMAGES_SEGMENT);
+        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
+            IMAGES_SEGMENT,
+        );
 
         url.query_pairs_mut().append_pair("private", "true");
 
@@ -117,7 +118,8 @@ impl Image {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id)
     pub fn get<S>(id: S) -> ImageRequest<Get, Image>
-        where S: Display
+    where
+        S: Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -132,7 +134,8 @@ impl Image {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-an-image)
     pub fn update<S>(id: S) -> ImageRequest<Update, Image>
-        where S: Display
+    where
+        S: Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -147,7 +150,8 @@ impl Image {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#delete-an-image)
     pub fn delete<S>(id: S) -> ImageRequest<Delete, ()>
-        where S: Display
+    where
+        S: Display,
     {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
@@ -164,7 +168,8 @@ impl ImageRequest<Update, Image> {
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#images)
     pub fn name<S>(mut self, val: S) -> ImageRequest<Update, Image>
-        where S: Display + Serialize
+    where
+        S: Display + Serialize,
     {
         self.body_mut()["name"] = json!(val);
         self
