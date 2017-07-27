@@ -26,7 +26,7 @@ pub struct Domain {
     /// seconds. This defines the time frame that clients can cache queried
     /// information before a refresh should be requested.
     #[get = "pub"]
-    ttl: Option<usize>,
+    ttl: usize,
     /// This attribute contains the complete contents of the zone file for the
     /// selected domain. Individual domain record resources should be used to
     /// get more granular control over records. However, this attribute can
