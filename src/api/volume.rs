@@ -4,7 +4,7 @@ use super::{HasPagination, HasResponse, HasValue};
 use super::region::Region;
 use super::snapshot::Snapshot;
 use {ROOT_URL, STATIC_URL_ERROR};
-use chrono::{DateTime, UTC};
+use chrono::{DateTime, Utc};
 use method::{Create, Delete, Get, List};
 use request::{SnapshotRequest, VolumeRequest};
 use request::Request;
@@ -52,7 +52,7 @@ pub struct Volume {
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Block Storage volume was created.
     #[get = "pub"]
-    created_at: DateTime<UTC>,
+    created_at: DateTime<Utc>,
 }
 
 impl Volume {

@@ -4,7 +4,7 @@ use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use super::Region;
 use {ROOT_URL, STATIC_URL_ERROR};
-use chrono::{DateTime, UTC};
+use chrono::{DateTime, Utc};
 use method::{Create, Delete, Get, List, Update};
 use request::LoadBalancerRequest;
 use request::Request;
@@ -45,7 +45,7 @@ pub struct LoadBalancer {
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Load Balancer was created.
     #[get = "pub"]
-    created_at: DateTime<UTC>,
+    created_at: DateTime<Utc>,
     /// An object specifying the forwarding rules for a Load Balancer.
     #[get = "pub"]
     forwarding_rules: Vec<ForwardingRule>,

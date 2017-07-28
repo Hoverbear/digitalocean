@@ -2,7 +2,7 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use {ROOT_URL, STATIC_URL_ERROR};
-use chrono::{DateTime, UTC};
+use chrono::{DateTime, Utc};
 use method::{Delete, Get, List, Update};
 use request::ImageRequest;
 use request::Request;
@@ -64,7 +64,7 @@ pub struct Image {
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Image was created.
     #[get = "pub"]
-    created_at: DateTime<UTC>,
+    created_at: DateTime<Utc>,
 }
 
 impl Image {

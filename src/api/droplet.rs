@@ -5,7 +5,7 @@ use super::{HasPagination, HasResponse, HasValue};
 use super::{Image, Region, Size};
 use super::snapshot::Snapshot;
 use {ROOT_URL, STATIC_URL_ERROR};
-use chrono::{DateTime, UTC};
+use chrono::{DateTime, Utc};
 use method::{Create, Delete, Get, List};
 use request::{DropletRequest, SnapshotRequest};
 use request::Request;
@@ -54,7 +54,7 @@ pub struct Droplet {
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Droplet was created.
     #[get = "pub"]
-    created_at: DateTime<UTC>,
+    created_at: DateTime<Utc>,
     /// A status string indicating the state of the Droplet instance. This may
     /// be "new", "active", "off", or "archive".
     #[get = "pub"]
@@ -119,7 +119,7 @@ pub struct Droplet {
 
 /// Fields which exists inside Droplets.
 pub mod droplet_fields {
-    use chrono::{DateTime, UTC};
+    use chrono::{DateTime, Utc};
     use std::net::IpAddr;
     /// This exists in the `networks` field of a droplet.
     #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -142,8 +142,8 @@ pub mod droplet_fields {
     /// This exists in the `next_backup_window` field of a droplet.
     #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct NextBackupWindow {
-        pub end: DateTime<UTC>,
-        pub start: DateTime<UTC>,
+        pub end: DateTime<Utc>,
+        pub start: DateTime<Utc>,
     }
 
     /// This exists in the `kernel` field of a droplet.

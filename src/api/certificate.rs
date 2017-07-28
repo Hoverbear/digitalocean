@@ -2,7 +2,7 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use {ROOT_URL, STATIC_URL_ERROR};
-use chrono::{DateTime, UTC};
+use chrono::{DateTime, Utc};
 use method::{Create, Delete, Get, List};
 use request::CertificateRequest;
 use request::Request;
@@ -28,7 +28,7 @@ pub struct Certificate {
     /// A time value given in ISO8601 combined date and time format that
     /// represents the certificate's expiration date.
     #[get = "pub"]
-    not_after: DateTime<UTC>,
+    not_after: DateTime<Utc>,
     /// A unique identifier generated from the SHA-1 fingerprint of the
     /// certificate.
     #[get = "pub"]
@@ -36,7 +36,7 @@ pub struct Certificate {
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the certificate was created.
     #[get = "pub"]
-    created_at: DateTime<UTC>,
+    created_at: DateTime<Utc>,
 }
 
 impl Certificate {

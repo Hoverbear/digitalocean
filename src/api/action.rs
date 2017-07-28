@@ -2,7 +2,7 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use {ROOT_URL, STATIC_URL_ERROR};
-use chrono::{DateTime, UTC};
+use chrono::{DateTime, Utc};
 use method::{Get, List};
 use request::ActionRequest;
 use request::Request;
@@ -37,11 +37,11 @@ pub struct Action {
     /// The type of action that the event is executing (reboot, power_off,
     /// etc.).
     #[get = "pub"]
-    started_at: DateTime<UTC>,
+    started_at: DateTime<Utc>,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the action was completed.
     #[get = "pub"]
-    completed_at: Option<DateTime<UTC>>,
+    completed_at: Option<DateTime<Utc>>,
     /// A unique identifier for the resource that the action is associated
     /// with.
     #[get = "pub"]

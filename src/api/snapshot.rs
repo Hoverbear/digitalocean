@@ -2,7 +2,7 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use {ROOT_URL, STATIC_URL_ERROR};
-use chrono::{DateTime, UTC};
+use chrono::{DateTime, Utc};
 use method::{Delete, Get, List};
 use request::Request;
 use request::SnapshotRequest;
@@ -28,7 +28,7 @@ pub struct Snapshot {
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the snapshot was created.
     #[get = "pub"]
-    created_at: DateTime<UTC>,
+    created_at: DateTime<Utc>,
     /// An array of the regions that the image is available in. The regions
     /// are represented by their identifying slug values.
     #[get = "pub"]
