@@ -1,5 +1,5 @@
 language: rust
-sudo: required # Apparently this gives us more ram...
+sudo: false
 env:
   global:
     - RUST_BACKTRACE=1
@@ -8,4 +8,10 @@ cache: cargo
 matrix:
   include:
     - rust: nightly
+      os: linux
     - rust: stable
+      os: linux
+    - rust: nightly
+      os: osx
+    - rust: stable
+      os: osx
