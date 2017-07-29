@@ -1,5 +1,4 @@
 language: rust
-sudo: false
 env:
   global:
     - RUST_BACKTRACE=1
@@ -8,8 +7,16 @@ cache: cargo
 matrix:
   include:
     - rust: nightly
+      sudo: required
       os: linux
     - rust: stable
+      sudo: required
+      os: linux
+    - rust: nightly
+      sudo: false
+      os: linux
+    - rust: stable
+      sudo: false
       os: linux
     - rust: nightly
       os: osx
