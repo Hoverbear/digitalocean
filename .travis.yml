@@ -1,5 +1,5 @@
 language: rust
-sudo: false
+sudo: required # Apparently this gives us more ram...
 env:
   global:
     - RUST_BACKTRACE=1
