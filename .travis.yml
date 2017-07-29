@@ -8,10 +8,7 @@ cache: cargo
 matrix:
   include:
     - rust: nightly
-      install:
-        - cargo install clippy --force
       script:
-        - cargo clippy
         - cargo build
         - cargo test --all
     - rust: stable
