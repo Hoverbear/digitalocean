@@ -633,7 +633,7 @@ impl LoadBalancerRequest<Get, LoadBalancer> {
         }
 
         {
-            let mut rules = self.body_mut()["forwarding_rules"].as_array_mut().expect(
+            let rules = self.body_mut()["forwarding_rules"].as_array_mut().expect(
                 "forwarding_rules \
                  should always \
                  be an array.\
@@ -665,7 +665,7 @@ impl LoadBalancerRequest<Get, LoadBalancer> {
         }
 
         {
-            let mut rules = self.body_mut()["forwarding_rules"].as_array_mut().expect(
+            let rules = self.body_mut()["forwarding_rules"].as_array_mut().expect(
                 "forwarding_rules \
                  should always \
                  be an array.\
