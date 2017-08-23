@@ -1,4 +1,3 @@
-
 use super::action::Action;
 use super::image::Image;
 use STATIC_URL_ERROR;

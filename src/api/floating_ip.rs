@@ -1,4 +1,3 @@
-
 use super::{ApiLinks, ApiMeta};
 use super::{Droplet, Region};
 use super::{HasPagination, HasResponse, HasValue};

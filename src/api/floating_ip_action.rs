@@ -1,4 +1,3 @@
-
 use super::Action;
 use super::floating_ip::FloatingIp;
 use STATIC_URL_ERROR;

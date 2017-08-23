@@ -1,4 +1,3 @@
-
 use self::load_balancer_fields::{ForwardingRule, HealthCheck, StickySessions};
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};

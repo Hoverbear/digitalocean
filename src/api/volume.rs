@@ -1,4 +1,3 @@
-
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use super::region::Region;

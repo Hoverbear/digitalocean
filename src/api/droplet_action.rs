@@ -1,4 +1,3 @@
-
 use super::action::Action;
 use super::droplet::Droplet;
 use STATIC_URL_ERROR;

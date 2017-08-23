@@ -1,4 +1,3 @@
-
 use super::{HasResponse, HasValue};
 use {ROOT_URL, STATIC_URL_ERROR};
 use method::Get;

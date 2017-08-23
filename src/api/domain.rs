@@ -1,4 +1,3 @@
-
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use {ROOT_URL, STATIC_URL_ERROR};

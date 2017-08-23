@@ -1,4 +1,3 @@
-
 use self::droplet_fields::{Kernel, Networks, NextBackupWindow};
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};

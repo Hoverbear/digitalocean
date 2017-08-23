@@ -5,7 +5,7 @@ format_strings = true
 match_block_trailing_comma = true
 
 # Convert /* */ comments to // comments where possible
-normalize_comments = true
+normalize_comments = false
 
 # Reorder import statements alphabetically
 reorder_imports = true
