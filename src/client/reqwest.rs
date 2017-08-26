@@ -15,11 +15,11 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("GET {:?}", request.url());
-        let req = self.client.get(request.url().clone());
+        let req = self.client.get(request.url().clone())?;
 
         let mut response = self.fetch(req)?;
 
-        match *response.status() {
+        match response.status() {
             // Successes
             StatusCode::Ok => (),
             // Not Found
@@ -58,10 +58,10 @@ impl DigitalOcean {
         };
 
         loop {
-            let req = self.client.get(current_url.clone());
+            let req = self.client.get(current_url.clone())?;
             let mut response = self.fetch(req)?;
 
-            match *response.status() {
+            match response.status() {
                 // Successes
                 StatusCode::Ok => (),
                 // Not Found
@@ -102,11 +102,11 @@ impl DigitalOcean {
     // Delete requests do not return content.
     pub(crate) fn delete<V>(&self, request: Request<Delete, V>) -> Result<()> {
         info!("DELETE {:?}", request.url());
-        let req = self.client.delete(request.url().clone());
+        let req = self.client.delete(request.url().clone())?;
 
         let response = self.fetch(req)?;
 
-        match *response.status() {
+        match response.status() {
             // Successes
             StatusCode::NoContent => (), // Delete success
             // Errors
@@ -121,13 +121,13 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("POST {:?}", request.url());
-        let req = self.client.post(request.url().clone());
+        let mut req = self.client.post(request.url().clone())?;
 
-        let req = req.json(&request.body().clone());
+        req.json(&request.body().clone())?;
 
         let mut response = self.fetch(req)?;
 
-        match *response.status() {
+        match response.status() {
             // Successes
             StatusCode::Created => (), // Post Success
             // Errors
@@ -146,13 +146,13 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("PUT {:?}", request.url());
-        let req = self.client.put(request.url().clone());
+        let mut req = self.client.put(request.url().clone())?;
 
-        let req = req.json(&request.body().clone());
+        req.json(&request.body().clone())?;
 
         let mut response = self.fetch(req)?;
 
-        match *response.status() {
+        match response.status() {
             // Successes
             StatusCode::Ok => (), // Update success
             // Errors
@@ -166,7 +166,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    fn fetch(&self, dispatch: RequestBuilder) -> Result<Response> {
+    fn fetch(&self, mut dispatch: RequestBuilder) -> Result<Response> {
         let response = dispatch
             .header(Authorization(Bearer { token: self.token.clone() }))
             .send()?;
