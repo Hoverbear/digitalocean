@@ -5,6 +5,8 @@ authors = ["hoverbear <andrew@hoverbear.org>"]
 repository = "https://github.com/hoverbear/digitalocean"
 categories = ["development-tools"]
 homepage = "https://github.com/hoverbear/digitalocean"
+documentation = "https://docs.rs/crate/digitalocean/"
+
 keywords = ["DigitalOcean", "IaaS", "API"]
 license = "MIT"
 description = """
