@@ -1,6 +1,6 @@
 [package]
 name = "digitalocean"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["hoverbear <andrew@hoverbear.org>"]
 repository = "https://github.com/hoverbear/digitalocean"
 categories = ["development-tools"]
