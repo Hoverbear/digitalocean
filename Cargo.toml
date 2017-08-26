@@ -7,7 +7,7 @@ categories = ["development-tools"]
 homepage = "https://github.com/hoverbear/digitalocean"
 keywords = ["DigitalOcean", "IaaS", "API"]
 license = "MIT"
-documentation = """
+description = """
 A crate for accessing and interacting with the DigitalOcean API.
 """
 
