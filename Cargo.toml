@@ -3,15 +3,18 @@ name = "digitalocean"
 version = "0.0.2"
 authors = ["hoverbear <andrew@hoverbear.org>"]
 repository = "https://github.com/hoverbear/digitalocean"
-categories = ["development-tools"]
+categories = ["development-tools", "api-bindings"]
 homepage = "https://github.com/hoverbear/digitalocean"
 documentation = "https://docs.rs/crate/digitalocean/"
 
 keywords = ["DigitalOcean", "IaaS", "API"]
 license = "MIT"
-description = """
-A crate for accessing and interacting with the DigitalOcean API.
-"""
+readme = "README.md"
+
+[badges]
+gitlab = { repository = "https://github.com/hoverbear/digitalocean" }
+travis-ci = { repository = "hoverbear/digitalocean" }
+maintenance = { status = "experimental" }
 
 [features]
 default = ["reqwest"]

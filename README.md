@@ -1,6 +1,7 @@
 # DigitalOcean
 
 [![Build Status](https://travis-ci.org/Hoverbear/digitalocean.svg?branch=master)](https://travis-ci.org/Hoverbear/digitalocean)
+[![Crates.io](https://img.shields.io/crates/v/digitalocean.svg)(https://crates.io/crates/digitalocean)
 
 A crate for interacting with the Digital Ocean API.
 
