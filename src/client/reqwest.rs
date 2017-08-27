@@ -130,6 +130,7 @@ impl DigitalOcean {
         match response.status() {
             // Successes
             StatusCode::Created => (), // Post Success
+            StatusCode::Accepted => (), // Post Success (async)
             // Errors
             StatusCode::UnprocessableEntity => {
                 Err(ErrorKind::UnprocessableEntity(response.json()?))?
