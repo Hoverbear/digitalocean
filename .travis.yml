@@ -15,3 +15,9 @@ matrix:
       os: osx
     - rust: stable
       os: osx
+
+before_script: 
+  - cargo install rustfmt || true
+script:
+  - cargo fmt -- --write-mode=diff
+  - cargo test --all
