@@ -137,7 +137,7 @@ pub mod droplet_fields {
         #[serde(rename = "type")]
         pub kind: String,
     }
-    
+
     /// These exist in the `networks` field of a droplet.
     #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct NetworkV6 {
