@@ -19,6 +19,5 @@ matrix:
 before_script: 
   - cargo install rustfmt || true
 script:
-  - cargo test --all
-  - cargo doc
   - cargo fmt -- --write-mode=diff
+  - cargo test --all
