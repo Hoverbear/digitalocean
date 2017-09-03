@@ -25,6 +25,9 @@ where_density = "Vertical"
 # Break comments to fit on the line
 # wrap_comments = true
 
+# Don't break if a line is too long
+error_on_line_overflow = false
+
 # Don't create backup files
 write_mode = "overwrite"
 
