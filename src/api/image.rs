@@ -59,7 +59,7 @@ pub struct Image {
     min_disk_size: usize,
     /// The size of the image in gigabytes.
     #[get = "pub"]
-    size_gigabytes: f32,
+    size_gigabytes: Option<f32>,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Image was created.
     #[get = "pub"]

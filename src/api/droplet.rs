@@ -119,20 +119,31 @@ pub struct Droplet {
 /// Fields which exists inside Droplets.
 pub mod droplet_fields {
     use chrono::{DateTime, Utc};
-    use std::net::IpAddr;
+    use std::net::{Ipv4Addr, Ipv6Addr};
     /// This exists in the `networks` field of a droplet.
     #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct Networks {
-        pub v4: Vec<Network>,
-        pub v6: Vec<Network>,
+        pub v4: Vec<NetworkV4>,
+        pub v6: Vec<NetworkV6>,
     }
 
     /// These exist in the `networks` field of a droplet.
     #[derive(Deserialize, Serialize, Debug, Clone)]
-    pub struct Network {
-        pub gateway: IpAddr,
-        pub ip_address: IpAddr,
-        pub netmask: IpAddr,
+    pub struct NetworkV4 {
+        pub gateway: Ipv4Addr,
+        pub ip_address: Ipv4Addr,
+        pub netmask: Ipv4Addr,
+        /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
+        #[serde(rename = "type")]
+        pub kind: String,
+    }
+    
+    /// These exist in the `networks` field of a droplet.
+    #[derive(Deserialize, Serialize, Debug, Clone)]
+    pub struct NetworkV6 {
+        pub gateway: Ipv6Addr,
+        pub ip_address: Ipv6Addr,
+        pub netmask: usize,
         /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
         #[serde(rename = "type")]
         pub kind: String,

@@ -44,7 +44,7 @@ pub struct Snapshot {
     min_disk_size: usize,
     /// The billable size of the snapshot in gigabytes.
     #[get = "pub"]
-    size_gigabytes: usize,
+    size_gigabytes: f64,
 }
 
 impl Snapshot {

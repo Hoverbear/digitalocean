@@ -47,7 +47,7 @@ pub struct Volume {
     description: String,
     /// The size of the Block Storage volume in GiB (1024^3).
     #[get = "pub"]
-    size_gigabytes: usize,
+    size_gigabytes: f32,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Block Storage volume was created.
     #[get = "pub"]
