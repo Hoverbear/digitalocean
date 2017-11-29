@@ -4,7 +4,7 @@
 
 use DigitalOcean;
 use api::{HasPagination, HasResponse};
-use error::*;
+use failure::Error;
 use method::{Create, Delete, Get, List, Method, Update};
 use serde_json::Value;
 use std::marker::PhantomData;
@@ -112,7 +112,7 @@ where
     T: HasResponse,
 {
     /// Execute the corresponding call.
-    fn execute(self, instance: &DigitalOcean) -> Result<T>;
+    fn execute(self, instance: &DigitalOcean) -> Result<T, Error>;
 }
 
 impl<V> Executable<Vec<V>> for Request<List, Vec<V>>
@@ -120,7 +120,7 @@ where
     Vec<V>: HasResponse,
     <Vec<V> as HasResponse>::Response: HasPagination,
 {
-    fn execute(self, instance: &DigitalOcean) -> Result<Vec<V>> {
+    fn execute(self, instance: &DigitalOcean) -> Result<Vec<V>, Error> {
         let response: Vec<V> = instance.list(self)?;
         Ok(response)
     }
@@ -130,7 +130,7 @@ impl<V> Executable<V> for Request<Create, V>
 where
     V: HasResponse,
 {
-    fn execute(self, instance: &DigitalOcean) -> Result<V> {
+    fn execute(self, instance: &DigitalOcean) -> Result<V, Error> {
         let response = instance.post(self)?;
         Ok(response)
     }
@@ -140,7 +140,7 @@ impl<V> Executable<V> for Request<Update, V>
 where
     V: HasResponse,
 {
-    fn execute(self, instance: &DigitalOcean) -> Result<V> {
+    fn execute(self, instance: &DigitalOcean) -> Result<V, Error> {
         let response = instance.put(self)?;
         Ok(response)
     }
@@ -150,14 +150,14 @@ impl<V> Executable<V> for Request<Get, V>
 where
     V: HasResponse,
 {
-    fn execute(self, instance: &DigitalOcean) -> Result<V> {
+    fn execute(self, instance: &DigitalOcean) -> Result<V, Error> {
         let response = instance.get(self)?;
         Ok(response)
     }
 }
 
 impl Executable<()> for Request<Delete, ()> {
-    fn execute(self, instance: &DigitalOcean) -> Result<()> {
+    fn execute(self, instance: &DigitalOcean) -> Result<(), Error> {
         let response = instance.delete(self)?;
         Ok(response)
     }
