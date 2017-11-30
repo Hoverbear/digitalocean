@@ -11,10 +11,10 @@ matrix:
       os: linux
     - rust: stable
       os: linux
-    - rust: nightly
-      os: osx
-    - rust: stable
-      os: osx
+    # - rust: nightly
+    #   os: osx
+    # - rust: stable
+    #   os: osx
 
 before_script: 
   - cargo install rustfmt || true
