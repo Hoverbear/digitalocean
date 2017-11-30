@@ -2,7 +2,8 @@ pub use reqwest::Client;
 
 use DigitalOcean;
 use api::{HasPagination, HasResponse, HasValue, MAX_PER_PAGE};
-use error::*;
+use error::ErrorKind;
+use failure::Error;
 use method::{Create, Delete, Get, List, Update};
 use request::Request;
 use reqwest::{RequestBuilder, Response};
@@ -10,7 +11,7 @@ use reqwest::StatusCode;
 use reqwest::header::{Authorization, Bearer};
 
 impl DigitalOcean {
-    pub(crate) fn get<V>(&self, request: Request<Get, V>) -> Result<V>
+    pub(crate) fn get<V>(&self, request: Request<Get, V>) -> Result<V, Error>
     where
         V: HasResponse,
     {
@@ -32,7 +33,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    pub(crate) fn list<V>(&self, request: Request<List, Vec<V>>) -> Result<Vec<V>>
+    pub(crate) fn list<V>(&self, request: Request<List, Vec<V>>) -> Result<Vec<V>, Error>
     where
         Vec<V>: HasResponse,
         <Vec<V> as HasResponse>::Response: HasPagination,
@@ -100,7 +101,7 @@ impl DigitalOcean {
     }
 
     // Delete requests do not return content.
-    pub(crate) fn delete<V>(&self, request: Request<Delete, V>) -> Result<()> {
+    pub(crate) fn delete<V>(&self, request: Request<Delete, V>) -> Result<(), Error> {
         info!("DELETE {:?}", request.url());
         let req = self.client.delete(request.url().clone())?;
 
@@ -116,7 +117,7 @@ impl DigitalOcean {
         Ok(())
     }
 
-    pub(crate) fn post<V>(&self, request: Request<Create, V>) -> Result<V>
+    pub(crate) fn post<V>(&self, request: Request<Create, V>) -> Result<V, Error>
     where
         V: HasResponse,
     {
@@ -142,7 +143,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    pub(crate) fn put<V>(&self, request: Request<Update, V>) -> Result<V>
+    pub(crate) fn put<V>(&self, request: Request<Update, V>) -> Result<V, Error>
     where
         V: HasResponse,
     {
@@ -167,7 +168,7 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    fn fetch(&self, mut dispatch: RequestBuilder) -> Result<Response> {
+    fn fetch(&self, mut dispatch: RequestBuilder) -> Result<Response, Error> {
         let response = dispatch
             .header(Authorization(Bearer { token: self.token.clone() }))
             .send()?;

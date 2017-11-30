@@ -104,18 +104,18 @@ extern crate serde;
 extern crate url_serde;
 extern crate url;
 extern crate chrono;
+extern crate failure;
 #[macro_use]
-extern crate error_chain;
+extern crate failure_derive;
 
 pub mod api;
-mod error;
+pub mod error;
 pub mod method;
 pub mod request;
 mod client;
 pub mod prelude;
 
-use error::*;
-pub use error::{Error, ErrorKind};
+use failure::Error;
 
 use api::HasResponse;
 use method::Method;
@@ -137,7 +137,7 @@ pub struct DigitalOcean {
 
 impl DigitalOcean {
     /// Create a DigitalOcean client with the given API key.
-    pub fn new<T: Into<String>>(token: T) -> Result<Self> {
+    pub fn new<T: Into<String>>(token: T) -> Result<Self, Error> {
         info!("Created.");
         Ok(DigitalOcean {
             client: client::Client::new()?,
@@ -145,7 +145,7 @@ impl DigitalOcean {
         })
     }
 
-    pub fn execute<A, V>(&self, request: Request<A, V>) -> Result<V>
+    pub fn execute<A, V>(&self, request: Request<A, V>) -> Result<V, Error>
     where
         A: Method,
         Request<A, V>: Executable<V>,
