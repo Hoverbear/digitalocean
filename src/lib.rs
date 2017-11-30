@@ -1,56 +1,58 @@
 /*!
 A crate for interacting with the Digital Ocean API.
 
-While browsing this documentation please feel encouraged to reference the
+While browsing this documentation, please feel encouraged to reference the
 [DigitalOcean docs](https://developers.digitalocean.com/documentation/v2/).
 
 ## A Basic Example
 
 ```rust,no_run
+extern crate digitalocean;
 use digitalocean::prelude::*;
 use std::env;
 
-let api_key = env::var("API_KEY")
-    .expect("API_KEY not set.");
-let client = DigitalOcean::new(api_key)
-    .unwrap();
+fn main() {
+    let api_key = env::var("API_KEY")
+        .expect("API_KEY not set.");
+    let client = DigitalOcean::new(api_key)
+        .unwrap();
 
-Droplet::list()
-.execute(&client);
+    Droplet::list()
+        .execute(&client);
+}
 ```
 
 ## Usage Fundamentals
 
-All values ([`Domain`](api/struct.Domain.html), [`SshKey`](api/struct.SshKey.html), etc) can
-be found in the [`api`](api/index.html) module.
+All values (`Domain`, `SshKey`, etc) can be found in the `api` module.
 
-Calling an action will return a [`Request<_,_>`](request/struct.Request.html) type. For example
-[`Droplet::create()`](api/struct.Droplet.html#method.create) will create a
-[`Request<Create, Droplet>`](request/struct.Request.html#method.ssh_keys). These types may then
-have specific futher functions to futher build up the request or transform it into some other
-request.
+Calling an action will return a `Request<_,_>` type. For example `Droplet::create()` will create a
+`Request<Create, Droplet>`. These types may then have specific futher functions to futher build up
+the request or transform it into some other request.
 
 ```rust,no_run
+extern crate digitalocean;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Domain;
 
-// Gets details of a specific domain.
-let req = Domain::get("foo.com");
+fn main() {
+    // Gets details of a specific domain.
+    let req = Domain::get("foo.com");
 
-// Get the records for that domain instead (futher build the request)
-let req = req.records();
-// Get the records of a domain without having a prior request.
-let req = Domain::get("foo.com").records();
+    // Get the records for that domain instead (futher build the request)
+    let req = req.records();
+    // Get the records of a domain without having a prior request.
+    let req = Domain::get("foo.com").records();
 
-// Create a new record for a domain
-let req = Domain::get("foo.com").records().create("CNAME", "test", "127.0.0.1");
+    // Create a new record for a domain
+    let req = Domain::get("foo.com").records().create("CNAME", "test", "127.0.0.1");
+}
 ```
 
-In order to realize any action [`.execute()`](request/trait.Executable.html#tymethod.execute)
-must be called with a [DigitalOcean](struct.DigitalOcean.html#method.new) client. It is also
-possible to call [`do_client.execute(some_request)`](struct.DigitalOcean.html#method.execute).
+In order to realize any action, `.execute()` must be called with a `DigitalOcean`
+ client. It is also possible to call `do_client.execute(some_request)`.
 
-In order to use the entire API it is recommended to reference the various `Request` types.
+In order to use the entire API, it is recommended to reference the various `Request` types.
 
 ## Design
 
@@ -67,8 +69,7 @@ The crate is founded on a few design considerations:
 
 ## Debugging
 
-This crate uses the [`log`](https://doc.rust-lang.org/log/log/index.html) crate. You can see
-`digitalocean` logs by passing an environment variable such as:
+This crate uses the [`log`](https://doc.rust-lang.org/log/log/index.html) crate. You can see `digitalocean` logs by passing an environment variable such as:
 
 ```bash
 RUST_LOG=digitalocean=debug cargo run
@@ -85,6 +86,7 @@ likely that some endpoints will have parsing errors due to unexpected values ret
 
 Feedback, patches, and new features are encouraged.
 Please just open an issue or PR!
+
 */
 
 #[macro_use]

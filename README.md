@@ -11,16 +11,19 @@ While browsing this documentation, please feel encouraged to reference the
 ## A Basic Example
 
 ```rust,no_run
+extern crate digitalocean;
 use digitalocean::prelude::*;
 use std::env;
 
-let api_key = env::var("API_KEY")
-    .expect("API_KEY not set.");
-let client = DigitalOcean::new(api_key)
-    .unwrap();
+fn main() {
+    let api_key = env::var("API_KEY")
+        .expect("API_KEY not set.");
+    let client = DigitalOcean::new(api_key)
+        .unwrap();
 
-Droplet::list()
-    .execute(&client);
+    Droplet::list()
+        .execute(&client);
+}
 ```
 
 ## Usage Fundamentals
@@ -32,19 +35,22 @@ Calling an action will return a `Request<_,_>` type. For example `Droplet::creat
 the request or transform it into some other request.
 
 ```rust,no_run
+extern crate digitalocean;
 use digitalocean::DigitalOcean;
 use digitalocean::api::Domain;
 
-// Gets details of a specific domain.
-let req = Domain::get("foo.com");
+fn main() {
+    // Gets details of a specific domain.
+    let req = Domain::get("foo.com");
 
-// Get the records for that domain instead (futher build the request)
-let req = req.records();
-// Get the records of a domain without having a prior request.
-let req = Domain::get("foo.com").records();
+    // Get the records for that domain instead (futher build the request)
+    let req = req.records();
+    // Get the records of a domain without having a prior request.
+    let req = Domain::get("foo.com").records();
 
-// Create a new record for a domain
-let req = Domain::get("foo.com").records().create("CNAME", "test", "127.0.0.1");
+    // Create a new record for a domain
+    let req = Domain::get("foo.com").records().create("CNAME", "test", "127.0.0.1");
+}
 ```
 
 In order to realize any action, `.execute()` must be called with a `DigitalOcean`
