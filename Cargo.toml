@@ -12,7 +12,6 @@ license = "MIT"
 readme = "README.md"
 
 [badges]
-gitlab = { repository = "https://github.com/hoverbear/digitalocean" }
 travis-ci = { repository = "hoverbear/digitalocean" }
 maintenance = { status = "experimental" }
 
