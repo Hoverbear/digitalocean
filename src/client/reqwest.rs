@@ -1,14 +1,14 @@
 pub use reqwest::Client;
 
-use DigitalOcean;
 use api::{HasPagination, HasResponse, HasValue, MAX_PER_PAGE};
 use error::ErrorKind;
 use failure::Error;
 use method::{Create, Delete, Get, List, Update};
 use request::Request;
-use reqwest::{RequestBuilder, Response};
-use reqwest::StatusCode;
 use reqwest::header::{Authorization, Bearer};
+use reqwest::StatusCode;
+use reqwest::{RequestBuilder, Response};
+use DigitalOcean;
 
 impl DigitalOcean {
     pub(crate) fn get<V>(&self, request: Request<Get, V>) -> Result<V, Error>
@@ -45,17 +45,15 @@ impl DigitalOcean {
 
         match request.method().0 {
             Some(limit) if limit < MAX_PER_PAGE => {
-                current_url.query_pairs_mut().append_pair(
-                    "per_page",
-                    &limit.to_string(),
-                );
-            },
+                current_url
+                    .query_pairs_mut()
+                    .append_pair("per_page", &limit.to_string());
+            }
             _ => {
-                current_url.query_pairs_mut().append_pair(
-                    "per_page",
-                    &MAX_PER_PAGE.to_string(),
-                );
-            },
+                current_url
+                    .query_pairs_mut()
+                    .append_pair("per_page", &MAX_PER_PAGE.to_string());
+            }
         };
 
         loop {
@@ -76,7 +74,6 @@ impl DigitalOcean {
             let next_page = deserialized.next_page();
             buffer.extend(deserialized.value());
 
-
             current_url = match next_page {
                 Some(v) => v,
                 None => break,
@@ -88,10 +85,9 @@ impl DigitalOcean {
                 if buffer_size >= limit {
                     break;
                 } else if remaining < MAX_PER_PAGE {
-                    current_url.query_pairs_mut().append_pair(
-                        "per_page",
-                        &remaining.to_string(),
-                    );
+                    current_url
+                        .query_pairs_mut()
+                        .append_pair("per_page", &remaining.to_string());
                 }
             }
             info!("Fetching next page...")
@@ -130,12 +126,12 @@ impl DigitalOcean {
 
         match response.status() {
             // Successes
-            StatusCode::Created => (), // Post Success
+            StatusCode::Created => (),  // Post Success
             StatusCode::Accepted => (), // Post Success (async)
             // Errors
             StatusCode::UnprocessableEntity => {
                 Err(ErrorKind::UnprocessableEntity(response.json()?))?
-            },
+            }
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 
@@ -160,7 +156,7 @@ impl DigitalOcean {
             // Errors
             StatusCode::UnprocessableEntity => {
                 Err(ErrorKind::UnprocessableEntity(response.json()?))?
-            },
+            }
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
 
@@ -170,7 +166,9 @@ impl DigitalOcean {
 
     fn fetch(&self, mut dispatch: RequestBuilder) -> Result<Response, Error> {
         let response = dispatch
-            .header(Authorization(Bearer { token: self.token.clone() }))
+            .header(Authorization(Bearer {
+                token: self.token.clone(),
+            }))
             .send()?;
 
         info!("Response status: {:?}", response.status());

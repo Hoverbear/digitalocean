@@ -4,9 +4,9 @@ extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
-use digitalocean::DigitalOcean;
 use digitalocean::api::Domain;
 use digitalocean::request::Executable;
+use digitalocean::DigitalOcean;
 use std::env;
 
 // cargo run --example records -- $DOMAIN $DOMAIN2...

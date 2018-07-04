@@ -1,11 +1,11 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
 use method::{Get, List};
 use request::ActionRequest;
 use request::Request;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const ACTIONS_SEGMENT: &'static str = "actions";
 
@@ -71,9 +71,9 @@ impl Action {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions)
     pub fn list() -> ActionRequest<List, Vec<Action>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            ACTIONS_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(ACTIONS_SEGMENT);
 
         Request::new(url)
     }
@@ -84,7 +84,6 @@ impl Action {
 pub struct ActionResponse {
     action: Action,
 }
-
 
 impl HasValue for ActionResponse {
     type Value = Action;

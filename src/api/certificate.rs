@@ -1,6 +1,5 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
 use method::{Create, Delete, Get, List};
 use request::CertificateRequest;
@@ -8,6 +7,7 @@ use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const CERTIFICATES_SEGMENT: &'static str = "certificates";
 
@@ -49,9 +49,9 @@ impl Certificate {
         S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            CERTIFICATES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(CERTIFICATES_SEGMENT);
 
         let mut req = Request::new(url);
 
@@ -67,9 +67,9 @@ impl Certificate {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-certificates)
     pub fn list() -> CertificateRequest<List, Vec<Certificate>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            CERTIFICATES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(CERTIFICATES_SEGMENT);
 
         Request::new(url)
     }

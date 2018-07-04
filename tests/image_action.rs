@@ -41,8 +41,7 @@ fn get_produces_correct_request() {
     let action_id = 456;
     let correct_url = format!(
         "https://api.digitalocean.com/v2/images/{}/actions/{}",
-        image_id,
-        action_id
+        image_id, action_id
     );
 
     let req: Request<Get, Action> = Image::get(image_id).action(action_id);
@@ -81,13 +80,19 @@ fn convert_produces_correct_request() {
     before();
 
     let image_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/images/{}/actions", image_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/images/{}/actions",
+        image_id
+    );
 
     let req: Request<Create, Action> = Image::get(image_id).convert();
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(), json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "type": "convert",
-    }));
+    })
+    );
 }

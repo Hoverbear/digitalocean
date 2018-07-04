@@ -1,15 +1,15 @@
-use super::{ApiLinks, ApiMeta};
-use super::{HasPagination, HasResponse, HasValue};
 use super::region::Region;
 use super::snapshot::Snapshot;
-use {ROOT_URL, STATIC_URL_ERROR};
+use super::{ApiLinks, ApiMeta};
+use super::{HasPagination, HasResponse, HasValue};
 use chrono::{DateTime, Utc};
 use method::{Create, Delete, Get, List};
-use request::{SnapshotRequest, VolumeRequest};
 use request::Request;
+use request::{SnapshotRequest, VolumeRequest};
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const VOLUME_SEGMENT: &'static str = "volumes";
 const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
@@ -58,9 +58,9 @@ impl Volume {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-block-storage-volumes)
     pub fn list() -> VolumeRequest<List, Vec<Volume>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            VOLUME_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(VOLUME_SEGMENT);
 
         Request::new(url)
     }
@@ -70,9 +70,9 @@ impl Volume {
         S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            VOLUME_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(VOLUME_SEGMENT);
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -100,9 +100,9 @@ impl Volume {
         S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            VOLUME_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(VOLUME_SEGMENT);
 
         url.query_pairs_mut()
             .append_pair("name", name.as_ref())
@@ -129,9 +129,9 @@ impl Volume {
         S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            VOLUME_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(VOLUME_SEGMENT);
 
         url.query_pairs_mut()
             .append_pair("name", name.as_ref())
@@ -147,10 +147,9 @@ impl VolumeRequest<List, Vec<Volume>> {
     where
         S: AsRef<str> + Serialize + Display,
     {
-        self.url_mut().query_pairs_mut().append_pair(
-            "region",
-            region.as_ref(),
-        );
+        self.url_mut()
+            .query_pairs_mut()
+            .append_pair("region", region.as_ref());
 
         self
     }
@@ -176,9 +175,7 @@ impl VolumeRequest<Get, Volume> {
             .expect(STATIC_URL_ERROR)
             .push(SNAPSHOTS_SEGMENT);
 
-        self.set_body(json!({
-            "name": name
-        }));
+        self.set_body(json!({ "name": name }));
 
         self.transmute()
     }
@@ -237,7 +234,6 @@ pub struct VolumeListResponse {
 impl HasResponse for Vec<Volume> {
     type Response = VolumeListResponse;
 }
-
 
 impl HasPagination for VolumeListResponse {
     fn next_page(&self) -> Option<Url> {

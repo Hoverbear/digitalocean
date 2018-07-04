@@ -1,10 +1,10 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use method::List;
 use request::Request;
 use request::SizeRequest;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const SIZES_SEGMENT: &'static str = "sizes";
 
@@ -62,9 +62,9 @@ impl Size {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-images)
     pub fn list() -> SizeRequest<List, Vec<Size>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            SIZES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(SIZES_SEGMENT);
 
         Request::new(url)
     }
