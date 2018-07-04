@@ -1,10 +1,10 @@
 use super::action::Action;
 use super::image::Image;
-use STATIC_URL_ERROR;
 use method::{Create, Get, List};
 use request::{ImageActionRequest, ImageRequest};
 use serde::Serialize;
 use std::fmt::Display;
+use STATIC_URL_ERROR;
 
 const IMAGE_ACTIONS_SEGMENT: &'static str = "actions";
 

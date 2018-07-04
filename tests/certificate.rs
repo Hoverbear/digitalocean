@@ -41,7 +41,6 @@ fn create_produces_correct_request() {
         String::from("chain"),
     );
 
-
     let req: Request<Create, Certificate> =
         Certificate::create(name.clone(), pkey.clone(), leaf.clone())
             .certificate_chain(chain.clone());
@@ -64,7 +63,10 @@ fn get_produces_correct_request() {
     before();
 
     let certificate_id = "123";
-    let correct_url = format!("https://api.digitalocean.com/v2/certificates/{}", certificate_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/certificates/{}",
+        certificate_id
+    );
 
     let req: Request<Get, Certificate> = Certificate::get(certificate_id);
     info!("{:#?}", req);
@@ -78,7 +80,10 @@ fn delete_produces_correct_request() {
     before();
 
     let certificate_id = "123";
-    let correct_url = format!("https://api.digitalocean.com/v2/certificates/{}", certificate_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/certificates/{}",
+        certificate_id
+    );
 
     let req: Request<Delete, ()> = Certificate::delete(certificate_id);
     info!("{:#?}", req);

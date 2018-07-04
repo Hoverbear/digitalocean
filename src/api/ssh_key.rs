@@ -1,12 +1,12 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use method::{Create, Delete, Get, List, Update};
 use request::Request;
 use request::SshKeyRequest;
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const ACCOUNT_SEGMENT: &'static str = "account";
 const KEYS_SEGMENT: &'static str = "keys";
@@ -143,7 +143,6 @@ pub struct SshKeyListResponse {
 impl HasResponse for Vec<SshKey> {
     type Response = SshKeyListResponse;
 }
-
 
 impl HasPagination for SshKeyListResponse {
     fn next_page(&self) -> Option<Url> {

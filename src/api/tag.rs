@@ -1,6 +1,5 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use method::{Create, Delete, Get, List};
 use request::Request;
 use request::TagRequest;
@@ -8,6 +7,7 @@ use serde::Serialize;
 use serde_json::Value;
 use std::fmt::Display;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const TAG_SEGMENT: &'static str = "tags";
 const RESOURCES_SEGMENT: &'static str = "resources";
@@ -39,9 +39,9 @@ impl Tag {
         S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            TAG_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(TAG_SEGMENT);
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -65,9 +65,9 @@ impl Tag {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag)
     pub fn list() -> TagRequest<List, Tag> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            TAG_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(TAG_SEGMENT);
 
         Request::new(url)
     }
@@ -150,7 +150,6 @@ impl TagRequest<Get, Tag> {
 pub struct TagResponse {
     tag: Tag,
 }
-
 
 impl HasValue for TagResponse {
     type Value = Tag;

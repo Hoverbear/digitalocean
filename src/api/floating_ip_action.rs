@@ -1,8 +1,8 @@
-use super::Action;
 use super::floating_ip::FloatingIp;
-use STATIC_URL_ERROR;
+use super::Action;
 use method::{Create, Get, List};
 use request::{FloatingIpActionRequest, FloatingIpRequest};
+use STATIC_URL_ERROR;
 
 const FLOATING_IP_ACTIONS_SEGMENT: &'static str = "actions";
 
@@ -41,7 +41,6 @@ impl FloatingIpRequest<Get, FloatingIp> {
 
         self.transmute()
     }
-
 
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#assign-a-floating-ip-to-a-droplet)
     pub fn assign(mut self, id: usize) -> FloatingIpActionRequest<Create, Action> {

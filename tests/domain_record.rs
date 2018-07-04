@@ -62,7 +62,10 @@ fn get_produces_correct_request() {
 
     let domain = "example.com";
     let record_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/domains/{}/records/{}", domain, record_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/domains/{}/records/{}",
+        domain, record_id
+    );
 
     let req: Request<Get, DomainRecord> = Domain::get(domain).records().get(record_id);
     info!("{:#?}", req);
@@ -77,7 +80,10 @@ fn update_produces_correct_request() {
 
     let domain = "example.com";
     let record_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/domains/{}/records/{}", domain, record_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/domains/{}/records/{}",
+        domain, record_id
+    );
     let (kind, name, ttl) = ("SRV", "ww2", 200);
 
     let req: Request<Update, DomainRecord> = Domain::get(domain)
@@ -89,11 +95,14 @@ fn update_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(), json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "type": kind,
         "name": name,
         "ttl": ttl,
-    }));
+    })
+    );
 }
 
 #[test]
@@ -102,7 +111,10 @@ fn delete_produces_correct_request() {
 
     let domain = "example.com";
     let record_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/domains/{}/records/{}", domain, record_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/domains/{}/records/{}",
+        domain, record_id
+    );
 
     let req: Request<Delete, ()> = Domain::get(domain).records().delete(record_id);
     info!("{:#?}", req);

@@ -61,9 +61,12 @@ fn for_region_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(), json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "region": region_id,
-    }));
+    })
+    );
 }
 
 #[test]
@@ -71,7 +74,10 @@ fn get_produces_correct_request() {
     before();
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}", floating_ip);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/floating_ips/{}",
+        floating_ip
+    );
 
     let req: Request<Get, FloatingIp> = FloatingIp::get(floating_ip);
     info!("{:#?}", req);
@@ -85,7 +91,10 @@ fn delete_produces_correct_request() {
     before();
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}", floating_ip);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/floating_ips/{}",
+        floating_ip
+    );
 
     let req: Request<Delete, ()> = FloatingIp::delete(floating_ip);
     info!("{:#?}", req);

@@ -4,20 +4,17 @@ env:
   global:
     - RUST_BACKTRACE=1
 cache: cargo
+before_script: 
+  - rustup component add rustfmt-preview
 
 matrix:
   include:
     - rust: nightly
       os: linux
+      script:
+        - cargo test --all
     - rust: stable
       os: linux
-    # - rust: nightly
-    #   os: osx
-    # - rust: stable
-    #   os: osx
-
-before_script: 
-  - cargo install rustfmt || true
-script:
-  - cargo fmt -- --write-mode=diff
-  - cargo test --all
+      script:
+        - cargo fmt
+        - cargo test --all

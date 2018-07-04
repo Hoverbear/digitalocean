@@ -1,6 +1,5 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
 use method::{Delete, Get, List, Update};
 use request::ImageRequest;
@@ -8,6 +7,7 @@ use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const IMAGES_SEGMENT: &'static str = "images";
 
@@ -70,9 +70,9 @@ impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-images)
     pub fn list() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            IMAGES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(IMAGES_SEGMENT);
 
         Request::new(url)
     }
@@ -80,9 +80,9 @@ impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-distribution-images)
     pub fn distributions() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            IMAGES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(IMAGES_SEGMENT);
 
         url.query_pairs_mut().append_pair("type", "distribution");
 
@@ -92,9 +92,9 @@ impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-application-images)
     pub fn applications() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            IMAGES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(IMAGES_SEGMENT);
 
         url.query_pairs_mut().append_pair("type", "application");
 
@@ -104,9 +104,9 @@ impl Image {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-a-user-s-images)
     pub fn user() -> ImageRequest<List, Vec<Image>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            IMAGES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(IMAGES_SEGMENT);
 
         url.query_pairs_mut().append_pair("private", "true");
 

@@ -100,20 +100,20 @@ extern crate serde_derive;
 extern crate getset;
 #[macro_use]
 extern crate serde_json;
-extern crate serde;
-extern crate url_serde;
-extern crate url;
 extern crate chrono;
 extern crate failure;
+extern crate serde;
+extern crate url;
+extern crate url_serde;
 #[macro_use]
 extern crate failure_derive;
 
 pub mod api;
+mod client;
 pub mod error;
 pub mod method;
-pub mod request;
-mod client;
 pub mod prelude;
+pub mod request;
 
 use failure::Error;
 
@@ -124,8 +124,8 @@ use url::Url;
 
 const STATIC_URL_ERROR: &'static str = "Staticly constructed DigitalOcean URL is malformed.";
 lazy_static! {
-    static ref ROOT_URL: Url = Url::parse("https://api.digitalocean.com/v2")
-        .expect(STATIC_URL_ERROR);
+    static ref ROOT_URL: Url =
+        Url::parse("https://api.digitalocean.com/v2").expect(STATIC_URL_ERROR);
 }
 
 /// A DigitalOcean Client that holds an API key.

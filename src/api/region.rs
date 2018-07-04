@@ -1,10 +1,10 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use method::List;
 use request::RegionRequest;
 use request::Request;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const REGIONS_SEGMENT: &'static str = "regions";
 
@@ -44,9 +44,9 @@ impl Region {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain)
     pub fn list() -> RegionRequest<List, Vec<Region>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            REGIONS_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(REGIONS_SEGMENT);
 
         Request::new(url)
     }

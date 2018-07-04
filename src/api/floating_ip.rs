@@ -1,7 +1,6 @@
 use super::{ApiLinks, ApiMeta};
 use super::{Droplet, Region};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use method::{Create, Delete, Get, List};
 use request::FloatingIpRequest;
 use request::Request;
@@ -9,6 +8,7 @@ use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const FLOATING_IP_SEGMENT: &'static str = "floating_ips";
 
@@ -41,9 +41,9 @@ impl FloatingIp {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-floating-ips)
     pub fn list() -> FloatingIpRequest<List, Vec<FloatingIp>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            FLOATING_IP_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(FLOATING_IP_SEGMENT);
 
         Request::new(url)
     }
@@ -51,9 +51,9 @@ impl FloatingIp {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-assigned-to-a-droplet)
     pub fn for_droplet(id: usize) -> FloatingIpRequest<Create, FloatingIp> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            FLOATING_IP_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(FLOATING_IP_SEGMENT);
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -68,9 +68,9 @@ impl FloatingIp {
         S: AsRef<str> + Display + Serialize,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            FLOATING_IP_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(FLOATING_IP_SEGMENT);
 
         let mut req = Request::new(url);
         req.set_body(json!({

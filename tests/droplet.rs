@@ -61,7 +61,9 @@ fn create_many_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(), json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "names": names,
         "region": region,
         "size": size,
@@ -69,7 +71,8 @@ fn create_many_produces_correct_request() {
         "ssh_keys": ssh_keys,
         "backups": backups,
         "monitoring": monitoring,
-    }));
+    })
+    );
 }
 
 #[test]
@@ -104,7 +107,10 @@ fn list_by_tag_produces_correct_request() {
     before();
 
     let tag_name = "bear";
-    let correct_url = format!("https://api.digitalocean.com/v2/droplets?tag_name={}", tag_name);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/droplets?tag_name={}",
+        tag_name
+    );
 
     let req: Request<List, Vec<Droplet>> = Droplet::list_by_tag("bear");
     info!("{:#?}", req);
@@ -132,7 +138,10 @@ fn delete_by_tag_produces_correct_request() {
     before();
 
     let tag_name = "bear";
-    let correct_url = format!("https://api.digitalocean.com/v2/droplets?tag_name={}", tag_name);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/droplets?tag_name={}",
+        tag_name
+    );
 
     let req: Request<Delete, ()> = Droplet::delete_by_tag(tag_name);
     info!("{:#?}", req);
@@ -159,7 +168,10 @@ fn snapshots_produces_correct_request() {
     before();
 
     let droplet_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/snapshots", droplet_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/droplets/{}/snapshots",
+        droplet_id
+    );
 
     let req: Request<List, Vec<Snapshot>> = Droplet::get(droplet_id).snapshots();
     info!("{:#?}", req);
@@ -173,7 +185,10 @@ fn backups_produces_correct_request() {
     before();
 
     let droplet_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/backups", droplet_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/droplets/{}/backups",
+        droplet_id
+    );
 
     let req: Request<List, Vec<Snapshot>> = Droplet::get(droplet_id).backups();
     info!("{:#?}", req);
@@ -187,7 +202,10 @@ fn get_neighbors_produces_correct_request() {
     before();
 
     let droplet_id = 123;
-    let correct_url = format!("https://api.digitalocean.com/v2/droplets/{}/neighbors", droplet_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/droplets/{}/neighbors",
+        droplet_id
+    );
 
     let req: Request<List, Vec<Droplet>> = Droplet::get(droplet_id).neighbors();
     info!("{:#?}", req);

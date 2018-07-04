@@ -2,7 +2,6 @@
 //!
 //!
 
-use DigitalOcean;
 use api::{HasPagination, HasResponse};
 use failure::Error;
 use method::{Create, Delete, Get, List, Method, Update};
@@ -10,6 +9,7 @@ use serde_json::Value;
 use std::marker::PhantomData;
 use url::Url;
 use url_serde;
+use DigitalOcean;
 
 /// A type alias with [`Request<_, Account>`](struct.Request.html) specific functions.
 pub type AccountRequest<M, V> = Request<M, V>;

@@ -88,7 +88,9 @@ fn add_resources_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(), json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "resources": [
             {
                 "resource_id": resources[0].0,
@@ -99,7 +101,8 @@ fn add_resources_produces_correct_request() {
                 "resource_type": resources[1].1,
             }
         ],
-    }));
+    })
+    );
 }
 
 #[test]
@@ -114,7 +117,9 @@ fn remove_resources_produces_correct_request() {
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(), json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "resources": [
             {
                 "resource_id": resources[0].0,
@@ -125,5 +130,6 @@ fn remove_resources_produces_correct_request() {
                 "resource_type": resources[1].1,
             }
         ],
-    }));
+    })
+    );
 }

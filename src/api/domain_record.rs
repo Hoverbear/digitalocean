@@ -1,12 +1,12 @@
+use super::domain::Domain;
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use super::domain::Domain;
-use STATIC_URL_ERROR;
 use method::{Create, Delete, Get, List, Update};
 use request::{DomainRecordRequest, DomainRequest};
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
+use STATIC_URL_ERROR;
 
 const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
 
@@ -219,7 +219,6 @@ impl DomainRecordRequest<Update, DomainRecord> {
 pub struct DomainRecordResponse {
     domain_record: DomainRecord,
 }
-
 
 impl HasValue for DomainRecordResponse {
     type Value = DomainRecord;

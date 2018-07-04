@@ -1,6 +1,5 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use method::{Create, Delete, Get, List};
 use request::DomainRequest;
 use request::Request;
@@ -8,6 +7,7 @@ use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const DOMAINS_SEGMENT: &'static str = "domains";
 
@@ -43,9 +43,9 @@ impl Domain {
         I: Into<IpAddr> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            DOMAINS_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(DOMAINS_SEGMENT);
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -58,9 +58,9 @@ impl Domain {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-domains)
     pub fn list() -> DomainRequest<List, Vec<Domain>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            DOMAINS_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(DOMAINS_SEGMENT);
 
         Request::new(url)
     }

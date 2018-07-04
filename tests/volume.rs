@@ -16,7 +16,6 @@ use digitalocean::request::Request;
 
 use utils::before;
 
-
 #[test]
 fn list_produces_correct_request() {
     before();
@@ -40,7 +39,6 @@ fn list_produces_correct_request() {
     assert_eq!(*req.body(), Value::Null);
 }
 
-
 #[test]
 fn create_produces_correct_request() {
     before();
@@ -62,7 +60,6 @@ fn create_produces_correct_request() {
     );
 }
 
-
 #[test]
 fn get_produces_correct_request() {
     before();
@@ -83,7 +80,10 @@ fn get_by_name_produces_correct_request() {
 
     let name = "test";
     let region = "tor1";
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/volumes?name={}&region={}",
+        name, region
+    );
 
     let req: Request<Get, Volume> = Volume::get_by_name(name, region);
     info!("{:#?}", req);
@@ -112,7 +112,10 @@ fn delete_by_name_produces_correct_request() {
 
     let name = "test";
     let region = "tor1";
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes?name={}&region={}", name, region);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/volumes?name={}&region={}",
+        name, region
+    );
 
     let req: Request<Delete, ()> = Volume::delete_by_name(name, region);
     info!("{:#?}", req);
@@ -126,7 +129,10 @@ fn snapshots_produces_correct_request() {
     before();
 
     let volume_id = "123";
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/snapshots", volume_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/volumes/{}/snapshots",
+        volume_id
+    );
 
     let req: Request<List, Vec<Snapshot>> = Volume::get(volume_id).snapshots();
     info!("{:#?}", req);
@@ -140,14 +146,15 @@ fn snapshot_produces_correct_request() {
     before();
 
     let volume_id = "123";
-    let correct_url = format!("https://api.digitalocean.com/v2/volumes/{}/snapshots", volume_id);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/volumes/{}/snapshots",
+        volume_id
+    );
     let snapshot_name = "test";
 
     let req: Request<Create, Snapshot> = Volume::get(volume_id).snapshot(snapshot_name);
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(), json!({
-        "name": snapshot_name
-    }));
+    assert_eq!(*req.body(), json!({ "name": snapshot_name }));
 }

@@ -4,9 +4,9 @@ extern crate digitalocean;
 extern crate dotenv;
 extern crate env_logger;
 
-use digitalocean::DigitalOcean;
 use digitalocean::api::Droplet;
 use digitalocean::request::Executable;
+use digitalocean::DigitalOcean;
 use std::env;
 
 // cargo run --example droplet
@@ -27,11 +27,11 @@ fn main() {
         (Some(id), Some(action)) => {
             let parsed_id = id.parse::<usize>().expect("Did not pass a valid id.");
             do_droplet_action(&client, parsed_id, action)
-        },
+        }
         (Some(id), None) => {
             let parsed_id = id.parse::<usize>().expect("Did not pass a valid id.");
             show_droplet_info(&client, parsed_id)
-        },
+        }
         _ => list_droplets(&client),
     }
 }

@@ -1,11 +1,11 @@
 use super::action::Action;
 use super::volume::Volume;
-use {ROOT_URL, STATIC_URL_ERROR};
 use method::{Create, Get, List};
-use request::{VolumeActionRequest, VolumeRequest};
 use request::Request;
+use request::{VolumeActionRequest, VolumeRequest};
 use serde::Serialize;
 use std::fmt::Display;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const VOLUMES_SEGMENT: &'static str = "volumes";
 const VOLUME_ACTIONS_SEGMENT: &'static str = "actions";
@@ -17,9 +17,9 @@ impl Volume {
         S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            VOLUMES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(VOLUMES_SEGMENT);
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -35,9 +35,9 @@ impl Volume {
         S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            VOLUMES_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(VOLUMES_SEGMENT);
 
         let mut req = Request::new(url);
         req.set_body(json!({

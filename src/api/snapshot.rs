@@ -1,11 +1,11 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use {ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
 use method::{Delete, Get, List};
 use request::Request;
 use request::SnapshotRequest;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const SNAPSHOT_SEGMENT: &'static str = "snapshots";
 
@@ -51,9 +51,9 @@ impl Snapshot {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-snapshots)
     pub fn list() -> SnapshotRequest<List, Vec<Snapshot>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            SNAPSHOT_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(SNAPSHOT_SEGMENT);
 
         Request::new(url)
     }
@@ -61,14 +61,12 @@ impl Snapshot {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-droplet-snapshots)
     pub fn droplets() -> SnapshotRequest<List, Vec<Snapshot>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            SNAPSHOT_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(SNAPSHOT_SEGMENT);
 
-        url.query_pairs_mut().append_pair(
-            "resource_type",
-            "droplet",
-        );
+        url.query_pairs_mut()
+            .append_pair("resource_type", "droplet");
 
         Request::new(url)
     }
@@ -76,9 +74,9 @@ impl Snapshot {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-volume-snapshots)
     pub fn volumes() -> SnapshotRequest<List, Vec<Snapshot>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            SNAPSHOT_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(SNAPSHOT_SEGMENT);
 
         url.query_pairs_mut().append_pair("resource_type", "volume");
 
@@ -119,7 +117,6 @@ pub struct SnapshotListResponse {
 impl HasResponse for Vec<Snapshot> {
     type Response = SnapshotListResponse;
 }
-
 
 impl HasPagination for SnapshotListResponse {
     fn next_page(&self) -> Option<Url> {

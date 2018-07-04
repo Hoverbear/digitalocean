@@ -3,22 +3,22 @@
 mod account;
 mod action;
 mod certificate;
-mod domain_record;
 mod domain;
-mod droplet_action;
+mod domain_record;
 mod droplet;
-mod load_balancer;
-mod floating_ip_action;
+mod droplet_action;
 mod floating_ip;
-mod image_action;
+mod floating_ip_action;
 mod image;
+mod image_action;
+mod load_balancer;
 mod region;
 mod size;
 mod snapshot;
 mod ssh_key;
-mod volume_action;
-mod volume;
 mod tag;
+mod volume;
+mod volume_action;
 
 use serde::de::DeserializeOwned;
 use url::Url;
@@ -29,10 +29,10 @@ pub use self::action::Action;
 pub use self::certificate::Certificate;
 pub use self::domain::Domain;
 pub use self::domain_record::DomainRecord;
-pub use self::droplet::{Droplet, droplet_fields};
+pub use self::droplet::{droplet_fields, Droplet};
 pub use self::floating_ip::FloatingIp;
 pub use self::image::Image;
-pub use self::load_balancer::{LoadBalancer, load_balancer_fields};
+pub use self::load_balancer::{load_balancer_fields, LoadBalancer};
 pub use self::region::Region;
 pub use self::size::Size;
 pub use self::snapshot::Snapshot;
@@ -51,11 +51,9 @@ struct ApiLinks {
 impl ApiLinks {
     fn next(&self) -> Option<Url> {
         match self.pages {
-            Some(ref pages) => {
-                match pages.next {
-                    Some(ref v) => Some(v.clone()),
-                    None => None,
-                }
+            Some(ref pages) => match pages.next {
+                Some(ref v) => Some(v.clone()),
+                None => None,
             },
             None => None,
         }

@@ -43,8 +43,7 @@ fn get_produces_correct_request() {
     let action_id = 123;
     let correct_url = format!(
         "https://api.digitalocean.com/v2/floating_ips/{}/actions/{}",
-        floating_ip,
-        action_id
+        floating_ip, action_id
     );
 
     let req: Request<Get, Action> = FloatingIp::get(floating_ip).action(action_id);
@@ -83,13 +82,19 @@ fn unassign_produces_correct_request() {
     before();
 
     let floating_ip = IpAddr::from_str("192.168.0.1").unwrap();
-    let correct_url = format!("https://api.digitalocean.com/v2/floating_ips/{}/actions", floating_ip);
+    let correct_url = format!(
+        "https://api.digitalocean.com/v2/floating_ips/{}/actions",
+        floating_ip
+    );
 
     let req: Request<Create, Action> = FloatingIp::get(floating_ip).unassign();
     info!("{:#?}", req);
 
     assert_eq!(req.url().as_str(), correct_url);
-    assert_eq!(*req.body(), json!({
+    assert_eq!(
+        *req.body(),
+        json!({
         "type": "unassign",
-    }));
+    })
+    );
 }

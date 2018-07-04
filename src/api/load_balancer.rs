@@ -1,8 +1,7 @@
 use self::load_balancer_fields::{ForwardingRule, HealthCheck, StickySessions};
+use super::Region;
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use super::Region;
-use {ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
 use method::{Create, Delete, Get, List, Update};
 use request::LoadBalancerRequest;
@@ -11,6 +10,7 @@ use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
 use url::Url;
+use {ROOT_URL, STATIC_URL_ERROR};
 
 const LOAD_BALANCERS_SEGMENT: &'static str = "load_balancers";
 const DROPLETS_SEGMENT: &'static str = "droplets";
@@ -227,9 +227,9 @@ impl LoadBalancer {
         S: AsRef<str> + Serialize + Display,
     {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            LOAD_BALANCERS_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(LOAD_BALANCERS_SEGMENT);
 
         let mut req = Request::new(url);
         req.set_body(json!({
@@ -255,9 +255,9 @@ impl LoadBalancer {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-load-balancers)
     pub fn list() -> LoadBalancerRequest<List, Vec<LoadBalancer>> {
         let mut url = ROOT_URL.clone();
-        url.path_segments_mut().expect(STATIC_URL_ERROR).push(
-            LOAD_BALANCERS_SEGMENT,
-        );
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(LOAD_BALANCERS_SEGMENT);
 
         Request::new(url)
     }
@@ -355,10 +355,12 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
             self.body_mut()["health_check"]["path"] = json!(path);
         }
         if let Some(check_interval_seconds) = check_interval_seconds {
-            self.body_mut()["health_check"]["check_interval_seconds"] = json!(check_interval_seconds);
+            self.body_mut()["health_check"]["check_interval_seconds"] =
+                json!(check_interval_seconds);
         }
         if let Some(response_timeout_seconds) = response_timeout_seconds {
-            self.body_mut()["health_check"]["response_timeout_seconds"] = json!(response_timeout_seconds);
+            self.body_mut()["health_check"]["response_timeout_seconds"] =
+                json!(response_timeout_seconds);
         }
         if let Some(unhealthy_threshold) = unhealthy_threshold {
             self.body_mut()["health_check"]["unhealthy_threshold"] = json!(unhealthy_threshold);
@@ -427,7 +429,6 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
         self
     }
 }
-
 
 impl LoadBalancerRequest<Update, LoadBalancer> {
     /// A human-readable name for a Load Balancer instance.
@@ -511,10 +512,12 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
             self.body_mut()["health_check"]["path"] = json!(path);
         }
         if let Some(check_interval_seconds) = check_interval_seconds {
-            self.body_mut()["health_check"]["check_interval_seconds"] = json!(check_interval_seconds);
+            self.body_mut()["health_check"]["check_interval_seconds"] =
+                json!(check_interval_seconds);
         }
         if let Some(response_timeout_seconds) = response_timeout_seconds {
-            self.body_mut()["health_check"]["response_timeout_seconds"] = json!(response_timeout_seconds);
+            self.body_mut()["health_check"]["response_timeout_seconds"] =
+                json!(response_timeout_seconds);
         }
         if let Some(unhealthy_threshold) = unhealthy_threshold {
             self.body_mut()["health_check"]["unhealthy_threshold"] = json!(unhealthy_threshold);
