@@ -16,7 +16,7 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("GET {:?}", request.url());
-        let req = self.client.get(request.url().clone())?;
+        let req = self.client.get(request.url().clone());
 
         let mut response = self.fetch(req)?;
 
@@ -57,7 +57,7 @@ impl DigitalOcean {
         };
 
         loop {
-            let req = self.client.get(current_url.clone())?;
+            let req = self.client.get(current_url.clone());
             let mut response = self.fetch(req)?;
 
             match response.status() {
@@ -99,7 +99,7 @@ impl DigitalOcean {
     // Delete requests do not return content.
     pub(crate) fn delete<V>(&self, request: Request<Delete, V>) -> Result<(), Error> {
         info!("DELETE {:?}", request.url());
-        let req = self.client.delete(request.url().clone())?;
+        let req = self.client.delete(request.url().clone());
 
         let response = self.fetch(req)?;
 
@@ -118,9 +118,9 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("POST {:?}", request.url());
-        let mut req = self.client.post(request.url().clone())?;
+        let mut req = self.client.post(request.url().clone());
 
-        req.json(&request.body().clone())?;
+        req.json(&request.body().clone());
 
         let mut response = self.fetch(req)?;
 
@@ -144,9 +144,9 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("PUT {:?}", request.url());
-        let mut req = self.client.put(request.url().clone())?;
+        let mut req = self.client.put(request.url().clone());
 
-        req.json(&request.body().clone())?;
+        req.json(&request.body().clone());
 
         let mut response = self.fetch(req)?;
 
