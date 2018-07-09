@@ -140,7 +140,7 @@ impl DigitalOcean {
     pub fn new<T: Into<String>>(token: T) -> Result<Self, Error> {
         info!("Created.");
         Ok(DigitalOcean {
-            client: client::Client::new()?,
+            client: client::Client::new(),
             token: token.into(),
         })
     }
