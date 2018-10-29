@@ -1,7 +1,7 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use chrono::{DateTime, Utc};
-use method::{Delete, Get, List, Update};
+use method::{Create, Delete, Get, List, Update};
 use request::ImageRequest;
 use request::Request;
 use serde::Serialize;
@@ -159,6 +159,34 @@ impl Image {
             .push(&format!("{}", id));
 
         Request::new(url)
+    }
+
+    pub fn create<S>(
+        name: S,
+        image_url: S,
+        region: S,
+        distribution: S,
+        desc: S,
+        tags: Vec<S>,
+    ) -> ImageRequest<Create, ()>
+    where
+        S: AsRef<str> + Display + Serialize,
+    {
+        let mut url = ROOT_URL.clone();
+        url.path_segments_mut()
+            .expect(STATIC_URL_ERROR)
+            .push(IMAGES_SEGMENT);
+
+        let mut req = Request::new(url);
+        req.set_body(json!({
+            "name": name,
+            "url": image_url,
+            "region": region,
+            "distribution": distribution,
+            "description": desc,
+            "tags": tags
+        }));
+        req
     }
 }
 
