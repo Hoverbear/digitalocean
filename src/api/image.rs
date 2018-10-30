@@ -160,7 +160,6 @@ impl Image {
 
         Request::new(url)
     }
-
 }
 
 impl ImageRequest<Update, Image> {
