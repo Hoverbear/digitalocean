@@ -9,8 +9,12 @@ use {ROOT_URL, STATIC_URL_ERROR};
 
 const IMAGES_SEGMENT: &'static str = "images";
 
-/// TODO: Doc
-/// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domains)
+/// A custom image is an image with an user-supplied raw image. 
+/// The body must contain a url attribute pointing to a Linux virtual machine image to be imported into DigitalOcean.
+/// The image must be in the raw, qcow2, vhdx, vdi, or vmdk format.
+/// It may be compressed using gzip or bzip2 and must be smaller than 100 GB after being decompressed.
+///
+/// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-custom-image)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct CustomImage {
     /// A unique number that can be used to identify and reference a specific
@@ -53,6 +57,7 @@ pub struct CustomImage {
 }
 
 impl CustomImage {
+    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-custom-image)
     pub fn create<S>(
         name: S,
         image_url: S,
