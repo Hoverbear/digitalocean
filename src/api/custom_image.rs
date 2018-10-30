@@ -14,7 +14,7 @@ const IMAGES_SEGMENT: &'static str = "images";
 /// The image must be in the raw, qcow2, vhdx, vdi, or vmdk format.
 /// It may be compressed using gzip or bzip2 and must be smaller than 100 GB after being decompressed.
 ///
-/// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-custom-image)
+/// [Digital Ocean Documentation.](https://www.digitalocean.com/docs/images/custom-images/)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
 pub struct CustomImage {
     /// A unique number that can be used to identify and reference a specific
