@@ -33,6 +33,8 @@ pub type FloatingIpRequest<M, V> = Request<M, V>;
 pub type ImageActionRequest<M, V> = Request<M, V>;
 /// A type alias with [`Request<_, Image>`](struct.Request.html) specific functions.
 pub type ImageRequest<M, V> = Request<M, V>;
+/// A type alias with [`Request<_, CustomImage>`](struct.Request.html) specific functions.
+pub type CustomImageRequest<M, V> = Request<M, V>;
 /// A type alias with [`Request<_, LoadBalancer>`](struct.Request.html) specific functions.
 pub type LoadBalancerRequest<M, V> = Request<M, V>;
 /// A type alias with [`Request<_, Region>`](struct.Request.html) specific functions.
