@@ -5,7 +5,6 @@ use error::ErrorKind;
 use failure::Error;
 use method::{Create, Delete, Get, List, Update};
 use request::Request;
-use reqwest::header::{Authorization, Bearer};
 use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
 use DigitalOcean;
@@ -22,9 +21,9 @@ impl DigitalOcean {
 
         match response.status() {
             // Successes
-            StatusCode::Ok => (),
+            StatusCode::OK => (),
             // Not Found
-            StatusCode::NotFound => Err(ErrorKind::NotFound)?,
+            StatusCode::NOT_FOUND => Err(ErrorKind::NotFound)?,
             // Errors
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
@@ -61,10 +60,9 @@ impl DigitalOcean {
             let mut response = self.fetch(req)?;
 
             match response.status() {
-                // Successes
-                StatusCode::Ok => (),
+                StatusCode::OK => (),
                 // Not Found
-                StatusCode::NotFound => Err(ErrorKind::NotFound)?,
+                StatusCode::NOT_FOUND => Err(ErrorKind::NotFound)?,
                 // Errors
                 e => Err(ErrorKind::UnexpectedStatus(e))?,
             };
@@ -105,7 +103,7 @@ impl DigitalOcean {
 
         match response.status() {
             // Successes
-            StatusCode::NoContent => (), // Delete success
+            StatusCode::NO_CONTENT => (), // Delete success
             // Errors
             e => Err(ErrorKind::UnexpectedStatus(e))?,
         };
@@ -118,18 +116,17 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("POST {:?}", request.url());
-        let mut req = self.client.post(request.url().clone());
-
-        req.json(&request.body().clone());
+        let req = self.client.post(request.url().clone())
+            .json(&request.body().clone());
 
         let mut response = self.fetch(req)?;
 
         match response.status() {
             // Successes
-            StatusCode::Created => (),  // Post Success
-            StatusCode::Accepted => (), // Post Success (async)
+            StatusCode::CREATED => (),  // Post Success
+            StatusCode::ACCEPTED => (), // Post Success (async)
             // Errors
-            StatusCode::UnprocessableEntity => {
+            StatusCode::UNPROCESSABLE_ENTITY => {
                 Err(ErrorKind::UnprocessableEntity(response.json()?))?
             }
             e => Err(ErrorKind::UnexpectedStatus(e))?,
@@ -144,17 +141,16 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("PUT {:?}", request.url());
-        let mut req = self.client.put(request.url().clone());
-
-        req.json(&request.body().clone());
+        let req = self.client.put(request.url().clone())
+            .json(&request.body().clone());
 
         let mut response = self.fetch(req)?;
 
         match response.status() {
             // Successes
-            StatusCode::Ok => (), // Update success
+            StatusCode::OK => (), // Update success
             // Errors
-            StatusCode::UnprocessableEntity => {
+            StatusCode::UNPROCESSABLE_ENTITY => {
                 Err(ErrorKind::UnprocessableEntity(response.json()?))?
             }
             e => Err(ErrorKind::UnexpectedStatus(e))?,
@@ -164,11 +160,9 @@ impl DigitalOcean {
         Ok(deserialized.value())
     }
 
-    fn fetch(&self, mut dispatch: RequestBuilder) -> Result<Response, Error> {
+    fn fetch(&self, dispatch: RequestBuilder) -> Result<Response, Error> {
         let response = dispatch
-            .header(Authorization(Bearer {
-                token: self.token.clone(),
-            }))
+            .bearer_auth(self.token.clone())
             .send()?;
 
         info!("Response status: {:?}", response.status());
