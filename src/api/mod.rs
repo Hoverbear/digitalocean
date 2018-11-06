@@ -3,6 +3,7 @@
 mod account;
 mod action;
 mod certificate;
+mod custom_image;
 mod domain;
 mod domain_record;
 mod droplet;
@@ -27,6 +28,7 @@ use url_serde;
 pub use self::account::Account;
 pub use self::action::Action;
 pub use self::certificate::Certificate;
+pub use self::custom_image::CustomImage;
 pub use self::domain::Domain;
 pub use self::domain_record::DomainRecord;
 pub use self::droplet::{droplet_fields, Droplet};
