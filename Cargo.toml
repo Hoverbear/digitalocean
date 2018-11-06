@@ -6,6 +6,7 @@ repository = "https://github.com/hoverbear/digitalocean"
 categories = ["development-tools", "api-bindings"]
 homepage = "https://github.com/hoverbear/digitalocean"
 documentation = "https://docs.rs/crate/digitalocean/"
+description = "A pure Rust DigitalOcean API binding."
 
 keywords = ["DigitalOcean", "IaaS", "API"]
 license = "MIT"
