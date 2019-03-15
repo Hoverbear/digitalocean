@@ -42,7 +42,7 @@ pub struct Region {
 }
 
 impl Region {
-    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain)
+    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-regions)
     pub fn list() -> RegionRequest<List, Vec<Region>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()
