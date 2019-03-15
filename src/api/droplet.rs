@@ -8,6 +8,7 @@ use crate::request::Request;
 use crate::request::{DropletRequest, SnapshotRequest};
 use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
+use getset::{Getters, Setters};
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;

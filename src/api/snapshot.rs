@@ -5,6 +5,7 @@ use crate::request::Request;
 use crate::request::SnapshotRequest;
 use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
+use getset::{Getters, Setters};
 use url::Url;
 
 const SNAPSHOT_SEGMENT: &str = "snapshots";

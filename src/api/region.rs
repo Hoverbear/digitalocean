@@ -4,6 +4,7 @@ use crate::method::List;
 use crate::request::RegionRequest;
 use crate::request::Request;
 use crate::{ROOT_URL, STATIC_URL_ERROR};
+use getset::{Getters, Setters};
 use url::Url;
 
 const REGIONS_SEGMENT: &str = "regions";
@@ -41,7 +42,7 @@ pub struct Region {
 }
 
 impl Region {
-    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-domain)
+    /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-regions)
     pub fn list() -> RegionRequest<List, Vec<Region>> {
         let mut url = ROOT_URL.clone();
         url.path_segments_mut()

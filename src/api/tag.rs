@@ -4,6 +4,7 @@ use crate::method::{Create, Delete, Get, List};
 use crate::request::Request;
 use crate::request::TagRequest;
 use crate::{ROOT_URL, STATIC_URL_ERROR};
+use getset::{Getters, Setters};
 use serde::Serialize;
 use serde_json::Value;
 use std::fmt::Display;

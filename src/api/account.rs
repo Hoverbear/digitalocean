@@ -3,6 +3,7 @@ use crate::method::Get;
 use crate::request::AccountRequest;
 use crate::request::Request;
 use crate::{ROOT_URL, STATIC_URL_ERROR};
+use getset::{Getters, Setters};
 
 const ACCOUNT_SEGMENT: &str = "account";
 
