@@ -93,18 +93,12 @@ Please just open an issue or PR!
 extern crate lazy_static;
 #[macro_use]
 extern crate log;
-extern crate reqwest;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
 extern crate getset;
 #[macro_use]
 extern crate serde_json;
-extern crate chrono;
-extern crate failure;
-extern crate serde;
-extern crate url;
-extern crate url_serde;
 #[macro_use]
 extern crate failure_derive;
 
@@ -117,12 +111,12 @@ pub mod request;
 
 use failure::Error;
 
-use api::HasResponse;
-use method::Method;
-use request::{Executable, Request};
+use crate::api::HasResponse;
+use crate::method::Method;
+use crate::request::{Executable, Request};
 use url::Url;
 
-const STATIC_URL_ERROR: &'static str = "Staticly constructed DigitalOcean URL is malformed.";
+const STATIC_URL_ERROR: &str = "Staticly constructed DigitalOcean URL is malformed.";
 lazy_static! {
     static ref ROOT_URL: Url =
         Url::parse("https://api.digitalocean.com/v2").expect(STATIC_URL_ERROR);

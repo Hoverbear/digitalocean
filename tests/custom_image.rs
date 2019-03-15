@@ -12,7 +12,7 @@ use digitalocean::api::CustomImage;
 use digitalocean::method::Create;
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn create_produces_correct_request() {
@@ -34,12 +34,12 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": "test",
-        "url": "http://foo.bar/baz.raw",
-        "region": "ams3",
-        "distribution": "archlinux",
-        "description": "test image",
-        "tags": vec!["arch", "small"]
-    })
+            "name": "test",
+            "url": "http://foo.bar/baz.raw",
+            "region": "ams3",
+            "distribution": "archlinux",
+            "description": "test image",
+            "tags": vec!["arch", "small"]
+        })
     );
 }

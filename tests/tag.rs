@@ -14,7 +14,7 @@ use digitalocean::api::Tag;
 use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -57,8 +57,8 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": tag,
-    })
+            "name": tag,
+        })
     );
 }
 
@@ -91,17 +91,17 @@ fn add_resources_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "resources": [
-            {
-                "resource_id": resources[0].0,
-                "resource_type": resources[0].1,
-            },
-            {
-                "resource_id": resources[1].0,
-                "resource_type": resources[1].1,
-            }
-        ],
-    })
+            "resources": [
+                {
+                    "resource_id": resources[0].0,
+                    "resource_type": resources[0].1,
+                },
+                {
+                    "resource_id": resources[1].0,
+                    "resource_type": resources[1].1,
+                }
+            ],
+        })
     );
 }
 
@@ -120,16 +120,16 @@ fn remove_resources_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "resources": [
-            {
-                "resource_id": resources[0].0,
-                "resource_type": resources[0].1,
-            },
-            {
-                "resource_id": resources[1].0,
-                "resource_type": resources[1].1,
-            }
-        ],
-    })
+            "resources": [
+                {
+                    "resource_id": resources[0].0,
+                    "resource_type": resources[0].1,
+                },
+                {
+                    "resource_id": resources[1].0,
+                    "resource_type": resources[1].1,
+                }
+            ],
+        })
     );
 }

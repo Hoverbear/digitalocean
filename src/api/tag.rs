@@ -1,16 +1,16 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use method::{Create, Delete, Get, List};
-use request::Request;
-use request::TagRequest;
+use crate::method::{Create, Delete, Get, List};
+use crate::request::Request;
+use crate::request::TagRequest;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use serde::Serialize;
 use serde_json::Value;
 use std::fmt::Display;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const TAG_SEGMENT: &'static str = "tags";
-const RESOURCES_SEGMENT: &'static str = "resources";
+const TAG_SEGMENT: &str = "tags";
+const RESOURCES_SEGMENT: &str = "resources";
 
 /// A Tag is a label that can be applied to a resource (currently only
 /// Droplets) in order to better organize or facilitate the lookups and actions
@@ -103,9 +103,9 @@ impl TagRequest<Get, Tag> {
             .into_iter()
             .map(|(id, kind)| {
                 json!({
-            "resource_id": id,
-            "resource_type": kind,
-        })
+                    "resource_id": id,
+                    "resource_type": kind,
+                })
             })
             .collect::<Vec<_>>();
 
@@ -131,9 +131,9 @@ impl TagRequest<Get, Tag> {
             .into_iter()
             .map(|(id, kind)| {
                 json!({
-            "resource_id": id,
-            "resource_type": kind,
-        })
+                    "resource_id": id,
+                    "resource_type": kind,
+                })
             })
             .collect::<Vec<_>>();
 

@@ -1,15 +1,15 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use method::{Create, Delete, Get, List};
-use request::DomainRequest;
-use request::Request;
+use crate::method::{Create, Delete, Get, List};
+use crate::request::DomainRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const DOMAINS_SEGMENT: &'static str = "domains";
+const DOMAINS_SEGMENT: &str = "domains";
 
 /// Domain resources are domain names that you have purchased from a domain
 /// name registrar that you are managing through the DigitalOcean DNS interface.

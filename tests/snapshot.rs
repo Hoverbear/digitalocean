@@ -13,7 +13,7 @@ use digitalocean::api::Snapshot;
 use digitalocean::method::{Delete, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {

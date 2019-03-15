@@ -14,7 +14,7 @@ use digitalocean::api::Certificate;
 use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -50,11 +50,11 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": name,
-        "private_key": pkey,
-        "leaf_certificate": leaf,
-        "certificate_chain": chain,
-    })
+            "name": name,
+            "private_key": pkey,
+            "leaf_certificate": leaf,
+            "certificate_chain": chain,
+        })
     );
 }
 

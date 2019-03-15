@@ -3,21 +3,21 @@ use super::snapshot::Snapshot;
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
 use super::{Image, Region, Size};
+use crate::method::{Create, Delete, Get, List};
+use crate::request::Request;
+use crate::request::{DropletRequest, SnapshotRequest};
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
-use method::{Create, Delete, Get, List};
-use request::Request;
-use request::{DropletRequest, SnapshotRequest};
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const DROPLETS_SEGMENT: &'static str = "droplets";
-const REPORTS_SEGMENT: &'static str = "reports";
-const DROPLET_NEIGHBORS_SEGMENT: &'static str = "droplet_neighbors";
-const NEIGHBORS_SEGMENT: &'static str = "neighbors";
-const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
-const BACKUPS_SEGMENT: &'static str = "backups";
+const DROPLETS_SEGMENT: &str = "droplets";
+const REPORTS_SEGMENT: &str = "reports";
+const DROPLET_NEIGHBORS_SEGMENT: &str = "droplet_neighbors";
+const NEIGHBORS_SEGMENT: &str = "neighbors";
+const SNAPSHOTS_SEGMENT: &str = "snapshots";
+const BACKUPS_SEGMENT: &str = "backups";
 
 /// A Droplet is a DigitalOcean virtual machine. By sending requests to the
 /// Droplet endpoint, you can list, create, or delete Droplets.

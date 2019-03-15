@@ -1,13 +1,13 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
+use crate::method::{Delete, Get, List};
+use crate::request::Request;
+use crate::request::SnapshotRequest;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
-use method::{Delete, Get, List};
-use request::Request;
-use request::SnapshotRequest;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const SNAPSHOT_SEGMENT: &'static str = "snapshots";
+const SNAPSHOT_SEGMENT: &str = "snapshots";
 
 /// Snapshots are saved instances of a Droplet or a volume, which is reflected
 /// in the `resource_type` attribute. In order to avoid problems with

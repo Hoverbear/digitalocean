@@ -14,7 +14,7 @@ use digitalocean::api::{Domain, DomainRecord};
 use digitalocean::method::{Create, Delete, Get, List, Update};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -48,11 +48,11 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": kind,
-        "name": name,
-        "data": data,
-        "ttl": ttl,
-    })
+            "type": kind,
+            "name": name,
+            "data": data,
+            "ttl": ttl,
+        })
     );
 }
 
@@ -98,10 +98,10 @@ fn update_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": kind,
-        "name": name,
-        "ttl": ttl,
-    })
+            "type": kind,
+            "name": name,
+            "ttl": ttl,
+        })
     );
 }
 

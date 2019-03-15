@@ -16,7 +16,7 @@ use digitalocean::api::Domain;
 use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -46,9 +46,9 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": domain,
-        "ip_address": ip_address,
-    })
+            "name": domain,
+            "ip_address": ip_address,
+        })
     );
 }
 

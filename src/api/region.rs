@@ -1,12 +1,12 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use method::List;
-use request::RegionRequest;
-use request::Request;
+use crate::method::List;
+use crate::request::RegionRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const REGIONS_SEGMENT: &'static str = "regions";
+const REGIONS_SEGMENT: &str = "regions";
 
 /// A region in DigitalOcean represents a datacenter where Droplets can be
 /// deployed and images can be transferred.

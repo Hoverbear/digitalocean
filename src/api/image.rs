@@ -1,15 +1,15 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
+use crate::method::{Delete, Get, List, Update};
+use crate::request::ImageRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
-use method::{Delete, Get, List, Update};
-use request::ImageRequest;
-use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const IMAGES_SEGMENT: &'static str = "images";
+const IMAGES_SEGMENT: &str = "images";
 
 /// Images in DigitalOcean may refer to one of a few different kinds of objects.
 ///

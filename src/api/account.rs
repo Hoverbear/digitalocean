@@ -1,10 +1,10 @@
 use super::{HasResponse, HasValue};
-use method::Get;
-use request::AccountRequest;
-use request::Request;
-use {ROOT_URL, STATIC_URL_ERROR};
+use crate::method::Get;
+use crate::request::AccountRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 
-const ACCOUNT_SEGMENT: &'static str = "account";
+const ACCOUNT_SEGMENT: &str = "account";
 
 /// The user account.
 ///

@@ -1,12 +1,12 @@
 use super::action::Action;
 use super::image::Image;
-use method::{Create, Get, List};
-use request::{ImageActionRequest, ImageRequest};
+use crate::method::{Create, Get, List};
+use crate::request::{ImageActionRequest, ImageRequest};
+use crate::STATIC_URL_ERROR;
 use serde::Serialize;
 use std::fmt::Display;
-use STATIC_URL_ERROR;
 
-const IMAGE_ACTIONS_SEGMENT: &'static str = "actions";
+const IMAGE_ACTIONS_SEGMENT: &str = "actions";
 
 impl ImageRequest<Get, Image> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-an-image)

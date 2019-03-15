@@ -2,19 +2,19 @@ use self::load_balancer_fields::{ForwardingRule, HealthCheck, StickySessions};
 use super::Region;
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
+use crate::method::{Create, Delete, Get, List, Update};
+use crate::request::LoadBalancerRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
-use method::{Create, Delete, Get, List, Update};
-use request::LoadBalancerRequest;
-use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const LOAD_BALANCERS_SEGMENT: &'static str = "load_balancers";
-const DROPLETS_SEGMENT: &'static str = "droplets";
-const FORWARDING_RULES_SEGMENT: &'static str = "forwarding_rules";
+const LOAD_BALANCERS_SEGMENT: &str = "load_balancers";
+const DROPLETS_SEGMENT: &str = "droplets";
+const FORWARDING_RULES_SEGMENT: &str = "forwarding_rules";
 
 /// Load Balancers provide a way to distribute traffic across multiple
 /// Droplets.
@@ -114,9 +114,9 @@ pub mod load_balancer_fields {
         {
             ForwardingRule {
                 entry_protocol: entry_protocol.as_ref().to_string(),
-                entry_port: entry_port,
+                entry_port,
                 target_protocol: target_protocol.as_ref().to_string(),
-                target_port: target_port,
+                target_port,
                 certificate_id: None,
                 tls_passthrough: false,
             }
@@ -334,6 +334,7 @@ impl LoadBalancerRequest<Create, LoadBalancer> {
     /// The (optional) health check settings.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer)
+    #[allow(clippy::too_many_arguments)]
     pub fn health_check<S>(
         mut self,
         protocol: S,
@@ -491,6 +492,7 @@ impl LoadBalancerRequest<Update, LoadBalancer> {
     /// The (optional) health check settings.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#update-a-load-balancer)
+    #[allow(clippy::too_many_arguments)]
     pub fn health_check<S>(
         mut self,
         protocol: S,

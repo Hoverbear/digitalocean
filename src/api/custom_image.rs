@@ -1,15 +1,15 @@
 use super::{HasResponse, HasValue};
+use crate::method::Create;
+use crate::request::CustomImageRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
-use method::{Create};
-use request::CustomImageRequest;
-use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const IMAGES_SEGMENT: &'static str = "images";
+const IMAGES_SEGMENT: &str = "images";
 
-/// A custom image is an image with an user-supplied raw image. 
+/// A custom image is an image with an user-supplied raw image.
 /// The body must contain a url attribute pointing to a Linux virtual machine image to be imported into DigitalOcean.
 /// The image must be in the raw, qcow2, vhdx, vdi, or vmdk format.
 /// It may be compressed using gzip or bzip2 and must be smaller than 100 GB after being decompressed.

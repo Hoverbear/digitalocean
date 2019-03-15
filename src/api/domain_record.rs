@@ -1,14 +1,14 @@
 use super::domain::Domain;
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use method::{Create, Delete, Get, List, Update};
-use request::{DomainRecordRequest, DomainRequest};
+use crate::method::{Create, Delete, Get, List, Update};
+use crate::request::{DomainRecordRequest, DomainRequest};
+use crate::STATIC_URL_ERROR;
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
-use STATIC_URL_ERROR;
 
-const DOMAIN_RECORDS_SEGMENT: &'static str = "records";
+const DOMAIN_RECORDS_SEGMENT: &str = "records";
 
 /// Domain record resources are used to set or retrieve information about the
 /// individual DNS records configured for a domain. This allows you to build

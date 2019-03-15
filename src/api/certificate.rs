@@ -1,15 +1,15 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
+use crate::method::{Create, Delete, Get, List};
+use crate::request::CertificateRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
-use method::{Create, Delete, Get, List};
-use request::CertificateRequest;
-use request::Request;
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const CERTIFICATES_SEGMENT: &'static str = "certificates";
+const CERTIFICATES_SEGMENT: &str = "certificates";
 
 /// SSL certificates may be uploaded to DigitalOcean where they will be placed
 /// in a fully encrypted and isolated storage system. They may then be used to

@@ -16,7 +16,7 @@ use digitalocean::api::FloatingIp;
 use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -45,8 +45,8 @@ fn for_droplet_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "droplet_id": droplet_id,
-    })
+            "droplet_id": droplet_id,
+        })
     );
 }
 
@@ -64,8 +64,8 @@ fn for_region_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "region": region_id,
-    })
+            "region": region_id,
+        })
     );
 }
 

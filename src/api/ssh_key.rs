@@ -1,15 +1,15 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use method::{Create, Delete, Get, List, Update};
-use request::Request;
-use request::SshKeyRequest;
+use crate::method::{Create, Delete, Get, List, Update};
+use crate::request::Request;
+use crate::request::SshKeyRequest;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const ACCOUNT_SEGMENT: &'static str = "account";
-const KEYS_SEGMENT: &'static str = "keys";
+const ACCOUNT_SEGMENT: &str = "account";
+const KEYS_SEGMENT: &str = "keys";
 
 /// DigitalOcean allows you to add SSH public keys to the interface so that you
 /// can embed your public key into a Droplet at the time of creation. Only the

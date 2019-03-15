@@ -13,7 +13,7 @@ use digitalocean::api::Size;
 use digitalocean::method::List;
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
