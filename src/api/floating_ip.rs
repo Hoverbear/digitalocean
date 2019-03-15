@@ -1,16 +1,16 @@
 use super::{ApiLinks, ApiMeta};
 use super::{Droplet, Region};
 use super::{HasPagination, HasResponse, HasValue};
-use method::{Create, Delete, Get, List};
-use request::FloatingIpRequest;
-use request::Request;
+use crate::method::{Create, Delete, Get, List};
+use crate::request::FloatingIpRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use serde::Serialize;
 use std::fmt::Display;
 use std::net::IpAddr;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const FLOATING_IP_SEGMENT: &'static str = "floating_ips";
+const FLOATING_IP_SEGMENT: &str = "floating_ips";
 
 /// Floating IP objects represent a publicly-accessible static IP addresses
 /// that can be mapped to one of your Droplets. They can be used to create

@@ -2,14 +2,14 @@
 //!
 //!
 
-use api::{HasPagination, HasResponse};
+use crate::api::{HasPagination, HasResponse};
+use crate::method::{Create, Delete, Get, List, Method, Update};
+use crate::DigitalOcean;
 use failure::Error;
-use method::{Create, Delete, Get, List, Method, Update};
 use serde_json::Value;
 use std::marker::PhantomData;
 use url::Url;
 use url_serde;
-use DigitalOcean;
 
 /// A type alias with [`Request<_, Account>`](struct.Request.html) specific functions.
 pub type AccountRequest<M, V> = Request<M, V>;
@@ -84,7 +84,7 @@ where
     /// returned when the call is executed.
     pub fn new(url: Url) -> Self {
         Request {
-            url: url,
+            url,
             body: Value::Null,
             method: A::default(),
             value: PhantomData,
@@ -160,7 +160,6 @@ where
 
 impl Executable<()> for Request<Delete, ()> {
     fn execute(self, instance: &DigitalOcean) -> Result<(), Error> {
-        let response = instance.delete(self)?;
-        Ok(response)
+        instance.delete(self)
     }
 }

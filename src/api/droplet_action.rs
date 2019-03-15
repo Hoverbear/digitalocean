@@ -1,12 +1,12 @@
 use super::action::Action;
 use super::droplet::Droplet;
-use method::{Create, Get, List};
-use request::{DropletActionRequest, DropletRequest};
+use crate::method::{Create, Get, List};
+use crate::request::{DropletActionRequest, DropletRequest};
+use crate::STATIC_URL_ERROR;
 use serde::Serialize;
 use std::fmt::Display;
-use STATIC_URL_ERROR;
 
-const DROPLET_ACTIONS_SEGMENT: &'static str = "actions";
+const DROPLET_ACTIONS_SEGMENT: &str = "actions";
 
 impl DropletRequest<Get, Droplet> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-actions-for-a-droplet)

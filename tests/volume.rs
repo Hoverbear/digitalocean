@@ -14,7 +14,7 @@ use digitalocean::api::{Snapshot, Volume};
 use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -53,10 +53,10 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": name,
-        "size_gigabytes": size,
-        "region": region,
-    })
+            "name": name,
+            "size_gigabytes": size,
+            "region": region,
+        })
     );
 }
 

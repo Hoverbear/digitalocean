@@ -14,7 +14,7 @@ use digitalocean::api::Image;
 use digitalocean::method::{Delete, Get, List, Update};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -58,8 +58,8 @@ fn update_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": name,
-    })
+            "name": name,
+        })
     );
 }
 

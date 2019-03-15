@@ -1,13 +1,13 @@
 pub use reqwest::Client;
 
-use api::{HasPagination, HasResponse, HasValue, MAX_PER_PAGE};
-use error::ErrorKind;
+use crate::api::{HasPagination, HasResponse, HasValue, MAX_PER_PAGE};
+use crate::error::ErrorKind;
+use crate::method::{Create, Delete, Get, List, Update};
+use crate::request::Request;
+use crate::DigitalOcean;
 use failure::Error;
-use method::{Create, Delete, Get, List, Update};
-use request::Request;
 use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
-use DigitalOcean;
 
 impl DigitalOcean {
     pub(crate) fn get<V>(&self, request: Request<Get, V>) -> Result<V, Error>
@@ -116,7 +116,9 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("POST {:?}", request.url());
-        let req = self.client.post(request.url().clone())
+        let req = self
+            .client
+            .post(request.url().clone())
             .json(&request.body().clone());
 
         let mut response = self.fetch(req)?;
@@ -141,7 +143,9 @@ impl DigitalOcean {
         V: HasResponse,
     {
         info!("PUT {:?}", request.url());
-        let req = self.client.put(request.url().clone())
+        let req = self
+            .client
+            .put(request.url().clone())
             .json(&request.body().clone());
 
         let mut response = self.fetch(req)?;
@@ -161,9 +165,7 @@ impl DigitalOcean {
     }
 
     fn fetch(&self, dispatch: RequestBuilder) -> Result<Response, Error> {
-        let response = dispatch
-            .bearer_auth(self.token.clone())
-            .send()?;
+        let response = dispatch.bearer_auth(self.token.clone()).send()?;
 
         info!("Response status: {:?}", response.status());
         Ok(response)

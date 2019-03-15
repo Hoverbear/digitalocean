@@ -1,13 +1,13 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
+use crate::method::{Get, List};
+use crate::request::ActionRequest;
+use crate::request::Request;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
-use method::{Get, List};
-use request::ActionRequest;
-use request::Request;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const ACTIONS_SEGMENT: &'static str = "actions";
+const ACTIONS_SEGMENT: &str = "actions";
 
 /// Actions are records of events that have occurred on the resources in your
 /// account. These can be things like rebooting a Droplet, or transferring an

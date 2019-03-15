@@ -1,10 +1,10 @@
 use super::floating_ip::FloatingIp;
 use super::Action;
-use method::{Create, Get, List};
-use request::{FloatingIpActionRequest, FloatingIpRequest};
-use STATIC_URL_ERROR;
+use crate::method::{Create, Get, List};
+use crate::request::{FloatingIpActionRequest, FloatingIpRequest};
+use crate::STATIC_URL_ERROR;
 
-const FLOATING_IP_ACTIONS_SEGMENT: &'static str = "actions";
+const FLOATING_IP_ACTIONS_SEGMENT: &str = "actions";
 
 impl FloatingIpRequest<Get, FloatingIp> {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-floating-ip)

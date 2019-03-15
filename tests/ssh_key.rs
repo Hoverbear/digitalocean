@@ -14,7 +14,7 @@ use digitalocean::api::SshKey;
 use digitalocean::method::{Create, Delete, Get, List, Update};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -43,9 +43,9 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": name,
-        "public_key": public_key,
-    })
+            "name": name,
+            "public_key": public_key,
+        })
     );
 }
 
@@ -78,8 +78,8 @@ fn update_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": name,
-    })
+            "name": name,
+        })
     );
 }
 

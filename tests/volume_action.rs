@@ -14,7 +14,7 @@ use digitalocean::api::{Action, Volume};
 use digitalocean::method::{Create, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn attach_produces_correct_request() {
@@ -34,9 +34,9 @@ fn attach_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "attach",
-        "droplet_id": droplet_id,
-    })
+            "type": "attach",
+            "droplet_id": droplet_id,
+        })
     );
 }
 
@@ -55,10 +55,10 @@ fn attach_by_name_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "attach",
-        "droplet_id": droplet_id,
-        "volume_name": volume_id
-    })
+            "type": "attach",
+            "droplet_id": droplet_id,
+            "volume_name": volume_id
+        })
     );
 }
 
@@ -80,9 +80,9 @@ fn detach_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "detach",
-        "droplet_id": droplet_id,
-    })
+            "type": "detach",
+            "droplet_id": droplet_id,
+        })
     );
 }
 
@@ -101,10 +101,10 @@ fn detach_by_name_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "detach",
-        "droplet_id": droplet_id,
-        "volume_name": volume_id
-    })
+            "type": "detach",
+            "droplet_id": droplet_id,
+            "volume_name": volume_id
+        })
     );
 }
 
@@ -125,9 +125,9 @@ fn resize_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "resize",
-        "size_gigabytes": 123,
-    })
+            "type": "resize",
+            "size_gigabytes": 123,
+        })
     );
 }
 

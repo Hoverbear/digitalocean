@@ -1,12 +1,12 @@
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
-use method::List;
-use request::Request;
-use request::SizeRequest;
+use crate::method::List;
+use crate::request::Request;
+use crate::request::SizeRequest;
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const SIZES_SEGMENT: &'static str = "sizes";
+const SIZES_SEGMENT: &str = "sizes";
 
 /// The sizes objects represent different packages of hardware resources that
 /// can be used for Droplets. When a Droplet is created, a size must be

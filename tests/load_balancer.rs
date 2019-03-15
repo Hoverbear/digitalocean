@@ -14,7 +14,7 @@ use digitalocean::api::LoadBalancer;
 use digitalocean::method::{Create, Delete, Get, List, Update};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -65,28 +65,28 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": name,
-        "region": region,
-        "algorithm": algo,
-        "forwarding_rules": [
-            {
-                "entry_protocol": rule_1.0,
-                "entry_port": rule_1.1,
-                "target_protocol": rule_1.2,
-                "target_port": rule_1.3,
-                "certificate_id": Value::Null,
-                "tls_passthrough": false,
-            },
-            {
-                "entry_protocol": rule_2.0,
-                "entry_port": rule_2.1,
-                "target_protocol": rule_2.2,
-                "target_port": rule_2.3,
-                "certificate_id": Value::Null,
-                "tls_passthrough": false,
-            },
-        ],
-    })
+            "name": name,
+            "region": region,
+            "algorithm": algo,
+            "forwarding_rules": [
+                {
+                    "entry_protocol": rule_1.0,
+                    "entry_port": rule_1.1,
+                    "target_protocol": rule_1.2,
+                    "target_port": rule_1.3,
+                    "certificate_id": Value::Null,
+                    "tls_passthrough": false,
+                },
+                {
+                    "entry_protocol": rule_2.0,
+                    "entry_port": rule_2.1,
+                    "target_protocol": rule_2.2,
+                    "target_port": rule_2.3,
+                    "certificate_id": Value::Null,
+                    "tls_passthrough": false,
+                },
+            ],
+        })
     );
 }
 
@@ -114,20 +114,20 @@ fn update_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": name,
-        "region": region,
-        "tag": tag,
-        "forwarding_rules": [
-            {
-                "entry_protocol": e_protocol,
-                "entry_port": e_port,
-                "target_protocol": t_protocol,
-                "target_port": t_port,
-                "certificate_id": Value::Null,
-                "tls_passthrough": false,
-            },
-        ],
-    })
+            "name": name,
+            "region": region,
+            "tag": tag,
+            "forwarding_rules": [
+                {
+                    "entry_protocol": e_protocol,
+                    "entry_port": e_port,
+                    "target_protocol": t_protocol,
+                    "target_port": t_port,
+                    "certificate_id": Value::Null,
+                    "tls_passthrough": false,
+                },
+            ],
+        })
     );
 }
 
@@ -167,8 +167,8 @@ fn add_droplets_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "droplet_ids": droplet_ids,
-    })
+            "droplet_ids": droplet_ids,
+        })
     );
 }
 
@@ -191,8 +191,8 @@ fn remove_droplets_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "droplet_ids": droplet_ids,
-    })
+            "droplet_ids": droplet_ids,
+        })
     );
 }
 
@@ -215,17 +215,17 @@ fn add_forwarding_rule_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "forwarding_rules": [
-            {
-                "entry_protocol": e_protocol,
-                "entry_port": e_port,
-                "target_protocol": t_protocol,
-                "target_port": t_port,
-                "certificate_id": Value::Null,
-                "tls_passthrough": true,
-            },
-        ],
-    })
+            "forwarding_rules": [
+                {
+                    "entry_protocol": e_protocol,
+                    "entry_port": e_port,
+                    "target_protocol": t_protocol,
+                    "target_port": t_port,
+                    "certificate_id": Value::Null,
+                    "tls_passthrough": true,
+                },
+            ],
+        })
     );
 }
 
@@ -248,16 +248,16 @@ fn remove_forwarding_rule_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "forwarding_rules": [
-            {
-                "entry_protocol": e_protocol,
-                "entry_port": e_port,
-                "target_protocol": t_protocol,
-                "target_port": t_port,
-                "certificate_id": Value::Null,
-                "tls_passthrough": false,
-            },
-        ],
-    })
+            "forwarding_rules": [
+                {
+                    "entry_protocol": e_protocol,
+                    "entry_port": e_port,
+                    "target_protocol": t_protocol,
+                    "target_port": t_port,
+                    "certificate_id": Value::Null,
+                    "tls_passthrough": false,
+                },
+            ],
+        })
     );
 }

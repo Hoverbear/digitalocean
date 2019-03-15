@@ -2,17 +2,17 @@ use super::region::Region;
 use super::snapshot::Snapshot;
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
+use crate::method::{Create, Delete, Get, List};
+use crate::request::Request;
+use crate::request::{SnapshotRequest, VolumeRequest};
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use chrono::{DateTime, Utc};
-use method::{Create, Delete, Get, List};
-use request::Request;
-use request::{SnapshotRequest, VolumeRequest};
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const VOLUME_SEGMENT: &'static str = "volumes";
-const SNAPSHOTS_SEGMENT: &'static str = "snapshots";
+const VOLUME_SEGMENT: &str = "volumes";
+const SNAPSHOTS_SEGMENT: &str = "snapshots";
 
 /// Block Storage volumes provide expanded storage capacity for your Droplets
 /// and can be moved between Droplets within a specific region. Volumes

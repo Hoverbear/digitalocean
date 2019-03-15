@@ -13,7 +13,7 @@ use digitalocean::api::Account;
 use digitalocean::method::Get;
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn get_produces_correct_request() {

@@ -14,7 +14,7 @@ use digitalocean::api::{Action, Droplet};
 use digitalocean::method::{Create, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -50,8 +50,8 @@ fn enable_backups_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "enable_backups",
-    })
+            "type": "enable_backups",
+        })
     );
 }
 
@@ -72,8 +72,8 @@ fn disable_backups_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "disable_backups",
-    })
+            "type": "disable_backups",
+        })
     );
 }
 
@@ -94,8 +94,8 @@ fn reboot_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "reboot",
-    })
+            "type": "reboot",
+        })
     );
 }
 
@@ -116,8 +116,8 @@ fn power_cycle_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "power_cycle",
-    })
+            "type": "power_cycle",
+        })
     );
 }
 
@@ -138,8 +138,8 @@ fn shutdown_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "shutdown",
-    })
+            "type": "shutdown",
+        })
     );
 }
 
@@ -161,8 +161,8 @@ fn power_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "power_off",
-    })
+            "type": "power_off",
+        })
     );
 
     // On
@@ -173,8 +173,8 @@ fn power_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "power_on",
-    })
+            "type": "power_on",
+        })
     );
 }
 
@@ -197,9 +197,9 @@ fn restore_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "restore",
-        "image": image_id.to_string(),
-    })
+            "type": "restore",
+            "image": image_id.to_string(),
+        })
     );
 
     // As id
@@ -211,9 +211,9 @@ fn restore_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "restore",
-        "image": image_id.to_string(),
-    })
+            "type": "restore",
+            "image": image_id.to_string(),
+        })
     );
 }
 
@@ -234,8 +234,8 @@ fn password_reset_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "password_reset",
-    })
+            "type": "password_reset",
+        })
     );
 }
 
@@ -257,10 +257,10 @@ fn resize_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "resize",
-        "size": size,
-        "disk": disk,
-    })
+            "type": "resize",
+            "size": size,
+            "disk": disk,
+        })
     );
 }
 
@@ -282,9 +282,9 @@ fn rebuild_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "rebuild",
-        "image": image_id,
-    })
+            "type": "rebuild",
+            "image": image_id,
+        })
     );
 }
 
@@ -306,9 +306,9 @@ fn rename_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "rename",
-        "name": new_name,
-    })
+            "type": "rename",
+            "name": new_name,
+        })
     );
 }
 
@@ -330,9 +330,9 @@ fn kernel_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "change_kernel",
-        "kernel": kernel_id,
-    })
+            "type": "change_kernel",
+            "kernel": kernel_id,
+        })
     );
 }
 
@@ -353,8 +353,8 @@ fn enable_ipv6_kernel_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "enable_ipv6",
-    })
+            "type": "enable_ipv6",
+        })
     );
 }
 
@@ -375,8 +375,8 @@ fn enable_private_networking_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "enable_private_networking",
-    })
+            "type": "enable_private_networking",
+        })
     );
 }
 
@@ -398,9 +398,9 @@ fn snapshot_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "snapshot",
-        "name": name,
-    })
+            "type": "snapshot",
+            "name": name,
+        })
     );
 }
 

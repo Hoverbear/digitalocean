@@ -1,14 +1,14 @@
 use super::action::Action;
 use super::volume::Volume;
-use method::{Create, Get, List};
-use request::Request;
-use request::{VolumeActionRequest, VolumeRequest};
+use crate::method::{Create, Get, List};
+use crate::request::Request;
+use crate::request::{VolumeActionRequest, VolumeRequest};
+use crate::{ROOT_URL, STATIC_URL_ERROR};
 use serde::Serialize;
 use std::fmt::Display;
-use {ROOT_URL, STATIC_URL_ERROR};
 
-const VOLUMES_SEGMENT: &'static str = "volumes";
-const VOLUME_ACTIONS_SEGMENT: &'static str = "actions";
+const VOLUMES_SEGMENT: &str = "volumes";
+const VOLUME_ACTIONS_SEGMENT: &str = "actions";
 
 impl Volume {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet-by-name)

@@ -90,9 +90,7 @@ pub trait HasValue {
 
 impl HasValue for () {
     type Value = ();
-    fn value(self) -> Self::Value {
-        ()
-    }
+    fn value(self) -> Self::Value {}
 }
 
 pub trait HasResponse: DeserializeOwned + Clone {

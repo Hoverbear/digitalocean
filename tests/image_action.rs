@@ -14,7 +14,7 @@ use digitalocean::api::{Action, Image};
 use digitalocean::method::{Create, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -69,9 +69,9 @@ fn transfer_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "transfer",
-        "region": region,
-    })
+            "type": "transfer",
+            "region": region,
+        })
     );
 }
 
@@ -92,7 +92,7 @@ fn convert_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "convert",
-    })
+            "type": "convert",
+        })
     );
 }

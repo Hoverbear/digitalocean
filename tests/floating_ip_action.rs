@@ -16,7 +16,7 @@ use digitalocean::api::{Action, FloatingIp};
 use digitalocean::method::{Create, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn list_produces_correct_request() {
@@ -71,9 +71,9 @@ fn assign_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "assign",
-        "droplet_id": droplet_id
-    })
+            "type": "assign",
+            "droplet_id": droplet_id
+        })
     );
 }
 
@@ -94,7 +94,7 @@ fn unassign_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "type": "unassign",
-    })
+            "type": "unassign",
+        })
     );
 }

@@ -14,7 +14,7 @@ use digitalocean::api::{Droplet, Snapshot};
 use digitalocean::method::{Create, Delete, Get, List};
 use digitalocean::request::Request;
 
-use utils::before;
+use crate::utils::before;
 
 #[test]
 fn create_produces_correct_request() {
@@ -34,14 +34,14 @@ fn create_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "name": name,
-        "region": region,
-        "size": size,
-        "image": image,
-        "ssh_keys": ssh_keys,
-        "backups": backups,
-        "monitoring": monitoring,
-    })
+            "name": name,
+            "region": region,
+            "size": size,
+            "image": image,
+            "ssh_keys": ssh_keys,
+            "backups": backups,
+            "monitoring": monitoring,
+        })
     );
 }
 
@@ -64,14 +64,14 @@ fn create_many_produces_correct_request() {
     assert_eq!(
         *req.body(),
         json!({
-        "names": names,
-        "region": region,
-        "size": size,
-        "image": image,
-        "ssh_keys": ssh_keys,
-        "backups": backups,
-        "monitoring": monitoring,
-    })
+            "names": names,
+            "region": region,
+            "size": size,
+            "image": image,
+            "ssh_keys": ssh_keys,
+            "backups": backups,
+            "monitoring": monitoring,
+        })
     );
 }
 
