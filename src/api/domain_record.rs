@@ -4,6 +4,7 @@ use super::{HasPagination, HasResponse, HasValue};
 use crate::method::{Create, Delete, Get, List, Update};
 use crate::request::{DomainRecordRequest, DomainRequest};
 use crate::STATIC_URL_ERROR;
+use getset::{Getters, Setters};
 use serde::Serialize;
 use std::fmt::Display;
 use url::Url;

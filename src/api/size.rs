@@ -4,6 +4,7 @@ use crate::method::List;
 use crate::request::Request;
 use crate::request::SizeRequest;
 use crate::{ROOT_URL, STATIC_URL_ERROR};
+use getset::{Getters, Setters};
 use url::Url;
 
 const SIZES_SEGMENT: &str = "sizes";

@@ -14,7 +14,7 @@ use std::env;
 // cargo run --example image -- $IMAGE --actions
 fn main() {
     dotenv::dotenv().ok();
-    env_logger::init().ok();
+    env_logger::try_init().ok();
 
     let mut args = env::args().skip(1);
 

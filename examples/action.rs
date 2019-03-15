@@ -15,7 +15,7 @@ enum Choice {
 // cargo run --example action -- [--list [limit] | --id id]
 fn main() {
     dotenv::dotenv().ok();
-    env_logger::init().ok();
+    env_logger::try_init().ok();
 
     let api_key = env::var("API_KEY").expect("API_KEY not set.");
     let client = DigitalOcean::new(api_key).unwrap();

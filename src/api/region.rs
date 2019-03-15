@@ -4,6 +4,7 @@ use crate::method::List;
 use crate::request::RegionRequest;
 use crate::request::Request;
 use crate::{ROOT_URL, STATIC_URL_ERROR};
+use getset::{Getters, Setters};
 use url::Url;
 
 const REGIONS_SEGMENT: &str = "regions";

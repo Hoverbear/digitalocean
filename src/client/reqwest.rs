@@ -6,6 +6,7 @@ use crate::method::{Create, Delete, Get, List, Update};
 use crate::request::Request;
 use crate::DigitalOcean;
 use failure::Error;
+use log::info;
 use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
 
