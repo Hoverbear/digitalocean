@@ -22,53 +22,41 @@ const FORWARDING_RULES_SEGMENT: &str = "forwarding_rules";
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#load-balancers)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
+#[get = "pub"]
 pub struct LoadBalancer {
     /// A unique ID that can be used to identify and reference a Load Balancer.
-    #[get = "pub"]
     id: String,
     /// A human-readable name for a Load Balancer instance.
-    #[get = "pub"]
     name: String,
     /// An attribute containing the public-facing IP address of the Load
     /// Balancer.
-    #[get = "pub"]
     ip: IpAddr,
     /// The load balancing algorithm used to determine which backend Droplet
     /// will be selected by a client. It must be either "round_robin" or
     /// "least_connections".
-    #[get = "pub"]
     algorithm: String,
     /// A status string indicating the current state of the Load Balancer.
     /// This can be "new", "active", or "errored".
-    #[get = "pub"]
     status: String,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Load Balancer was created.
-    #[get = "pub"]
     created_at: DateTime<Utc>,
     /// An object specifying the forwarding rules for a Load Balancer.
-    #[get = "pub"]
     forwarding_rules: Vec<ForwardingRule>,
     /// An object specifying health check settings for the Load Balancer.
-    #[get = "pub"]
     health_check: HealthCheck,
     /// An object specifying sticky sessions settings for the Load Balancer.
-    #[get = "pub"]
     sticky_sessions: StickySessions,
     /// The region where the Load Balancer instance is located.
-    #[get = "pub"]
     region: Region,
     /// The name of a Droplet tag corresponding to Droplets assigned to the
     /// Load Balancer.
-    #[get = "pub"]
     tag: String,
     /// An array containing the IDs of the Droplets assigned to the Load
     /// Balancer.
-    #[get = "pub"]
     droplet_ids: Vec<usize>,
     /// A boolean value indicating whether HTTP requests to the Load Balancer
     /// on port 80 will be redirected to HTTPS on port 443.
-    #[get = "pub"]
     redirect_http_to_https: bool,
 }
 

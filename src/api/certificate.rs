@@ -18,24 +18,20 @@ const CERTIFICATES_SEGMENT: &str = "certificates";
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#certificates)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
+#[get = "pub"]
 pub struct Certificate {
     /// A unique ID that can be used to identify and reference a certificate.
-    #[get = "pub"]
     id: String,
     /// A unique human-readable name referring to a certificate.
-    #[get = "pub"]
     name: String,
     /// A time value given in ISO8601 combined date and time format that
     /// represents the certificate's expiration date.
-    #[get = "pub"]
     not_after: DateTime<Utc>,
     /// A unique identifier generated from the SHA-1 fingerprint of the
     /// certificate.
-    #[get = "pub"]
     sha1_fingerprint: String,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the certificate was created.
-    #[get = "pub"]
     created_at: DateTime<Utc>,
 }
 

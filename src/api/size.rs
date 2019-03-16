@@ -20,42 +20,34 @@ const SIZES_SEGMENT: &str = "sizes";
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#sizes)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
+#[get = "pub"]
 pub struct Size {
     /// A human-readable string that is used to uniquely identify each size.
-    #[get = "pub"]
     slug: String,
     /// This is a boolean value that represents whether new Droplets can be
     /// created with this size.
-    #[get = "pub"]
     available: bool,
     /// The amount of transfer bandwidth that is available for Droplets created
     /// in this size. This only counts traffic on the public interface. The
     /// value is given in terabytes.
-    #[get = "pub"]
     transfer: f64,
     /// This attribute describes the monthly cost of this Droplet size if the
     /// Droplet is kept for an entire month. The value is measured in US
     /// dollars.
-    #[get = "pub"]
     price_monthly: f64,
     /// This describes the price of the Droplet size as measured hourly. The
     /// value is measured in US dollars.
-    #[get = "pub"]
     price_hourly: f64,
     /// The amount of RAM allocated to Droplets created of this size. The value
     /// is represented in megabytes.
-    #[get = "pub"]
     memory: usize,
     /// The number of virtual CPUs allocated to Droplets of this size.
-    #[get = "pub"]
     vcpus: usize,
     /// The amount of disk space set aside for Droplets of this size. The value
     /// is represented in gigabytes.
-    #[get = "pub"]
     disk: usize,
     /// An array containing the region slugs where this size is available for
     /// Droplet creates.
-    #[get = "pub"]
     regions: Vec<String>,
 }
 

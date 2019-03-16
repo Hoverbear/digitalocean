@@ -18,26 +18,22 @@ const REGIONS_SEGMENT: &str = "regions";
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#regions)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
+#[get = "pub"]
 pub struct Region {
     /// A human-readable string that is used as a unique identifier for each
     /// region.
-    #[get = "pub"]
     name: String,
     /// The display name of the region. This will be a full name that is used
     /// in the control panel and other interfaces.
-    #[get = "pub"]
     slug: String,
     /// This attribute is set to an array which contains the identifying slugs
     ///  for the sizes available in this region.
-    #[get = "pub"]
     sizes: Vec<String>,
     /// This is a boolean value that represents whether new Droplets can be
     /// created in this region.
-    #[get = "pub"]
     available: bool,
     /// This attribute is set to an array which contains features available in
     /// this region
-    #[get = "pub"]
     features: Vec<String>,
 }
 

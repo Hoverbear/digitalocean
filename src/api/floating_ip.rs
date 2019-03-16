@@ -22,19 +22,17 @@ const FLOATING_IP_SEGMENT: &str = "floating_ips";
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#floating-ips)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
+#[get = "pub"]
 pub struct FloatingIp {
     /// The public IP address of the Floating IP. It also serves as its
     /// identifier.
-    #[get = "pub"]
     ip: IpAddr,
     /// The region that the Floating IP is reserved to. When you query a
     /// Floating IP, the entire region object will be returned.
-    #[get = "pub"]
     region: Region,
     /// The Droplet that the Floating IP has been assigned to. When you query
     /// a Floating IP, if it is assigned to a Droplet, the entire Droplet
     /// object will be returned. If it is not assigned, the value will be null.
-    #[get = "pub"]
     droplet: Option<Droplet>,
 }
 
