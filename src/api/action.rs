@@ -25,36 +25,30 @@ const ACTIONS_SEGMENT: &str = "actions";
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#actions)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
+#[get = "pub"]
 pub struct Action {
     /// A unique identifier for each Droplet action event. This is used to
     /// reference a specific action that was requested.
-    #[get = "pub"]
     id: usize,
     /// The current status of the action. The value of this attribute will be
     /// "in-progress", "completed", or "errored".
-    #[get = "pub"]
     status: String,
     /// The type of action that the event is executing (reboot, power_off,
     /// etc.).
-    #[get = "pub"]
     started_at: DateTime<Utc>,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the action was completed.
-    #[get = "pub"]
     completed_at: Option<DateTime<Utc>>,
     /// A unique identifier for the resource that the action is associated
     /// with.
-    #[get = "pub"]
     resource_id: usize,
     /// The type of resource that the action is associated with.
-    #[get = "pub"]
     resource_type: String,
     // /// (deprecated) A slug representing the region where the action occurred.
     // #[get = "pub"]
     // #[deprecated(since = "0.0.1", note = "DigitalOcean has deprecated this.")]
     // region: Option<Region>,
     /// A slug representing the region where the action occurred.
-    #[get = "pub"]
     region_slug: Option<String>,
 }
 

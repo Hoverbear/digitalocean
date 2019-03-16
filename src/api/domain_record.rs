@@ -21,35 +21,28 @@ const DOMAIN_RECORDS_SEGMENT: &str = "records";
 ///
 /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#domain-records)
 #[derive(Deserialize, Serialize, Debug, Clone, Getters, Setters)]
+#[get = "pub"]
 pub struct DomainRecord {
     /// A unique identifier for each domain record.
-    #[get = "pub"]
     id: usize,
     /// The type of the DNS record (ex: A, CNAME, TXT, ...).
     ///
     /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
-    #[get = "pub"]
     #[serde(rename = "type")]
     kind: String, // 'type' is reserved in Rust.
     /// The name to use for the DNS record.
-    #[get = "pub"]
     name: String,
     /// The value to use for the DNS record.
-    #[get = "pub"]
     data: String,
     /// The priority for SRV and MX records.
-    #[get = "pub"]
     priority: Option<usize>,
     /// The port for SRV records.
-    #[get = "pub"]
     port: Option<usize>,
     /// This value is the time to live for the record, in seconds. This defines
     /// the time frame that clients can cache queried information before a refresh
     /// should be requested.
-    #[get = "pub"]
     ttl: usize,
     /// The weight for SRV records.
-    #[get = "pub"]
     weight: Option<usize>,
 }
 

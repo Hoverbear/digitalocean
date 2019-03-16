@@ -20,40 +20,31 @@ const IMAGES_SEGMENT: &str = "images";
 pub struct CustomImage {
     /// A unique number that can be used to identify and reference a specific
     /// image.
-    #[get = "pub"]
     id: usize,
     /// The display name that has been given to an image. This is what is shown
     /// in the control panel and is generally a descriptive title for the image
     /// in question.
-    #[get = "pub"]
     name: String,
     /// The kind of image, describing the duration of how long the image is
     /// stored. This is either "snapshot" or "backup".
     ///
     /// *Note:* Since `type` is a keyword in Rust `kind` is used instead.
     #[serde(rename = "type")]
-    #[get = "pub"]
     kind: String, // 'type' is reserved in Rust.
     /// This attribute describes the base distribution used for this image.
-    #[get = "pub"]
     distribution: String,
     /// This attribute is an array of the regions that the image is available
     /// in. The regions are represented by their identifying slug values.
-    #[get = "pub"]
     regions: Vec<String>,
     /// Tags to quickly find an image or to group multiple images
     /// under a common name
-    #[get = "pub"]
     tags: Vec<String>,
     /// A time value given in ISO8601 combined date and time format that
     /// represents when the Image was created.
-    #[get = "pub"]
     created_at: DateTime<Utc>,
     /// A brief description about the image
-    #[get = "pub"]
     description: String,
     /// The status of the image
-    #[get = "pub"]
     status: String,
 }
 
