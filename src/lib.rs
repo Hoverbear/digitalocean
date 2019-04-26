@@ -89,8 +89,9 @@ Please just open an issue or PR!
 
 */
 
-use lazy_static::lazy_static;
 use log::info;
+#[macro_use]
+extern crate lazy_static;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]

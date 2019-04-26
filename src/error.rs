@@ -17,6 +17,12 @@ pub enum ErrorKind {
     /// The reqest's API key is invalid or not authorized to view this resource.
     #[fail(display = "Unauthorized")]
     Unauthorized,
+    /// The specified `Host` header value is invalid.
+    #[fail(display = "Invalid hostname")]
+    InvalidHostHeader,
+    /// The specified `User-Agent` header value is invalid.
+    #[fail(display = "Invalid user agent")]
+    InvalidUserAgent,
     /// An unexpected status code was returned from the API. Please raise a ticket.
     #[fail(display = "Unexpected status code: {}", _0)]
     UnexpectedStatus(reqwest::StatusCode),
