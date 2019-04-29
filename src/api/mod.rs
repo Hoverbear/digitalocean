@@ -16,6 +16,8 @@ mod load_balancer;
 mod region;
 mod size;
 mod snapshot;
+#[cfg(feature = "spaces")]
+mod spaces;
 mod ssh_key;
 mod tag;
 mod volume;
@@ -38,6 +40,8 @@ pub use self::load_balancer::{load_balancer_fields, LoadBalancer};
 pub use self::region::Region;
 pub use self::size::Size;
 pub use self::snapshot::Snapshot;
+#[cfg(feature = "spaces")]
+pub use self::spaces::SpacesError;
 pub use self::ssh_key::SshKey;
 pub use self::tag::Tag;
 pub use self::volume::Volume;
