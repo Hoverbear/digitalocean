@@ -41,7 +41,7 @@ pub use self::region::Region;
 pub use self::size::Size;
 pub use self::snapshot::Snapshot;
 #[cfg(feature = "spaces")]
-pub use self::spaces::SpacesError;
+pub use self::spaces::{Bucket, SpacesError};
 pub use self::ssh_key::SshKey;
 pub use self::tag::Tag;
 pub use self::volume::Volume;

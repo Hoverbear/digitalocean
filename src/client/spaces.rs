@@ -56,9 +56,7 @@ impl Spaces {
             client,
         }
     }
-}
 
-impl Spaces {
     /// Initializes the request builder with the provided HTTP method, region and bucket name.
     #[inline]
     pub(crate) fn builder(
@@ -70,7 +68,10 @@ impl Spaces {
         SpacesRequestBuilder::new(method, region, bucket, &self.access_key, &self.secret_key)
     }
 
-    async fn fetch_response<'a>(&'a self, builder: SpacesRequestBuilder) -> Result<Vec<u8>, Error> {
+    pub(crate) async fn fetch_response<'a>(
+        &'a self,
+        builder: SpacesRequestBuilder,
+    ) -> Result<Vec<u8>, Error> {
         let request = builder.build_request()?;
         let msg = format!("{}: {}", request.method(), request.uri());
         let response = await!(self.client.request(request))?;
@@ -91,7 +92,7 @@ impl Spaces {
     }
 
     /// Parse the given bytes as XML and return a future that resolves to that object.
-    fn parse_xml<T, B>(bytes: B) -> Result<T, Error>
+    pub(crate) fn parse_xml<T, B>(bytes: B) -> Result<T, Error>
     where
         for<'de> T: Deserialize<'de>,
         T: Debug,

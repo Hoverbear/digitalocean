@@ -5,8 +5,11 @@ mod reqwest;
 #[cfg(feature = "spaces")]
 mod spaces;
 
+pub use self::reqwest::Client;
+
 #[cfg(feature = "spaces")]
 pub(crate) use self::builder::RequestBuilder;
-pub use self::reqwest::Client;
 #[cfg(feature = "spaces")]
 pub use self::spaces::Spaces;
+#[cfg(feature = "spaces")]
+pub(crate) use self::spaces::ACL_HEADER;

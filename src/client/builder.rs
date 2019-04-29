@@ -1,3 +1,4 @@
+use crate::error::XmlError;
 use failure::Error;
 use hyper::{Body, Request};
 use serde::Serialize;
@@ -36,6 +37,17 @@ pub(crate) trait RequestBuilder {
         T: Serialize,
     {
         let bytes = serde_json::to_vec(model)?;
+        self.raw_payload_mut().replace(bytes);
+        Ok(())
+    }
+
+    /// Set the payload by serializing the given model as XML.
+    fn payload_xml<T>(&mut self, model: &T) -> Result<(), Error>
+    where
+        T: Serialize,
+    {
+        let mut bytes = Vec::new();
+        serde_xml_rs::to_writer(&mut bytes, model).map_err(XmlError::from)?;
         self.raw_payload_mut().replace(bytes);
         Ok(())
     }
