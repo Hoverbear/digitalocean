@@ -62,3 +62,8 @@ env_logger = "0.6.1"
 [dev-dependencies.uuid]
 features = ["v4"]
 version = "0.7.2"
+
+[[test]]
+name = "bucket"
+path = "tests/bucket.rs"
+required-features = ["spaces"]

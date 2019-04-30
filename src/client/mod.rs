@@ -8,7 +8,9 @@ mod spaces;
 pub use self::reqwest::Client;
 
 #[cfg(feature = "spaces")]
-pub(crate) use self::builder::RequestBuilder;
+pub use self::builder::Requestable;
+#[cfg(feature = "spaces")]
+pub(crate) use self::builder::{ApiRequest, RequestBuilder};
 #[cfg(feature = "spaces")]
 pub use self::spaces::Spaces;
 #[cfg(feature = "spaces")]

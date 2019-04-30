@@ -1,6 +1,6 @@
 use super::object::ObjectACL;
 use super::SpacesRequest;
-use crate::client::ACL_HEADER;
+use crate::client::{ApiRequest, RequestBuilder, Requestable, ACL_HEADER};
 use crate::method::Update;
 use crate::Spaces;
 use failure::Error;
@@ -21,6 +21,8 @@ pub struct Bucket {
 
 impl Bucket {
     /// Initialize an object to create a space / bucket.
+    ///
+    /// https://developers.digitalocean.com/documentation/spaces/#create-a-bucket
     pub fn create<N, R>(name: N, region: R) -> SpacesRequest<Self, Update, ()>
     where
         N: Into<String>,
@@ -37,17 +39,22 @@ impl Bucket {
 impl SpacesRequest<Bucket, Update, ()> {
     /// Set the access control for this bucket.
     pub fn acl(mut self, acl: ObjectACL) -> Self {
-        self.model.acl = Some(acl);
+        self.acl = Some(acl);
         self
     }
+}
 
-    pub async fn execute(self, client: &Spaces) -> Result<(), Error> {
-        let mut builder = client.builder(Method::PUT, &self.model.region, &self.model.name);
-        if let Some(value) = self.model.acl {
+impl Requestable for SpacesRequest<Bucket, Update, ()> {
+    type Client = Spaces;
+
+    fn build_request(self, client: &Self::Client) -> Result<ApiRequest, Error> {
+        let mut builder = client.builder(Method::PUT, &self.region, &self.name);
+        if let Some(value) = self.acl {
             builder.headers.insert(ACL_HEADER.clone(), value.header());
         }
 
-        await!(client.fetch_response(builder))?;
-        Ok(())
+        builder.build_request()
     }
 }
+
+impl_execute!(Spaces => SpacesRequest<Bucket, Update, ()>);

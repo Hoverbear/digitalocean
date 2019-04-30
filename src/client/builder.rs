@@ -7,6 +7,17 @@ use url::percent_encoding::{self as url_encode, DEFAULT_ENCODE_SET, QUERY_ENCODE
 use std::collections::BTreeMap;
 use std::fmt::Display;
 
+/// Alias for HTTP request for the API.
+pub type ApiRequest = Request<Body>;
+
+/// Interface for building the HTTP requests.
+pub trait Requestable {
+    /// The associated client.
+    type Client;
+    /// Builds the `Request` object using the API client.
+    fn build_request(self, client: &Self::Client) -> Result<ApiRequest, Error>;
+}
+
 /// Interface for API request builders.
 pub(crate) trait RequestBuilder {
     /// Path stored in this builder.
@@ -20,7 +31,7 @@ pub(crate) trait RequestBuilder {
     /// Mutable reference to the underlying query params.
     fn raw_params_mut(&mut self) -> &mut BTreeMap<String, String>;
     /// Builds the `Request` object to be used in the HTTP client.
-    fn build_request(self) -> Result<Request<Body>, Error>;
+    fn build_request(self) -> Result<ApiRequest, Error>;
 
     /// Get a reference to the payload for this request.
     #[inline]

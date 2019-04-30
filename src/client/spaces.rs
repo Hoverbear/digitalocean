@@ -1,4 +1,4 @@
-use super::RequestBuilder;
+use super::{ApiRequest, RequestBuilder};
 use crate::error::{ErrorKind, XmlError};
 use chrono::offset::Utc;
 use chrono::DateTime;
@@ -68,11 +68,11 @@ impl Spaces {
         SpacesRequestBuilder::new(method, region, bucket, &self.access_key, &self.secret_key)
     }
 
-    pub(crate) async fn fetch_response<'a>(
-        &'a self,
-        builder: SpacesRequestBuilder,
-    ) -> Result<Vec<u8>, Error> {
-        let request = builder.build_request()?;
+    pub(crate) async fn fetch_response<'a, R>(&'a self, request: ApiRequest) -> Result<R, Error>
+    where
+        for<'de> R: Deserialize<'de>,
+        R: Debug,
+    {
         let msg = format!("{}: {}", request.method(), request.uri());
         let response = await!(self.client.request(request))?;
         info!("{}: {}", msg, response.status());
@@ -88,7 +88,7 @@ impl Spaces {
             return Err(ErrorKind::Spaces(Self::parse_xml(bytes)?))?;
         }
 
-        Ok(bytes)
+        Ok(Self::parse_xml(bytes)?)
     }
 
     /// Parse the given bytes as XML and return a future that resolves to that object.
@@ -359,7 +359,7 @@ impl RequestBuilder for SpacesRequestBuilder {
 
     /// Signs this request, consumes the builder, and returns a `Request` object to be used
     /// in the HTTP client.
-    fn build_request(mut self) -> Result<Request<Body>, Error> {
+    fn build_request(mut self) -> Result<ApiRequest, Error> {
         self.sign()?;
         let mut query = self.query_string();
         if !query.is_empty() {

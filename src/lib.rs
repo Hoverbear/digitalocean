@@ -105,6 +105,7 @@ extern crate failure_derive;
 #[cfg(feature = "spaces")]
 extern crate tokio;
 
+#[cfg_attr(feature = "spaces", macro_use)]
 pub mod api;
 mod client;
 pub mod error;
