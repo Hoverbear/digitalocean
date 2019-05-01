@@ -1,6 +1,6 @@
 use super::object::ObjectACL;
 use super::SpacesRequest;
-use crate::client::{ApiRequest, RequestBuilder, Requestable, ACL_HEADER};
+use crate::request::{ApiRequest, RequestBuilder, Requestable, ACL_HEADER};
 use crate::method::Update;
 use crate::Spaces;
 use failure::Error;
@@ -50,7 +50,7 @@ impl Requestable for SpacesRequest<Bucket, Update, ()> {
     fn build_request(self, client: &Self::Client) -> Result<ApiRequest, Error> {
         let mut builder = client.builder(Method::PUT, &self.region, &self.name);
         if let Some(value) = self.acl {
-            builder.headers.insert(ACL_HEADER.clone(), value.header());
+            builder.headers.insert(ACL_HEADER.clone(), value.header().clone());
         }
 
         builder.build_request()

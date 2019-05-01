@@ -29,20 +29,20 @@ pub enum ContentDisposition {
 
 impl ObjectACL {
     #[inline]
-    pub(crate) fn header(&self) -> HeaderValue {
+    pub(crate) fn header(&self) -> &'static HeaderValue {
         match *self {
-            ObjectACL::PublicRead => ACL_PUBLIC.clone(),
-            ObjectACL::Private => ACL_PRIVATE.clone(),
+            ObjectACL::PublicRead => &*ACL_PUBLIC,
+            ObjectACL::Private => &*ACL_PRIVATE,
         }
     }
 }
 
 impl ContentDisposition {
     #[inline]
-    pub(crate) fn header(&self) -> HeaderValue {
+    pub(crate) fn header(&self) -> &'static HeaderValue {
         match *self {
-            ContentDisposition::Inline => DISPLAY_INLINE.clone(),
-            ContentDisposition::Attachment => DISPLAY_ATTACHMENT.clone(),
+            ContentDisposition::Inline => &*DISPLAY_INLINE,
+            ContentDisposition::Attachment => &*DISPLAY_ATTACHMENT,
         }
     }
 }
