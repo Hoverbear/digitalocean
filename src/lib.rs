@@ -89,15 +89,23 @@ Please just open an issue or PR!
 
 */
 
-use lazy_static::lazy_static;
-use log::info;
+#![cfg_attr(feature = "spaces", feature(async_await, await_macro))]
+
+#[macro_use]
+extern crate lazy_static;
+#[macro_use]
+extern crate log;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
 extern crate serde_json;
 #[macro_use]
 extern crate failure_derive;
+#[macro_use]
+#[cfg(feature = "spaces")]
+extern crate tokio;
 
+#[cfg_attr(feature = "spaces", macro_use)]
 pub mod api;
 mod client;
 pub mod error;
@@ -144,3 +152,6 @@ impl DigitalOcean {
         request.execute(self)
     }
 }
+
+#[cfg(feature = "spaces")]
+pub use self::client::Spaces;

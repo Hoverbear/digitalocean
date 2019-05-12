@@ -1,5 +1,21 @@
 //! API specific documentation.
 
+#[cfg(feature = "spaces")]
+// FIXME: Async methods aren't supported in traits. We could
+// use a normal method that returns Pin<Box<_>> monstrosity,
+// but is that okay? How can we work around this?
+macro_rules! impl_execute {
+    ($client:ident => $wrapper:ident < $obj:ty, $req:ty, $resp:ty >) => {
+        impl $wrapper<$obj, $req, $resp> {
+            pub async fn execute(self, client: &$client) -> Result<$resp, failure::Error> {
+                let request = self.build_request(client)?;
+                let response = r#await!(client.fetch_response(request))?;
+                Ok(response)
+            }
+        }
+    };
+}
+
 mod account;
 mod action;
 mod certificate;
@@ -16,6 +32,8 @@ mod load_balancer;
 mod region;
 mod size;
 mod snapshot;
+#[cfg(feature = "spaces")]
+mod spaces;
 mod ssh_key;
 mod tag;
 mod volume;
@@ -38,6 +56,8 @@ pub use self::load_balancer::{load_balancer_fields, LoadBalancer};
 pub use self::region::Region;
 pub use self::size::Size;
 pub use self::snapshot::Snapshot;
+#[cfg(feature = "spaces")]
+pub use self::spaces::{Bucket, ContentDisposition, ObjectACL, SpacesError};
 pub use self::ssh_key::SshKey;
 pub use self::tag::Tag;
 pub use self::volume::Volume;

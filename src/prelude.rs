@@ -7,3 +7,10 @@ pub use crate::api::{
 pub use crate::request::Executable;
 pub use crate::request::Request;
 pub use crate::DigitalOcean;
+
+#[cfg(feature = "spaces")]
+pub use super::request::Requestable;
+#[cfg(feature = "spaces")]
+pub use super::client::Spaces;
+#[cfg(feature = "spaces")]
+pub use crate::api::{Bucket, ContentDisposition, ObjectACL};

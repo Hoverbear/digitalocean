@@ -2,6 +2,18 @@
 //!
 //!
 
+#[cfg(feature = "spaces")]
+mod builder;
+#[cfg(feature = "spaces")]
+mod spaces;
+
+#[cfg(feature = "spaces")]
+pub use self::builder::{ApiRequest, Requestable};
+#[cfg(feature = "spaces")]
+pub(crate) use self::builder::RequestBuilder;
+#[cfg(feature = "spaces")]
+pub(crate) use self::spaces::{ACL_HEADER, SpacesRequestBuilder};
+
 use crate::api::{HasPagination, HasResponse};
 use crate::method::{Create, Delete, Get, List, Method, Update};
 use crate::DigitalOcean;
