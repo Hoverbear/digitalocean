@@ -1,4 +1,5 @@
 use self::droplet_fields::{Kernel, Networks, NextBackupWindow};
+use super::SshKey;
 use super::snapshot::Snapshot;
 use super::{ApiLinks, ApiMeta};
 use super::{HasPagination, HasResponse, HasValue};
@@ -149,7 +150,7 @@ pub mod droplet_fields {
 
 impl Droplet {
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
-    pub fn create<S, D>(name: S, region: S, size: S, image: D) -> DropletRequest<Create, Droplet>
+    pub fn create<S, D>(name: S, region: S, size: S, image: D, ssh_keys: Vec<SshKey>) -> DropletRequest<Create, Droplet>
     where
         S: AsRef<str> + Serialize + Display,
         D: Serialize + Display,
@@ -159,12 +160,15 @@ impl Droplet {
             .expect(STATIC_URL_ERROR)
             .push(DROPLETS_SEGMENT);
 
+        let fingerprints:Vec<String> = ssh_keys.into_iter().map(|k| k.fingerprint().to_owned()).collect::<Vec<_>>();
+
         let mut req = Request::new(url);
         req.set_body(json!({
             "name": name,
             "region": region,
             "size": size,
             "image": format!("{}", image),
+            "ssh_keys": fingerprints
         }));
         req
     }
