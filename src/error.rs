@@ -27,11 +27,5 @@ pub enum Error {
     /// There was a miscellaneous error processing the request. Please look at the documentation of
     /// `reqwest` to learn more about how to handle these errors.
     #[error("{0}")]
-    ReqwestError(reqwest::Error),
-}
-
-impl From<reqwest::Error> for Error {
-    fn from(err: reqwest::Error) -> Self {
-        Self::ReqwestError(err)
-    }
+    ReqwestError(#[from] reqwest::Error),
 }
