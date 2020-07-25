@@ -1,11 +1,10 @@
 pub use reqwest::Client;
 
 use crate::api::{HasPagination, HasResponse, HasValue, MAX_PER_PAGE};
-use crate::error::ErrorKind;
+use crate::error::Error;
 use crate::method::{Create, Delete, Get, List, Update};
 use crate::request::Request;
 use crate::DigitalOcean;
-use failure::Error;
 use log::info;
 use reqwest::StatusCode;
 use reqwest::{RequestBuilder, Response};
@@ -24,9 +23,9 @@ impl DigitalOcean {
             // Successes
             StatusCode::OK => (),
             // Not Found
-            StatusCode::NOT_FOUND => Err(ErrorKind::NotFound)?,
+            StatusCode::NOT_FOUND => Err(Error::NotFound)?,
             // Errors
-            e => Err(ErrorKind::UnexpectedStatus(e))?,
+            e => Err(Error::UnexpectedStatus(e))?,
         };
 
         let deserialized: V::Response = response.json()?;
@@ -63,9 +62,9 @@ impl DigitalOcean {
             match response.status() {
                 StatusCode::OK => (),
                 // Not Found
-                StatusCode::NOT_FOUND => Err(ErrorKind::NotFound)?,
+                StatusCode::NOT_FOUND => Err(Error::NotFound)?,
                 // Errors
-                e => Err(ErrorKind::UnexpectedStatus(e))?,
+                e => Err(Error::UnexpectedStatus(e))?,
             };
 
             let deserialized: <Vec<V> as HasResponse>::Response = response.json()?;
@@ -106,7 +105,7 @@ impl DigitalOcean {
             // Successes
             StatusCode::NO_CONTENT => (), // Delete success
             // Errors
-            e => Err(ErrorKind::UnexpectedStatus(e))?,
+            e => Err(Error::UnexpectedStatus(e))?,
         };
 
         Ok(())
@@ -130,9 +129,9 @@ impl DigitalOcean {
             StatusCode::ACCEPTED => (), // Post Success (async)
             // Errors
             StatusCode::UNPROCESSABLE_ENTITY => {
-                Err(ErrorKind::UnprocessableEntity(response.json()?))?
+                Err(Error::UnprocessableEntity(response.json()?))?
             }
-            e => Err(ErrorKind::UnexpectedStatus(e))?,
+            e => Err(Error::UnexpectedStatus(e))?,
         };
 
         let deserialized: V::Response = response.json()?;
@@ -156,9 +155,9 @@ impl DigitalOcean {
             StatusCode::OK => (), // Update success
             // Errors
             StatusCode::UNPROCESSABLE_ENTITY => {
-                Err(ErrorKind::UnprocessableEntity(response.json()?))?
+                Err(Error::UnprocessableEntity(response.json()?))?
             }
-            e => Err(ErrorKind::UnexpectedStatus(e))?,
+            e => Err(Error::UnexpectedStatus(e))?,
         };
 
         let deserialized: V::Response = response.json()?;

@@ -5,7 +5,7 @@
 use crate::api::{HasPagination, HasResponse};
 use crate::method::{Create, Delete, Get, List, Method, Update};
 use crate::DigitalOcean;
-use failure::Error;
+use crate::error::Error;
 use getset::{Getters, MutGetters, Setters};
 use serde_json::Value;
 use std::marker::PhantomData;
