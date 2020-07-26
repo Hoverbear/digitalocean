@@ -95,8 +95,6 @@ use log::info;
 extern crate serde_derive;
 #[macro_use]
 extern crate serde_json;
-#[macro_use]
-extern crate failure_derive;
 
 pub mod api;
 mod client;
@@ -105,11 +103,10 @@ pub mod method;
 pub mod prelude;
 pub mod request;
 
-use failure::Error;
-
 use crate::api::HasResponse;
 use crate::method::Method;
 use crate::request::{Executable, Request};
+use crate::error::Error;
 use url::Url;
 
 const STATIC_URL_ERROR: &str = "Staticly constructed DigitalOcean URL is malformed.";
