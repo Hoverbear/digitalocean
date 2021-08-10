@@ -1,7 +1,5 @@
 # DigitalOcean
 
-> **Psst**: I don't have time to give this crate the love and care it deserves to use in real situations. I'd love to point you to [LoganDark's active version](https://github.com/LoganDark/digitalocean). They have the ability to publish new versions of the crate to [Crates.io](https://crates.io/crates/digitalocean).
-
 [![Build Status](https://travis-ci.org/Hoverbear/digitalocean.svg?branch=master)](https://travis-ci.org/Hoverbear/digitalocean)
 [![Crates.io](https://img.shields.io/crates/v/digitalocean.svg)](https://crates.io/crates/digitalocean)
 
