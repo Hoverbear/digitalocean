@@ -311,7 +311,9 @@ impl DropletRequest<Create, Droplet> {
     /// It must be plain text and may not exceed 64 KiB in size.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
-    pub fn user_data(mut self, val: bool) -> Self {
+    pub fn user_data<S>(mut self, val: S) -> Self
+        where S: AsRef<str> + Serialize,
+    {
         self.body_mut()["user_data"] = json!(val);
         self
     }
@@ -384,7 +386,9 @@ impl DropletRequest<Create, Vec<Droplet>> {
     /// It must be plain text and may not exceed 64 KiB in size.
     ///
     /// [Digital Ocean Documentation.](https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet)
-    pub fn user_data(mut self, val: bool) -> Self {
+    pub fn user_data<S>(mut self, val: S) -> Self
+        where S: AsRef<str> + Serialize,
+    {
         self.body_mut()["user_data"] = json!(val);
         self
     }
